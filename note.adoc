@@ -6,6 +6,9 @@
 - option: timestamps 
 - option: useNestedStrict 
 
+# Unique field in mongoose 
+// https://masteringjs.io/tutorials/mongoose/unique
+
 # typegql reference
 // https://typegraphql.com/
 
