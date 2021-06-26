@@ -1,0 +1,164 @@
+# Typegoose reference 
+// https://typegoose.github.io/typegoose/
+
+# Mongoose reference 
+// https://mongoosejs.com/docs/guide.html#options
+- option: timestamps 
+- option: useNestedStrict 
+
+# typegql reference
+// https://typegraphql.com/
+
+## Basic decorator references
+// https://typegraphql.com/docs/resolvers.html
+
+## Scalars
+// https://typegraphql.com/docs/scalars.html
+Custom scalars 
+
+## Interfaces
+// https://typegraphql.com/docs/interfaces.html
+methods within interfacetype and objectype definition. 
+
+## Subscriptions
+// https://typegraphql.com/docs/subscriptions.html
+WHEN DATA CHANGES IN THE BACK END, notify front-end with subscriptions. 
+
+
+## Generic types
+// https://typegraphql.com/docs/generic-types.html
+Use Types factory to factor InputTypes from ObjecTypes ?? 
+
+## Higher Order Resolver
+// https://www.youtube.com/watch?v=fYBlg9oOvQM
+
+
+
+// https://medium.com/@stubailo/returning-the-query-type-in-graphql-111d5c0b15b8
+// https://charlypoly.com/publications/typescript-with-graphql-done-right
+
+
+# Generic resolver ??
+!?! https://typegraphql.com/docs/inheritance.html !?!
+
+!?! // https://typegraphql.com/docs/generic-types.html !?!
+
+
+// https://medium.com/@tomi.trescak/effortlessly-type-safe-resolvers-with-typescript-apollo-and-prisma-f1fecd89770c
+
+
+// https://www.apollographql.com/docs/apollo-server/data/errors/
+?Error config? Apollo server
+
+
+# Validation ??
+// https://typegraphql.com/docs/resolvers.html
+
+
+
+Apollo directive
+// https://www.apollographql.com/docs/apollo-server/schema/directives/
+// https://www.graphql-tools.com/docs/schema-directives/
+@deprecated
+@skip
+@include
+@rename
+@upperCase
+
+// https://dev.to/daven/graphql-create-your-api-using-typescript-and-decorators-with-rakkit-2koo
+Use of "@Arg"
+
+// https://ututuv.medium.com/how-to-implement-a-graphql-api-using-typescript-and-typeorm-8a5de1252679 
+TypeORM ? 
+Typedi ? has @Service
+Some Validation examples ? 
+@Service ?? 
+CRUD like implementation ? 
+
+
+
+// https://blog.logrocket.com/integrating-typescript-graphql/
+
+
+How to integrate MongoDo/Mongoose/Typegoose into a TypeGql server. 
+
+
+## CORS with APOLLO 
+// https://mbbaig.blog/apollo-server-typescript/ 
+
+> npm init -y
+> npx tsc --init 
+> npm install type-graphql reflect-metadata graphql express class-validator apollo-server-express mongoose @typegoose/typegoose --save
+> npm install @types/express @types/graphql @types/node typescript ts-node @types/mongoose nodemon --save-dev
+
+## INTROSPECTION
+
+// https://blog.logrocket.com/properly-designed-graphql-resolvers/
+// https://graphql.org/learn/introspection/
+For "meta" request to gql. 
+
+{
+  __schema {
+    types {
+      name
+    }
+  }
+}
+
+
+returns ... 
+
+
+{
+  "data": {
+    "__schema": {
+      "types": [
+        {
+          "name": "Query"
+        },
+        ...
+        {
+          "name": "Mutation"
+        },
+        {
+          "name": "Character"
+        },
+        ... 
+      ]
+    }
+  }
+}
+
+
+
+{
+  __type(name: "Categories") {
+    name
+    fields {
+      name
+    }
+  }
+}
+
+
+returns 
+
+
+{
+  "data": {
+    "__type": {
+      "name": "Categories",
+      "fields": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "description"
+        }
+      ]
+    }
+  }
+}

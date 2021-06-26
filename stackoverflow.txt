@@ -1,0 +1,81 @@
+Suppose I have some types 
+
+```
+@ObjectType({ description: "The some other object X ..." })
+export class ObjectX{
+  @Field(()=> ID)
+  id: string;
+
+  @Field() 
+  @Property() 
+  fieldX1: typeX1; 
+
+  ... 
+
+  @Field() 
+  @Property() 
+  fieldXn: typeXn; 
+}
+```
+
+Now I'd like to not write something like ...
+
+```
+@InputType() 
+export CreateObject {
+  @Field() 
+  @Property() 
+  fieldX1: typeX1;
+
+  ... 
+
+  @Field() 
+  @Property() 
+  fieldXn: typeXn; 
+}
+
+@InputType() 
+export UpdateObject {
+  @Field(()=> ID)
+  id: string;
+  
+  @Field({nullable:true}) 
+  @Property() 
+  fieldX1: typeX1;
+
+  ... 
+
+  @Field({nullable:true}) 
+  @Property() 
+  fieldXn: typeXn; 
+}
+```
+
+Instead I'd like a function that takes in a ClassType like "ObjectX", and returns 2 derived InputTypes. 
+The first "CreateObjectX" omits the "id" but extends all other fields, properties and validation defined in "ObjectX". 
+The second "UpdateObjectX requires "id" and extends all other fields, properties and validation defined in "ObjectX" as optional. 
+
+Such that I obtain the following schema.gql something like ...
+
+```
+type ObjectX { 
+  id: ID! 
+  x1: typeX1! 
+  ...:
+  xn: typeXn!
+}
+
+input CreateObjectX {
+  // id: ID!  id would be omitted. 
+  x1: typeX1! 
+  ... 
+  xn: typeXn! 
+} 
+
+input UpdateObjectX { 
+  id: ID! 
+  x1?: typeX1 // would be nullable for Update 
+  ... 
+  xn?: typeXn // would be nullable for Update 
+} 
+```
