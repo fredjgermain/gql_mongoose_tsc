@@ -1,5 +1,3 @@
-
-
 import { 
   ClassType, Field, ObjectType, InputType, 
   ID, Int,  
@@ -94,6 +92,7 @@ export class CrudResolver {
   @Mutation(type => [ObjectScalar]) 
   async Create(@Args() { modelName, inputs }: CreateArgs) { 
     const model = GetModel(modelName); 
+    //console.log('Create', inputs) 
     if(!model) 
       return []; // should return error msg 
     return await model.create(inputs); 

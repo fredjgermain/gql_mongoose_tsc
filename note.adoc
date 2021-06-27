@@ -1,6 +1,15 @@
 # Typegoose reference 
 // https://typegoose.github.io/typegoose/
 
+# Typegoose custom validation ?
+// https://typegoose.github.io/typegoose/docs/api/decorators/prop/
+
+# Typegoose get & set 
+// https://typegoose.github.io/typegoose/docs/api/decorators/prop/
+
+# Typegoose match (regex) 
+// 
+
 # Mongoose reference 
 // https://mongoosejs.com/docs/guide.html#options
 - option: timestamps 

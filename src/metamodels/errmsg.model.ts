@@ -11,6 +11,7 @@ export class ErrMsg {
   accessor: string; 
 
   // Multilingual error messages. 
-  @prop({required:true}) 
+  @prop({type: [String], 
+    required:true}) 
   errmsg: string[]; 
 } 

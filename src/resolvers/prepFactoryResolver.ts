@@ -6,16 +6,16 @@ import { getModelWithString } from "@typegoose/typegoose";
 // --------------------------------------------------------
 import { CrudResolver } from './crudresolver.resolver'; 
 
-import { FactoryResolver } from './resolvers.factory'; 
-import { Dummy, CreateDummy, UpdateDummy } from '../models/Dummy'; 
+//import { FactoryResolver } from './resolvers.factory'; 
+/*import { Dummy, CreateDummy, UpdateDummy } from '../models/Dummy'; 
 import { Post, CreatePost, UpdatePost} from '../models/Post'; 
 import { Category, CreateCategory, UpdateCategory } from '../models/Category'; 
-import { TestEntity } from '../models/TestEntity'; 
+import { TestEntity } from '../models/TestEntity'; */
 
 
 
 
-@Resolver()
+/*@Resolver()
 class TestEntityResolver { 
   @Query(type => [TestEntity]) 
   async testEntities(): Promise<TestEntity[]> { 
@@ -28,7 +28,7 @@ class TestEntityResolver {
 
 const CategoryResolver = FactoryResolver(Category, CreateCategory, UpdateCategory); 
 const DummyResolver = FactoryResolver(Dummy, CreateDummy, UpdateDummy); 
-const PostResolver = FactoryResolver(Post, CreatePost, UpdatePost); 
+const PostResolver = FactoryResolver(Post, CreatePost, UpdatePost); */
 
 export const Resolvers = [CrudResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
 //export const Resolvers = [CrudResolver, DummyResolver, PostResolver, CategoryResolver, TestEntityResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 

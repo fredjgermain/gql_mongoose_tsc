@@ -4,15 +4,16 @@ import express from "express";
 import "reflect-metadata"; 
 import { buildSchema } from "type-graphql"; 
 import { connect } from "mongoose"; 
-import { MakeController } from './controllertest/testcontroler'; 
+// import { MakeController } from './controllertest/testcontroler'; 
 
 import cors from "cors";
+
 
 
 // Local-import 
 import { mongodbUrl } from './mongodb.connectionurl'; 
 // resolvers
-import { Resolvers } from './resolvers/resolvers'; 
+import { Resolvers } from './prepping'; 
 
 const main = async () => {
   const schema = await buildSchema({ 

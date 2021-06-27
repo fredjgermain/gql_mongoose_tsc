@@ -1,4 +1,4 @@
-import { GraphQLScalarType, Kind } from "graphql"; 
+import { GraphQLScalarType, Kind, valueFromAST } from "graphql"; 
 import { ObjectId } from "mongodb";
 
 
@@ -60,10 +60,9 @@ export const UpdateScalar = new GraphQLScalarType({
 export const ObjectScalar = new GraphQLScalarType({ 
   name: "ObjectScalar", 
   description: "Simulates Object", 
-
   // SERIALIZE --------------------------------------------
   serialize(value: unknown): Object {
-    //console.log('serialize', value);
+    console.log('serialize test', value); 
     // check the type of received value
     if (!(value instanceof Object)) {
       throw new Error("ObjectScalar can only serialize Object values");
@@ -73,7 +72,7 @@ export const ObjectScalar = new GraphQLScalarType({
 
   // PARSE VALUE ------------------------------------------
   parseValue(value: unknown): Object { 
-    //console.log('parsed value', value); 
+    console.log('parsed value', value); 
     // check the type of received value 
     if (typeof value !== "string") { 
       throw new Error("ObjectScalar can only parse object values"); 
@@ -84,24 +83,113 @@ export const ObjectScalar = new GraphQLScalarType({
 
   // PARSE LITERAL ----------------------------------------
   parseLiteral(ast): Object { 
-    // check the type of received value 
+    // check the type of received value     
+    /*let parsedObject = {} as any; 
     const {fields} = ast as any; 
-    let parsedObject = {} as any; 
+
     (fields as any[]).map( f => { 
         const {name:{value:name}, value:{value}} = f; 
         parsedObject[name] =value; 
       } 
-    ) 
+    ) */
+
+    let parsedObject = ParseObjectValue(ast as ObjectValue) 
 
     if (ast.kind !== Kind.OBJECT) { 
       throw new Error("ObjectScalar can only parse object values (Literal)"); 
     } 
     
-    //console.log('parse literal', parsedObject); 
+    //console.log('parse literal 2', parsedObject); 
 
     return parsedObject as Object; 
   }, 
 }); 
+
+
+type Nested = ListValue | ScalarValue | ObjectValue; 
+
+interface ListValue { 
+  kind: string, 
+  values: Nested[], 
+} 
+
+interface ScalarValue { 
+  kind: string, 
+  value: any, 
+} 
+
+interface ObjectValue { 
+  kind: string, 
+  fields: ObjectField[] 
+} 
+
+interface ObjectField { 
+  kind: string, 
+  name: { value: string } 
+  value: Nested, 
+} 
+
+
+function ParseScalarValue(toParse:ScalarValue):any { 
+  return toParse.value; 
+} 
+
+function ParseListValue(toParse:ListValue):any[] { 
+  return toParse.values.map( _toParse => { 
+    return SwitchByKind(_toParse) 
+  }) 
+} 
+
+function SwitchByKind(toParse:Nested):any { 
+  if(toParse.kind === 'ListValue') 
+    return ParseListValue(toParse as ListValue) 
+  else if(toParse.kind === 'ObjectField') 
+    return ParseObjectValue(toParse as ObjectValue) 
+  return ParseScalarValue(toParse as ScalarValue) 
+} 
+
+function ParseObjectValue(toParse:ObjectValue) { 
+  let parsedValue = {} as any; 
+  toParse.fields.forEach( field => { 
+    parsedValue[field.name.value] = SwitchByKind(field.value); 
+  }) 
+  return parsedValue; 
+} 
+
+
+//Ast
+
+/*interface AstField { 
+  kind: string, 
+  name: {kind:'Name', value:'<fieldName>'} 
+  value: { 
+    kind: 'StringValue' ... 
+    value: '<string value itself>' 
+    ...
+  } 
+  
+  OR
+
+  value: { 
+    kind: 'ListValue' ... 
+    values: [Object, Object] 
+    ...
+  } 
+
+
+  ... 
+}*/
+
+
+
+
+
+
+
+
+
+
+
 
 
 export const ObjectIdScalar = new GraphQLScalarType({
