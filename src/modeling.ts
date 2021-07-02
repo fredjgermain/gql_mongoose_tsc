@@ -1,9 +1,6 @@
-import { getModelForClass, getModelWithString } from "@typegoose/typegoose"; 
+import { getModelForClass } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { ErrMsg } from './metamodels/errmsg.model'; 
-import { MetaCollection } from './metamodels/metacollections.model'; 
-
 import { Answer } from './models/answer.model'; 
 import { Form } from './models/form.model'; 
 import { Instruction } from './models/instruction.model'; 
@@ -11,10 +8,14 @@ import { Patient } from './models/patient.model';
 import { Question } from './models/question.model'; 
 import { ResponseChoice, ResponseType } from './models/responsetype.model'; 
 
+import { MetaCollection } from './metamodels/metacollections.model'; 
+import { FeedbackMsg } from './metamodels/feedback.model'; 
+
+
 // Register collections 
 export async function RegisterModels() { 
-  getModelForClass(ErrMsg); 
   getModelForClass(MetaCollection); 
+  getModelForClass(FeedbackMsg); 
 
   getModelForClass(Answer); 
   getModelForClass(Form); 

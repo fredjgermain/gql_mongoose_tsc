@@ -15,5 +15,5 @@ scalar ObjectScalar
 type Query {
   Model(modelName: String!): ObjectScalar!
   Read(ids: [ID!], modelName: String!): [ObjectScalar!]!
-  Validate(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
+  ValidateInputs(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
 }

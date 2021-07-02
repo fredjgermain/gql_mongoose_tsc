@@ -10,12 +10,10 @@ export class MetaCollection {
   accessor: string; 
 
   // Multilingual label 
-  @prop({type: [String], 
-    required:true}) 
+  @prop({type: [String], required:true}) 
   label: string[]; 
 
   // Multilingual description 
-  @prop({type: [String], 
-    required:true}) 
+  @prop({type: [String], required:true}) 
   description: string[]; 
 } 
