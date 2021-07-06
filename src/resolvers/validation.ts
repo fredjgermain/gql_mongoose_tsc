@@ -1,7 +1,8 @@
-// --------------------------------------------------------
 import { modelNames } from 'mongoose'; 
+
+// --------------------------------------------------------
 import { ErrMsgModel } from '../metamodels/errmsg.model'; 
-import { MongoModel, GetModelObject } from './typegoose.util'; 
+import { MongoModel, GetMongoModelObject } from '../typegoose.utils/getmodel.util'; 
 
 interface ErrProp { 
   name: string; 

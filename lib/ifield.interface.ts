@@ -1,24 +1,46 @@
-interface IType { 
+export interface IType { 
+  defaultValue: any; 
   name: string; 
-  nestedType?: IType[] | {[key:string]:IType}; 
-  isArray: boolean; 
-  isScalar: boolean; 
-  isObject: boolean; 
+  //nestedType?: IType[] | {[key:string]:IType}; 
+  enums?: string[]; // ?? 
+  isEnum?: boolean; 
+  isArray?: boolean; 
+  isScalar?: boolean; 
+  isObject?: boolean; 
 } 
 
-interface IField {
+export interface IField {
   name: string; 
   type: IType; 
 
   label: string; 
-  required: boolean; 
-  unique: boolean; 
+  isRef?: boolean; 
+  options?: any; 
+  // required?: boolean; 
+  // unique?: boolean; 
   // regex: string ?? 
   // format: string ?? 
   // validators: any[];
   // abbrev: 
+  
+}
 
-  isArray: boolean; 
-  isRef: boolean; 
-  isScalar: boolean; 
+export interface IMongoField {
+  path:string;  // accessor 
+  instance:string; 
+  validators: any; 
+  options: { 
+    ref?: string; 
+    label?: string; 
+    sortType?: string; 
+    defaultValue?: any; 
+    format?: string; 
+    enum?: any[]; 
+    abbrev?: boolean; 
+    [key:string]:any; 
+  }; 
+  $embeddedSchemaType?:{ 
+    instance:string; 
+  }; 
+  [key:string]:any; 
 }

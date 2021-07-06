@@ -8,6 +8,8 @@ import { prop } from "@typegoose/typegoose";
 */ 
 enum FeedbackTypeEnum { 
   Success, 
+  Warning, 
+  Notif, 
   Error 
 } 
 
@@ -20,7 +22,7 @@ export class FeedbackMsg {
   @prop({ enum: FeedbackTypeEnum, type: Number }) 
   type: FeedbackTypeEnum; 
 
-  // Multilingual error messages. 
+  // Multilingual feedback messages, it may include error message. 
   @prop({type: [String], required:true}) 
-  errmsg: string[]; 
+  msg: string[]; 
 } 

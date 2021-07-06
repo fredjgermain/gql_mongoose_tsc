@@ -62,7 +62,7 @@ export const ObjectScalar = new GraphQLScalarType({
   description: "Simulates Object", 
   // SERIALIZE --------------------------------------------
   serialize(value: unknown): Object {
-    console.log('serialize test', value); 
+    //console.log('serialize test', value); 
     // check the type of received value
     if (!(value instanceof Object)) {
       throw new Error("ObjectScalar can only serialize Object values");
@@ -72,7 +72,7 @@ export const ObjectScalar = new GraphQLScalarType({
 
   // PARSE VALUE ------------------------------------------
   parseValue(value: unknown): Object { 
-    console.log('parsed value', value); 
+    //console.log('parsed value', value); 
     // check the type of received value 
     if (typeof value !== "string") { 
       throw new Error("ObjectScalar can only parse object values"); 

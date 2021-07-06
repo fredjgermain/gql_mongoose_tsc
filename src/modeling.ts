@@ -24,4 +24,4 @@ export async function RegisterModels() {
   getModelForClass(Question); 
   getModelForClass(ResponseChoice); 
   getModelForClass(ResponseType); 
-}
+} 
