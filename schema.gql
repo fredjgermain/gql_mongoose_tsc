@@ -13,6 +13,8 @@ type Mutation {
 scalar ObjectScalar
 
 type Query {
+  Count(ids: [ID!], modelName: String!): [ObjectScalar!]!
+  FeedbackMsg(feedbackNames: [String!]!): [ObjectScalar!]!
   Model(modelName: String!): ObjectScalar!
   Read(ids: [ID!], modelName: String!): [ObjectScalar!]!
   ValidateInputs(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!

@@ -4,7 +4,7 @@ import { ClassType, Field, ID, Int,
 
 
 // --------------------------------------------------------
-import { CrudResolver } from './resolvers/crudresolver.resolver'; 
+import { CrudResolver } from './resolvers/crud.resolver'; 
 import { RegisterModels } from './modeling'; 
 
 RegisterModels(); 

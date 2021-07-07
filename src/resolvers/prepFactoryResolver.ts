@@ -4,7 +4,12 @@ import { ClassType, Field, ID, Int,
 import { getModelWithString } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { CrudResolver } from './crudresolver.resolver'; 
+import { CrudResolver } from './crud.resolver'; 
+export const Resolvers = [CrudResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
+
+
+//export const Resolvers = [CrudResolver, DummyResolver, PostResolver, CategoryResolver, TestEntityResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
+
 
 //import { FactoryResolver } from './resolvers.factory'; 
 /*import { Dummy, CreateDummy, UpdateDummy } from '../models/Dummy'; 
@@ -29,7 +34,3 @@ class TestEntityResolver {
 const CategoryResolver = FactoryResolver(Category, CreateCategory, UpdateCategory); 
 const DummyResolver = FactoryResolver(Dummy, CreateDummy, UpdateDummy); 
 const PostResolver = FactoryResolver(Post, CreatePost, UpdatePost); */
-
-export const Resolvers = [CrudResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
-//export const Resolvers = [CrudResolver, DummyResolver, PostResolver, CategoryResolver, TestEntityResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
-

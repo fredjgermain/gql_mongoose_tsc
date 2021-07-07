@@ -4,6 +4,9 @@ import { modelNames } from 'mongoose';
 import { ErrMsgModel } from '../metamodels/errmsg.model'; 
 import { MongoModel, GetMongoModelObject } from '../typegoose.utils/getmodel.util'; 
 
+
+
+/*
 interface ErrProp { 
   name: string; 
   path: string; 
@@ -28,3 +31,4 @@ export async function Validate(model:MongoModel, item:any) {
       return errProps.map( errProp => GetErrMsg(model.baseModelName??'', errProp) ) 
     }); 
 }
+*/

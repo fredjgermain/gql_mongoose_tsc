@@ -20,7 +20,6 @@ const validateValue = [
     message: 'value is 20- less characters long!', 
   } 
 ] 
-  
 
 
 /** Form
@@ -33,7 +32,6 @@ const validateValue = [
 export class Form { 
   @prop({label:["fid", "fid"], 
     required:true, unique:true, 
-    testValid: 'testValid', 
     validate: validateValue, 
   }) 
   fid!: string; 
