@@ -115,7 +115,7 @@ function FindIds(itemIds:string[], ids:string[]) {
 async function GetInputsErrors(model:MongoModel, inputs:object[]) { 
   const ids = inputs.map( input => ParsedItem(input)._id ?? ParsedItem(input).id ); 
   // collection excludes the inputs themselves if they exists. 
-  const allItems = await model.find()
+  const allItems = await model.find() 
   const collection = allItems 
     .map( item => ParsedItem(item)) 
     .filter( item => !ids.includes(item._id)); 
@@ -139,12 +139,47 @@ async function GetInputsErrors(model:MongoModel, inputs:object[]) {
 // FIND -------------------------------------------------
 async function GetFindItemErrors(model:MongoModel, ids:string[]) { 
   const items = ids.map( id => {return {_id:id}} ) 
-  return (await ItemsExist(model, items)) 
-    .map( async (e) => { 
-      return !(await e).exist ? 
-        [{name:"Item not found", path:'_id', value:(await e).value}] as ErrProp[]: []; 
-    }) 
+  const itemsExist = await ItemsExist(model, items) 
+
+  const found = {name:"Item found", path:'_id', value:[]} as ErrProp; 
+  const notFound = {name:"Item not found", path:'_id', value:[]} as ErrProp; 
+  for(let i=0; i<itemsExist.length; i++) { 
+    const {value, exist} = await itemsExist[i]; 
+    exist ? 
+      (found.value as any[]).push(value): 
+      (notFound.value as any[]).push(value); 
+  }
+  return [found, notFound]; 
 }
+
+
+// Read ---------------------------------------------------
+async function Read(model:MongoModel, ids:string[]) { 
+  try{ 
+    const selector = ids && ids.length > 0 ? {_id: {$in: ids} }: {}; 
+    return await model.find(selector); 
+  }catch(err) { 
+    return await GetFindItemErrors(model, ids); 
+  } 
+}
+
+// Delete -------------------------------------------------
+async function Delete(model:MongoModel, ids:string[]) { 
+  if(!ids || ids.length === 0) 
+    return [] 
+  const [found, notFound] = await GetFindItemErrors(model, ids); 
+  if((notFound.value as any[]).length > 0) 
+    return [found, notFound]; 
+
+  try{ 
+    const deleted = await model.find({_id: {$in: ids}}); 
+    for(let i=0; i<ids.length; i++) 
+      await model.deleteOne({_id: ids[i] }) 
+    return deleted; 
+  }catch(err) { 
+
+  }
+} 
 
 // Create -----------------------------------------------
 async function GetCreateErrors(model:MongoModel, inputs:object[]) { 
@@ -183,11 +218,12 @@ async function GetUpdateErrors(model:MongoModel, inputs:object[]) {
         [{name:"Item not found", path:'_id', value:(await e).value}] as ErrProp[]: []; 
     }) 
   const inputErrors = await GetInputsErrors(model, inputs) 
-
-  // ignore remove required errors 
+  // ignore required fields and errors. 
+  const ignoreRequired = inputErrors.map( async input => 
+    (await input).filter( errors => errors?.type != 'required') ); 
 
   return inputs.map( async (input, i) => { 
-    return {input, errors: [...(await itemNotFoundErrors[i]), ...(await inputErrors[i])]} 
+    return {input, errors: [...(await itemNotFoundErrors[i]), ...(await ignoreRequired[i])]} 
   }) 
 } 
 async function Update(model:MongoModel, inputs:object[]) { 
@@ -214,17 +250,6 @@ async function Update(model:MongoModel, inputs:object[]) {
 
 
 
-async function _Read(model:MongoModel, ids:string[]) { 
-  try{ 
-    const selector = ids && ids.length > 0 ? {_id: {$in: ids} }: {}; 
-    return await model.find(selector); 
-  }catch(err) { 
-    const existingIds = ((await model.find()) as {_id:ObjectId}[]) 
-      .map( item => ParsedItem(item).id) 
-    return FindIds(existingIds, ids); 
-  } 
-}
-
 @Resolver() 
 export class CrudResolver { 
 
@@ -234,13 +259,6 @@ export class CrudResolver {
     return FetchMetaModel(modelName); 
   } 
   // VALIDATE .............................................
-  /*@Query(type => [Boolean]) 
-  async IdsExist(@Args() { modelName, ids }: ModelIdsArgs) { 
-    const model = GetMongoModelObject(modelName); 
-    const allItems = ((await model.find()) as {_id:ObjectId}[]) 
-    return await IdsExist(allItems, ids); 
-  } */
-
   @Query(type => [ObjectScalar]) 
   async ValidateInputs(@Args() { modelName, inputs }: UpdateArgs) { 
     const model = GetMongoModelObject(modelName); 
@@ -251,7 +269,7 @@ export class CrudResolver {
   @Query(type => [ObjectScalar]) 
   async Read(@Args() { modelName, ids }: ModelIdsArgs) { 
     const model = GetMongoModelObject(modelName); 
-    return await _Read(model, ids); 
+    return await Read(model, ids); 
   } 
 
   // CREATE ...............................................
@@ -281,14 +299,15 @@ export class CrudResolver {
   @Mutation(type => [ObjectScalar]) 
   async Delete(@Args() { modelName, ids }: ModelIdsArgs) { 
     const model = GetMongoModelObject(modelName); 
-    if(!model) 
+    return Delete(model, ids); 
+    /*if(!model) 
       return []; // should return error msg 
     const selector = ids && ids.length > 0 ? {_id: {$in: ids} }: {}; 
     const deleted = await model.find(selector); 
     for(let i=0; i<ids.length; i++) { 
       await model.deleteOne({_id: ids[i] }) 
     } 
-    return deleted; 
+    return deleted; */ 
   } 
 }
 
