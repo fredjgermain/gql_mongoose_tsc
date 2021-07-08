@@ -1,5 +1,78 @@
 import { ErrProp, ErrorParsing } from "../typegoose.utils/getfeedback.util"; 
 import { MongoModel, GetIFields } from '../typegoose.utils/getmodel.util'; 
+import { FEEDBACK_MSG } from './feedback'; 
+
+
+/* 
+Creation 
+- Parse input to remove id. (ignore if id already exists) 
+
+Update 
+- Parse input to REQUIRE id. 
+
+ParseToCreateInput() 
+ParseToUpdateInput() 
+ParseFromDoc() 
+
+
+ValidateInputs(model, inputs) 
+  const collection = model.find( excluding inputs ) 
+  const validations = [] as {input, errors}[] 
+  for(let i=0; i<inputs.length; i++) { 
+    const input = inputs[i] 
+    const otherInputs = Remove(i, inputs) 
+    inputErrors += IsInputValid(model, input) 
+    duplicateErrors += IsInputDuplicate(model, input, [...otherInputs, ...collection]) 
+    const errors = [...inputErrors, ...duplicateErros] 
+    validations.push({input, errors}) 
+  } 
+
+
+Create(model, inputs) 
+    
+
+*/ 
+
+function ParseToCreate(input:object) { 
+  const {id, _id, ..._input} = (input as any); // ignore id and _id if they were 
+  return _input; 
+}
+
+function ParseToUpdate(input:any): {_id:string, id:string, [key:string]:any} { 
+  //let parsedInputs = JSON.parse(JSON.stringify(input)); 
+  let parseToUpdate = {...input}; 
+  parseToUpdate._id = parseToUpdate._id ?? parseToUpdate.id ?? ''; 
+  parseToUpdate.id = parseToUpdate._id; 
+  return parseToUpdate; 
+} 
+
+function ParseFromDoc(docs:any): {_id:string, id:string, [key:string]:any} { 
+  return JSON.parse(JSON.stringify(docs)); 
+} 
+
+export async function ValidateInputs(model:MongoModel, inputs:object[]) { 
+  const ids = inputs.map( input => ParsedItem(input)._id ?? ParsedItem(input).id ); 
+  const collection = (await model.find()).filter( item => !ids.includes(ParseFromDoc(item)._id)); 
+
+  const validations = [] as {input:object, errors:ErrProp[]}[] 
+  for(let i=0; i<inputs.length; i++) { 
+    const input = inputs[i]; 
+    const otherInputs = RemoveAt(i, inputs); 
+    const toCompare = [...otherInputs, ...collection]; 
+    const errors = [ 
+      ...(await IsInputValid(model, input)), 
+      ...IsInputDuplicate(model, input, toCompare) 
+    ]; 
+    validations.push({input, errors}); 
+  } 
+  return validations; 
+}
+
+
+
+
+
+
 
 
 function RemoveAt(at:number, array:any[]) { 
@@ -15,7 +88,7 @@ export function IsIdUnic(input:any, toCompares:any[]) {
   if(ids.filter( i => !!id && id == i ).length > 0) 
     return [{name:'', path:"_id", value:id}] as ErrProp[]; 
   return []; 
-}
+} 
 
 export function IsInputDuplicate(model:MongoModel, input:any, toCompare:any[]) { 
   const indexedFields = GetIFields(model) 
@@ -27,7 +100,7 @@ export function IsInputDuplicate(model:MongoModel, input:any, toCompare:any[]) {
     const values = toCompare.map( i => i[path]) 
     return values.filter( v => !!v && !!value && v === value ).length > 0; 
   }).map( path => { 
-    return {name:'', path, value:input[path]} as ErrProp
+    return {name:FEEDBACK_MSG.ERROR_DUPLICATE.name, path, value:input[path]} as ErrProp 
   }) 
 } 
 

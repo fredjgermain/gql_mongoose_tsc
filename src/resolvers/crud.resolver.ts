@@ -8,7 +8,7 @@ import {
 // --------------------------------------------------------
 import { ObjectScalar } from '../models/customscalar'; 
 import { MongoModel, GetMongoModelObject, FetchMetaModel } from '../typegoose.utils/getmodel.util'; 
-import { GetInputsErrors, GetCreateErrors, GetUpdateErrors, GetFindItemErrors, ParsedItem } from './crudvalidation'; 
+import { ValidateInputs, GetCreateErrors, GetUpdateErrors, GetFindItemErrors, ParsedItem } from './crudvalidation'; 
 import { FEEDBACK_MSG } from './feedback'; 
 
 @ObjectType() 
@@ -61,7 +61,7 @@ export class CrudResolver {
   @Query(type => [ObjectScalar]) 
   async ValidateInputs(@Args() { modelName, inputs }: UpdateArgs) { 
     const model = GetMongoModelObject(modelName); 
-    return await GetInputsErrors(model, inputs) 
+    return await ValidateInputs(model, inputs);  
   } 
 
   // FEEDBACKMSG ..........................................
