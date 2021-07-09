@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'; 
+
 // ----------------------------------------------
 import { Form } from '../models/form.model'; 
 
@@ -17,13 +18,13 @@ export const FormDatas:Form[] = [
     description: ["ASRS"] 
   }, 
   { 
-    //_id: new mongoose.Types.ObjectId(), 
+    _id: new mongoose.Types.ObjectId(), 
     fid: 'whodas', 
     title: ['WHODAS 2.0'], 
     description: ["WHODAS 2.0"] 
   }, 
   { 
-    //_id: new mongoose.Types.ObjectId(), 
+    _id: new mongoose.Types.ObjectId(), 
     fid: 'edec', 
     title: ["EDEC Échelle d'autoévaluation cognitive"], 
     description: ["EDEC Échelle d'autoévaluation cognitive"]

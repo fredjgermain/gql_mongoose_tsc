@@ -1,11 +1,15 @@
 import mongoose from 'mongoose'; 
+
+// --------------------------------------------------------
 import { FormDatas } from './forms.mockdata'; 
 import { InstructionDatas } from './instructions.mockdata'; 
 import { ResponseGroupDatas } from './responses.mockdata'; 
 
+/*
 import { Form } from '../models/form.model'; 
 import { Instruction} from '../models/instruction.model'; 
 import { ResponseGroup } from '../models/responsegroup.model'; 
+*/
 import { Question } from '../models/question.model'; 
 
 
@@ -60,15 +64,13 @@ const asrs_q = [
 ] 
 
 const asrs_questions = asrs_q.map( ({label}, i) => { 
-  //const _id = new mongoose.Types.ObjectId(); 
+  const _id = new mongoose.Types.ObjectId(); 
   const qid = 'asrs'+(i+1); 
   const form = asrs_f; 
   const instructions = [] as any[]; 
-  const section = ''; 
-  const order = i; 
   const responsegroup = pdqd5_r; 
   const optional = false; 
-  return {qid, label, form, instructions, optional, responsegroup} as Question; 
+  return {_id, qid, label, form, instructions, optional, responsegroup} as Question; 
 }) 
 
 
@@ -122,12 +124,13 @@ const whodas_q = [
 ]
 
 const whodas_questions = whodas_q.map( ({label, section}, i) => { 
+  const _id = new mongoose.Types.ObjectId(); 
   const qid = section+(i+1); 
   const form = whodas_f; 
   const instructions = whodas_i.filter( i => i.iid.match(section)); 
   const responsegroup = section.match('h') ? whodas_r2: whodas_r1; 
   const optional = false; 
-  return {qid, label, form, instructions, optional, responsegroup} as Question; 
+  return {_id, qid, label, form, instructions, optional, responsegroup} as Question; 
 }) 
 
 
@@ -188,13 +191,13 @@ const edec_q = [
 ] 
 
 const edec_questions = edec_q.map( ({label}, i) => { 
-  //const _id = new mongoose.Types.ObjectId(); 
+  const _id = new mongoose.Types.ObjectId(); 
   const qid = `edec_${i+1}`; 
   const form = edec_f; 
   const instructions = [] as any[]; 
   const responsegroup = edec_r; 
   const optional = false; 
-  return {qid, label, form, instructions, optional, responsegroup} as Question; 
+  return {_id, qid, label, form, instructions, optional, responsegroup} as Question; 
 }) 
 
 

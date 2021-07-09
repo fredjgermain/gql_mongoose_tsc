@@ -22,7 +22,7 @@ function Range_DaysPerMonth() {
 // RESPONSE -------------------------------------
 export const ResponseGroupDatas:ResponseGroup[] = [ 
   { 
-    ////_id:new mongoose.Types.ObjectId(), 
+    _id:new mongoose.Types.ObjectId(), 
     rid: 'pdqd5', 
     responsechoices: [
       ['Never', "Rarely (once or twice)", "Sometimes (3 to 5 times)", "Often (once per day)", "Very often (more than once per day)"], 
@@ -30,7 +30,7 @@ export const ResponseGroupDatas:ResponseGroup[] = [
     ], 
   }, 
   { 
-    ////_id:new mongoose.Types.ObjectId(), 
+    _id:new mongoose.Types.ObjectId(), 
     rid: 'asrs', 
     responsechoices: [ 
       [`Not at all`, `Rarely`, `Sometimes`, `Often`, `Very often`], 
@@ -38,7 +38,7 @@ export const ResponseGroupDatas:ResponseGroup[] = [
     ], 
   }, 
   { 
-    //_id:new mongoose.Types.ObjectId(), 
+    _id:new mongoose.Types.ObjectId(), 
     rid: 'whodas_r1', 
     responsechoices: [ 
       [`None`, `Mild`, `Moderate`, `Severe`, `Extreme or cannot do`], 
@@ -46,14 +46,14 @@ export const ResponseGroupDatas:ResponseGroup[] = [
     ], 
   }, 
   { 
-    //_id:new mongoose.Types.ObjectId(), 
+    _id:new mongoose.Types.ObjectId(), 
     rid: 'whodas_r2', 
     responsechoices: [ 
       Range(0, 30).map( i => JSON.stringify(i)) 
     ], 
   }, 
   {
-    //_id:new mongoose.Types.ObjectId(), 
+    _id:new mongoose.Types.ObjectId(), 
     rid: 'edec_r', 
     responsechoices: [[
       `(0) Aucunement`, 
