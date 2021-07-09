@@ -1,5 +1,5 @@
 import { prop } from "@typegoose/typegoose"; 
-
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
 
 /** Instruction
  * Instruction assignable to a question, giving a bit of instruction about a question of series of questions. 
@@ -7,7 +7,7 @@ import { prop } from "@typegoose/typegoose";
  * iid 
  * label ... multilingual 
  */
-export class Instruction {
+export class Instruction extends Base {
   @prop({label:["iid", "iid"], 
     required:true, unique:true}) 
   iid: string; 

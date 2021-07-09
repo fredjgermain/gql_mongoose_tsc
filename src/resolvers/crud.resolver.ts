@@ -8,7 +8,7 @@ import {
 // --------------------------------------------------------
 import { ObjectScalar } from '../models/customscalar'; 
 import { MongoModel, GetMongoModelObject, FetchMetaModel } from '../typegoose.utils/getmodel.util'; 
-import { ValidateInputs, GetCreateErrors, GetUpdateErrors, GetFindItemErrors, ParsedItem } from './crudvalidation'; 
+import { ValidateInputs, Create, Read, Update, Delete } from './crudvalidation'; 
 import { FEEDBACK_MSG } from './feedback'; 
 
 @ObjectType() 
@@ -59,9 +59,9 @@ export class CrudResolver {
   
   // VALIDATEINPUTS .......................................
   @Query(type => [ObjectScalar]) 
-  async ValidateInputs(@Args() { modelName, inputs }: UpdateArgs) { 
+  async Validate(@Args() { modelName, inputs }: UpdateArgs) { 
     const model = GetMongoModelObject(modelName); 
-    return await ValidateInputs(model, inputs);  
+    return await ValidateInputs(model, inputs); 
   } 
 
   // FEEDBACKMSG ..........................................
@@ -70,17 +70,16 @@ export class CrudResolver {
     return Object.entries(FEEDBACK_MSG) 
       .filter( f => { 
         const [name] = f; 
-        console.log(feedbackNames, name); 
         return feedbackNames.includes(name); 
       }) 
   } 
 
   // COUNT ................................................
-  @Query(type => [ObjectScalar]) 
+  /*@Query(type => [ObjectScalar]) 
   async Count(@Args() { modelName }: ModelIdsArgs) { 
     const model = GetMongoModelObject(modelName); 
-    return await model.find(); 
-  } 
+    return (await model.find()).length; 
+  } */
 
   // READ .................................................
   @Query(type => [ObjectScalar]) 
@@ -89,10 +88,25 @@ export class CrudResolver {
     return await Read(model, ids); 
   } 
 
+  // TEST MUTATION ........................................
+  @Mutation(type => [String]) 
+  async TestMutationName(@Args() { modelName }: ModelNameArg) { 
+    //console.log(modelName); 
+    return [modelName]; 
+  } 
+
+  // TEST MUTATION ........................................
+  @Mutation(type => [String]) 
+  async TestMutationArgs(@Args() { modelName, ids }: ModelIdsArgs) { 
+    //console.log(modelName, ids); 
+    return ids; 
+  } 
+
   // CREATE ...............................................
   @Mutation(type => [ObjectScalar]) 
   async Create(@Args() { modelName, inputs }: CreateArgs) { 
     const model = GetMongoModelObject(modelName); 
+    //console.log(modelName, inputs); 
     return await Create(model, inputs); 
   } 
 
@@ -110,71 +124,3 @@ export class CrudResolver {
     return Delete(model, ids); 
   } 
 }
-
-// Read ---------------------------------------------------
-async function Read(model:MongoModel, ids:string[]) { 
-  try{ 
-    const selector = ids && ids.length > 0 ? {_id: {$in: ids} }: {}; 
-    return await model.find(selector); 
-  }catch(err) { 
-    return await GetFindItemErrors(model, ids); 
-  } 
-}
-
-// Delete -------------------------------------------------
-async function Delete(model:MongoModel, ids:string[]) { 
-  if(!ids || ids.length === 0) 
-    return [] 
-  const [found, notFound] = await GetFindItemErrors(model, ids); 
-  if((notFound.value as any[]).length > 0) 
-    return [found, notFound]; 
-
-  try{ 
-    const deleted = await model.find({_id: {$in: ids}}); 
-    for(let i=0; i<ids.length; i++) 
-      await model.deleteOne({_id: ids[i] }) 
-    return deleted; 
-  }catch(err) { 
-    return err; 
-  }
-} 
-
-// Create -----------------------------------------------
-async function Create(model:MongoModel, inputs:object[]) { 
-  const createErrors = await GetCreateErrors(model, inputs); 
-  for(let i=0; i<createErrors.length; i++) { 
-    if((await createErrors[i]).errors.length >0) 
-      return createErrors; 
-  } 
-  
-  try { 
-    return await model.create(inputs); 
-  }catch(err) { 
-    return err; 
-  } 
-} 
-
-
-// Update -----------------------------------------------
-async function Update(model:MongoModel, inputs:object[]) { 
-  const updateErrors = await GetUpdateErrors(model, inputs); 
-  for(let i=0; i<updateErrors.length; i++) { 
-    if((await updateErrors[i]).errors.length >0) 
-      return updateErrors; 
-  } 
-  
-  try { 
-    const items = inputs.map( item => { 
-      const {id, _id, ...parsedItem} = ParsedItem(item) 
-      return {id, parsedItem}}) 
-    for(let i=0; i<items.length; i++) { 
-      const {id, parsedItem} = items[i]; 
-      await model.updateOne({_id:id}, parsedItem); 
-    } 
-    const ids = items.map(i=>i.id); 
-    return await model.find({_id:{$in:ids}}); 
-  }catch(err) { 
-    return err; 
-  } 
-} 
-

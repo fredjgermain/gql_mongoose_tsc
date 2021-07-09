@@ -1,4 +1,7 @@
 import { prop } from "@typegoose/typegoose"; 
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
+
+// --------------------------------------------------------
 import { Patient } from './patient.model'; 
 import { Question } from './question.model'; 
 
@@ -11,7 +14,7 @@ import { Question } from './question.model';
  * date
  * answervalues ... unanswered question are -1 
  */
-export class Answer { 
+export class Answer extends Base { 
   @prop({label: ["patient", "patient"], 
     ref:'Patient', 
     required:true}) 

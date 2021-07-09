@@ -1,4 +1,7 @@
-import { prop } from "@typegoose/typegoose"; 
+import { ObjectId } from 'mongoose'; 
+import { prop, mongoose } from "@typegoose/typegoose"; 
+//import {  } from '@typegoose/typegoose/lib/types'; 
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
 
 
 
@@ -29,10 +32,9 @@ const validateValue = [
  * title ... multilingual 
  * description ... multilingual 
  */
-export class Form { 
+export class Form extends Base { 
   @prop({label:["fid", "fid"], 
-    required:true, unique:true, 
-    validate: validateValue, 
+    required:true, unique:true 
   }) 
   fid!: string; 
 

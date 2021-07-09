@@ -1,3 +1,5 @@
+import { ErrProp } from '../typegoose.utils/getfeedback.util'; 
+
 
 enum FBType { 
   Success, 
@@ -15,6 +17,17 @@ interface FeedbackMsg {
 /*interface FeedbackMsgS { 
   [key:string]: FeedbackMsg; 
 } */
+
+function EvalStringInterpolation(errorArgs:ErrProp, templateStr:string) { 
+  const keys = Object.keys(errorArgs); 
+  templateStr = templateStr.replace(/`/g, '\\`'); 
+  const fn = new Function(...keys, 'return `' + templateStr + '`'); 
+  return fn(...keys.map(key => errorArgs[key])); 
+} 
+
+const error = {name:'ERROR', path:'myfield', value:'wrong value'}; 
+console.log(EvalStringInterpolation(error, "this is field: ${path} ... ${value} ")) 
+
 
 export const FEEDBACK_MSG = { 
   // Errors ...............................................

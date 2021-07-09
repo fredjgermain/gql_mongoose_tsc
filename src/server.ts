@@ -4,16 +4,17 @@ import express from "express";
 import "reflect-metadata"; 
 import { buildSchema } from "type-graphql"; 
 import { connect } from "mongoose"; 
-// import { MakeController } from './controllertest/testcontroler'; 
 
 import cors from "cors";
 
 
 
-// Local-import 
+// Local-import -------------------------------------------
 import { mongodbUrl } from './mongodb.connectionurl'; 
 // resolvers
 import { Resolvers } from './prepping'; 
+import { MockDatas } from './mockdata/mockinit'; 
+
 
 const main = async () => {
   const schema = await buildSchema({ 
@@ -22,27 +23,32 @@ const main = async () => {
     validate: false, 
   });
 
-// create mongoose connection
-const mongodbConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true } 
-const mongoose = await connect(mongodbUrl, mongodbConnectionOptions); 
-await mongoose.connection; 
+  // create mongoose connection
+  const mongodbConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true } 
+  const mongoose = await connect(mongodbUrl, mongodbConnectionOptions); 
+  await mongoose.connection; 
 
-const PORT = process.env.PORT || 8000; 
-const app = express(); 
+  const PORT = process.env.PORT || 8000; 
+  const app = express(); 
 
 
-// Express CORS -------------------
-app.use(cors()); 
-app.use(cors({ 
-  origin: 'http://localhost:3000' 
-})); 
+  // Express CORS -------------------
+  app.use(cors()); 
+  app.use(cors({ 
+    origin: 'http://localhost:3000' 
+  })); 
 
-// Express CORS -------------------
-const server = new ApolloServer({schema}); 
-server.applyMiddleware({ app }); 
+  // Express CORS -------------------
+  const server = new ApolloServer({schema}); 
+  server.applyMiddleware({ app }); 
 
-app.listen({ port: PORT }, () => 
-  console.log(`Server ready and listening at ==> http://localhost:${PORT}${server.graphqlPath}`)) 
+
+  // INIT MOCK DATA ----------------
+  MockDatas() 
+  // init mock data ... 
+
+  app.listen({ port: PORT }, () => 
+    console.log(`Server ready and listening at ==> http://localhost:${PORT}${server.graphqlPath}`)) 
 }; 
 main().catch((error)=>{ 
     console.log(error, 'error'); 

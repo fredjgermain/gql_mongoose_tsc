@@ -1,6 +1,9 @@
 import { prop } from "@typegoose/typegoose"; 
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
+
+// --------------------------------------------------------
 import { Form } from './form.model'; 
-import { ResponseType } from './responsetype.model'; 
+import { ResponseGroup } from './responsegroup.model'; 
 import { Instruction } from './instruction.model'; 
 
 
@@ -14,27 +17,27 @@ import { Instruction } from './instruction.model';
  * label ... a multi-lingual question label. 
  * optional ... indicate if that question if optional or not. 
  */ 
-export class Question { 
+export class Question extends Base { 
   @prop({label:["qid", "qid"], 
     required:true, unique:true}) 
   qid!: string; 
 
   @prop({label:["form", "formulaire"], 
-    ref:'Form', 
-    required:true})
+  type: Form,  ref:'Form', 
+    required:true}) 
   form!: Form; 
 
   @prop({label:["instructions", "instructions"], 
     type: [Instruction], ref:'Instruction', 
     required:true}) 
-  instruction!: Instruction[]; 
+  instructions!: Instruction[]; 
 
   @prop({label:["response type", "type de réponse"], 
-    type: [ResponseType], ref:'ResponseType', 
+    type: [ResponseGroup], ref:'ResponseGroup', 
     required:true}) 
-  responsetype!: ResponseType; 
+  responsegroup!: ResponseGroup; 
 
-  @prop({label:["label", "libélé"], 
+  @prop({label:["label", "libel"], 
     type: [String], 
     required:true}) 
   label!: string[]; 

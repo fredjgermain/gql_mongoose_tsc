@@ -6,6 +6,8 @@
 type Mutation {
   Create(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
   Delete(ids: [ID!], modelName: String!): [ObjectScalar!]!
+  TestMutationArgs(ids: [ID!], modelName: String!): [String!]!
+  TestMutationName(modelName: String!): [String!]!
   Update(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
 }
 
@@ -13,9 +15,8 @@ type Mutation {
 scalar ObjectScalar
 
 type Query {
-  Count(ids: [ID!], modelName: String!): [ObjectScalar!]!
   FeedbackMsg(feedbackNames: [String!]!): [ObjectScalar!]!
   Model(modelName: String!): ObjectScalar!
   Read(ids: [ID!], modelName: String!): [ObjectScalar!]!
-  ValidateInputs(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
+  Validate(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
 }

@@ -1,4 +1,5 @@
 import { prop } from "@typegoose/typegoose"; 
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
 
 /** Patient
  * Patient profile
@@ -24,7 +25,7 @@ email: string[]; */
 address: string[]; */
 // match: '^[a-zA-Z]{4}[0-9]{8}$'
 
-export class Patient { 
+export class Patient extends Base { 
   @prop({label: ["RAMQ", "RAMQ"], 
     required:true, unique:true}) 
   ramq!: string; 

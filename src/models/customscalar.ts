@@ -56,14 +56,13 @@ export const UpdateScalar = new GraphQLScalarType({
 
 
 
-
 export const ObjectScalar = new GraphQLScalarType({ 
   name: "ObjectScalar", 
   description: "Simulates Object", 
   // SERIALIZE --------------------------------------------
   serialize(value: unknown): Object {
     //console.log('serialize test', value); 
-    // check the type of received value
+    // check the type of received value 
     if (!(value instanceof Object)) {
       throw new Error("ObjectScalar can only serialize Object values");
     }
@@ -72,35 +71,24 @@ export const ObjectScalar = new GraphQLScalarType({
 
   // PARSE VALUE ------------------------------------------
   parseValue(value: unknown): Object { 
-    //console.log('parsed value', value); 
+    //console.log('parsed value 1', value); 
     // check the type of received value 
-    if (typeof value !== "string") { 
+    /*if (typeof value != "string") { 
+      console.log('parsed value ... is string ?', value); 
       throw new Error("ObjectScalar can only parse object values"); 
-    } 
+    } */ 
+    //console.log('parsed value 2', value); 
     
-    return value as Object; // value from the client input variables 
+    return value as any as Object; // value from the client input variables 
   }, 
 
   // PARSE LITERAL ----------------------------------------
   parseLiteral(ast): Object { 
-    // check the type of received value     
-    /*let parsedObject = {} as any; 
-    const {fields} = ast as any; 
-
-    (fields as any[]).map( f => { 
-        const {name:{value:name}, value:{value}} = f; 
-        parsedObject[name] =value; 
-      } 
-    ) */
-
+    //console.log('parsed literal'); 
     let parsedObject = ParseObjectValue(ast as ObjectValue) 
-
     if (ast.kind !== Kind.OBJECT) { 
       throw new Error("ObjectScalar can only parse object values (Literal)"); 
     } 
-    
-    //console.log('parse literal 2', parsedObject); 
-
     return parsedObject as Object; 
   }, 
 }); 
