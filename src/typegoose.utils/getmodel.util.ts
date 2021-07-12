@@ -22,8 +22,9 @@ export function GetIFields(model:MongoModel) {
 
 export async function FetchMetaModel(modelName:string) { 
   const MetaCollectionModel = GetMongoModelObject('MetaCollection'); 
-  const [metaCollection] = (await MetaCollectionModel.find({accessor: modelName.toLowerCase()}) as MetaCollection[]); 
-  const {accessor, label, description} = metaCollection;
+
+  const metaCollection = (await MetaCollectionModel.findOne({accessor:modelName}) as MetaCollection); 
+  const {accessor, label, description} = metaCollection; 
 
   const model = GetMongoModelObject(modelName); 
   // get Mlang metaCollection ... 
