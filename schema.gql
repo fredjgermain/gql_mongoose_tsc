@@ -3,12 +3,26 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type CrudResult {
+  abbrevs: [ObjectScalar!]!
+  count: Float!
+  errors: [ObjectScalar!]!
+  ids: [String!]!
+  items: [ObjectScalar!]!
+  modelName: String!
+}
+
+type Model {
+  accessor: String!
+  description: [String!]!
+  ifields: [ObjectScalar!]!
+  label: [String!]!
+}
+
 type Mutation {
-  Create(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
-  Delete(ids: [ID!], modelName: String!): [ObjectScalar!]!
-  TestMutationArgs(ids: [ID!], modelName: String!): [String!]!
-  TestMutationName(modelName: String!): [String!]!
-  Update(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
+  Create(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  Delete(ids: [ID!], modelName: String!): CrudResult!
+  Update(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }
 
 """Simulates Object"""
@@ -16,7 +30,7 @@ scalar ObjectScalar
 
 type Query {
   FeedbackMsg(feedbackNames: [String!]!): [ObjectScalar!]!
-  Model(modelName: String!): ObjectScalar!
-  Read(ids: [ID!], modelName: String!): [ObjectScalar!]!
-  Validate(inputs: [ObjectScalar!]!, modelName: String!): [ObjectScalar!]!
+  Model(modelName: String!): Model!
+  Read(ids: [ID!], modelName: String!): CrudResult!
+  Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }
