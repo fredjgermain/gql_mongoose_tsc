@@ -5,7 +5,6 @@ import {
   ParsedItem, ParseFromDoc, ParseToCreate, ParseToUpdate, 
   GetDuplicateErrors, GetNotFoundError, GetValidationErrors } 
   from './crudvalidation'; 
-import { CrudResult } from "./crud.resolver";
 
 
 

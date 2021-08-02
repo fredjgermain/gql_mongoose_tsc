@@ -28,8 +28,8 @@ export async function FetchMetaModel(modelName:string) {
 
   const model = GetMongoModelObject(modelName); 
   // get Mlang metaCollection ... 
-  const fields = GetIFields(model); 
-  return {accessor, label, description, fields}; 
+  const ifields = GetIFields(model); 
+  return {accessor, label, description, ifields}; 
 }
 
 function ParseToIField(mongoField:IMongoField) { 

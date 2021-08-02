@@ -12,7 +12,7 @@ type CrudResult {
   modelName: String!
 }
 
-type Model {
+type ModelObjectType {
   accessor: String!
   description: [String!]!
   ifields: [ObjectScalar!]!
@@ -30,7 +30,7 @@ scalar ObjectScalar
 
 type Query {
   FeedbackMsg(feedbackNames: [String!]!): [ObjectScalar!]!
-  Model(modelName: String!): Model!
+  Model(modelName: String!): ModelObjectType!
   Read(ids: [ID!], modelName: String!): CrudResult!
   Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }
