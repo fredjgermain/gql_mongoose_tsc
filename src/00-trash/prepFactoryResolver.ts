@@ -4,7 +4,7 @@ import { ClassType, Field, ID, Int,
 import { getModelWithString } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { CrudResolver } from './crud.resolver'; 
+import { CrudResolver } from '../resolvers/crud.resolver'; 
 export const Resolvers = [CrudResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
 
 

@@ -3,11 +3,11 @@ import { Args, Resolver, Query, Mutation } from "type-graphql";
 // --------------------------------------------------------
 import { ObjectScalar } from '../models/customscalar'; 
 import { MongoModel, GetMongoModelObject, FetchMetaModel } from '../typegoose.utils/getmodel.util'; 
-import { ValidateInputs, Create, Read, Update, Delete } from './crud.actions'; 
-import { FEEDBACK_MSG } from './feedback'; 
-import { CrudResult } from './crudresult.class'; 
-import { ModelObjectType } from './model.class'; 
-import { CreateArgs, FeedbackMsgArg, ModelIdsArgs, ModelNameArg, UpdateArgs } from './crud.argstypes'; 
+import { ValidateInputs, Create, Read, Update, Delete } from '../typegoose.utils/crud.actions'; 
+import { FEEDBACK_MSG } from '../typegoose.utils/feedback'; 
+import { CrudResult } from '../typegql.utils/crudresult.class'; 
+import { ModelObjectType } from '../typegql.utils/model.class'; 
+import { CreateArgs, FeedbackMsgArg, ModelIdsArgs, ModelNameArg, UpdateArgs } from '../typegql.utils/crud.argstypes'; 
 
 
 

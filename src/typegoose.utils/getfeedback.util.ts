@@ -2,7 +2,7 @@ import { mongoose } from "@typegoose/typegoose";
 
 // --------------------------------------------------------
 import { FeedbackMsg } from '../metamodels/feedback.model'; 
-import { FEEDBACK_MSG } from '../resolvers/feedback'; 
+import { FEEDBACK_MSG } from './feedback'; 
 import { GetMongoModelObject } from './getmodel.util'; 
 
 

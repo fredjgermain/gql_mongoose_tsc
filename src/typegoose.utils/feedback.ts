@@ -1,4 +1,4 @@
-import { ErrProp } from '../typegoose.utils/getfeedback.util'; 
+import { ErrProp } from './getfeedback.util'; 
 
 
 enum FBType { 

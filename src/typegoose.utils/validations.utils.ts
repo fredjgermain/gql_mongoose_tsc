@@ -1,5 +1,5 @@
-import { ErrProp, ErrorParsing } from "../typegoose.utils/getfeedback.util"; 
-import { MongoModel, GetIFields } from '../typegoose.utils/getmodel.util'; 
+import { ErrProp, ErrorParsing } from "./getfeedback.util"; 
+import { MongoModel, GetIFields } from './getmodel.util'; 
 import { FEEDBACK_MSG } from './feedback'; 
 
 
