@@ -8,8 +8,8 @@ import { Patient } from './patient.model';
 import { Question } from './question.model'; 
 import { ResponseGroup } from './responsegroup.model'; 
 
-import { MetaCollection } from '../metamodels/metacollections.model'; 
-import { FeedbackMsg } from '../metamodels/feedback.model'; 
+import { MetaCollection } from '../typegoose.utils/metacollections.class'; 
+import { FeedbackMsg } from '../typegoose.utils/feedback.utils/feedback.model'; 
 
 
 // Register collections 

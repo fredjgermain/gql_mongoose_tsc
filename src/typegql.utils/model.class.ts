@@ -1,13 +1,13 @@
 import { Field, ObjectType } from "type-graphql"; 
 
 // --------------------------------------------------------
-import { ObjectScalar } from '../models/customscalar'; 
+import { ObjectScalar } from './customscalar'; 
 
 
 
 // MODELOBJECTTYPE ########################################
 @ObjectType() 
-export class ModelObjectType { 
+export class GQLModel { 
   @Field() 
   accessor: string; 
   

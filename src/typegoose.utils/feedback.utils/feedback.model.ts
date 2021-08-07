@@ -1,18 +1,21 @@
 import { prop } from "@typegoose/typegoose"; 
 
 
-/** FeedbackMsg 
- * FeedbackMsg stores multilingual messages 
- * Includes success messages, confirmation messages, error messages 
- * ?FeedbackMsg ought to be searched by name, rather than by Id? 
-*/ 
-enum FeedbackTypeEnum { 
+/** FeedbackTypeEnum 
+ * Success, Warning, Notif, Error 
+ */
+export enum FeedbackTypeEnum { 
   Success, 
   Warning, 
   Notif, 
   Error 
 } 
 
+/** FeedbackMsg 
+ * FeedbackMsg stores multilingual messages 
+ * Includes success messages, confirmation messages, error messages 
+ * ?FeedbackMsg ought to be searched by name, rather than by Id? 
+*/ 
 export class FeedbackMsg { 
   // unique name for errmsg 
   @prop({required:true, unique:true}) 

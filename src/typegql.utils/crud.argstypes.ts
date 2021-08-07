@@ -1,7 +1,7 @@
 import { Field, ID, ArgsType } from "type-graphql"; 
 
 // --------------------------------------------------------
-import { ObjectScalar } from '../models/customscalar'; 
+import { ObjectScalar } from './customscalar'; 
 
 
 
@@ -16,6 +16,9 @@ export class FeedbackMsgArg {
 export class ModelNameArg { 
   @Field(type => String) 
   modelName: string; 
+
+  @Field(type => [String], {nullable:true}) 
+  fields: string[]; 
 }
 
 @ArgsType() 

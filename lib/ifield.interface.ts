@@ -10,12 +10,16 @@ export interface IType {
 } 
 
 export interface IField {
-  name: string; 
+  accessor: string; 
   type: IType; 
 
   label: string; 
   isRef?: boolean; 
   options?: any; 
+  abbrev?: boolean; 
+  format?: string; 
+  order?: number; 
+
   // required?: boolean; 
   // unique?: boolean; 
   // regex: string ?? 
@@ -35,6 +39,7 @@ export interface IMongoField {
     sortType?: string; 
     defaultValue?: any; 
     format?: string; 
+    order?: number; 
     enum?: any[]; 
     abbrev?: boolean; 
     [key:string]:any; 

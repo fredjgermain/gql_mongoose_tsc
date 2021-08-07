@@ -1,13 +1,13 @@
 import { mongoose } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { MetaCollection } from '../metamodels/metacollections.model'; 
+import { MetaCollection } from './metacollections.class'; 
 import { IField, IType, IMongoField } from '../../lib/ifield.interface'; 
 
 
 export type MongoModel = mongoose.Model<any, {}, {}>; 
 
-export function GetMongoModelObject(modelName:string) { 
+export function GetMongoModelObject(modelName:string):MongoModel { 
   return mongoose.models[modelName]; 
 } 
 
@@ -15,9 +15,9 @@ export function GetMongoFields(model:MongoModel) {
   return Object.values(model.schema.paths) as any[] as IMongoField[]; 
 } 
 
-export function GetIFields(model:MongoModel) { 
+export function GetIFields(model:MongoModel):IField[] { 
   const mongofields = GetMongoFields(model); 
-  return mongofields.map( f => ParseToIField(f)) // parse fields to convert to IFields ?? 
+  return mongofields.map( field => ParseToIField(field) ) // parse fields to convert to IFields ?? 
 }
 
 export async function FetchMetaModel(modelName:string) { 
@@ -30,26 +30,27 @@ export async function FetchMetaModel(modelName:string) {
   // get Mlang metaCollection ... 
   const ifields = GetIFields(model); 
   return {accessor, label, description, ifields}; 
-}
-
-function ParseToIField(mongoField:IMongoField) { 
-  const {path, instance, options, $embeddedSchemaType} = mongoField; 
-  const ifield:IField = {} as IField; 
-  const type = ParseToIType(mongoField); 
-
-  ifield.name = path ?? ''; 
-  ifield.label = options.label ?? ''; 
-  ifield.type = type; 
-  ifield.isRef = !!options?.ref; 
-  ifield.options = options; 
-  return ifield; 
 } 
 
-function ParseToIType(mongoField:IMongoField) { 
+function ParseToIField(mongoField:IMongoField):IField { 
+  const {path, instance, options, $embeddedSchemaType} = mongoField; 
+  const type = ParseToIType(mongoField); 
+  const {label, abbrev, format, order, _options} = options; 
+
+  return { 
+    accessor: path ?? '', 
+    label: label ?? '', 
+    isRef: !!options?.ref, 
+    options: _options, 
+    type, abbrev, format, order, 
+  } 
+} 
+
+function ParseToIType(mongoField:IMongoField): IType { 
   const {instance, options, $embeddedSchemaType} = mongoField; 
   const type = {} as IType; 
-
-  type.name = (options?.ref ?? $embeddedSchemaType?.instance ?? mongoField.instance ?? '').toLowerCase(); 
+  
+  type.name = (options?.ref ?? $embeddedSchemaType?.instance ?? mongoField.instance ?? '').toLowerCase(), 
   type.enums = options?.enum; 
   type.isEnum = !!type.enums; 
   type.isArray = instance.toLowerCase() === 'array'; 
@@ -57,7 +58,7 @@ function ParseToIType(mongoField:IMongoField) {
   type.isScalar = !type.isArray && !type.isObject; 
   type.defaultValue = GetDefaultValue(type.name, options); 
   return type; 
-}
+} 
 
 function GetDefaultValue(type:string, options:any):any { 
   if(options['defaultValue']) 

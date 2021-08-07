@@ -4,15 +4,13 @@
 # -----------------------------------------------
 
 type CrudResult {
-  abbrevs: [ObjectScalar!]!
   count: Float!
   errors: [ObjectScalar!]!
-  ids: [String!]!
   items: [ObjectScalar!]!
   modelName: String!
 }
 
-type ModelObjectType {
+type GQLModel {
   accessor: String!
   description: [String!]!
   ifields: [ObjectScalar!]!
@@ -20,9 +18,9 @@ type ModelObjectType {
 }
 
 type Mutation {
-  Create(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
-  Delete(ids: [ID!], modelName: String!): CrudResult!
-  Update(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  Create(fields: [String!], inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  Delete(fields: [String!], ids: [ID!], modelName: String!): CrudResult!
+  Update(fields: [String!], inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }
 
 """Simulates Object"""
@@ -30,7 +28,7 @@ scalar ObjectScalar
 
 type Query {
   FeedbackMsg(feedbackNames: [String!]!): [ObjectScalar!]!
-  Model(modelName: String!): ModelObjectType!
-  Read(ids: [ID!], modelName: String!): CrudResult!
-  Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  Model(fields: [String!], modelName: String!): GQLModel!
+  Read(fields: [String!], ids: [ID!], modelName: String!): CrudResult!
+  Validate(fields: [String!], inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }

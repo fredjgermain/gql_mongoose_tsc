@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'; 
 
 // --------------------------------------------------------
-import { MetaCollection } from '../metamodels/metacollections.model'; 
+import { MetaCollection } from '../typegoose.utils/metacollections.class'; 
 import { FormDatas } from './forms.mockdata'; 
 import { InstructionDatas } from './instructions.mockdata'; 
 import { ResponseGroupDatas } from './responses.mockdata'; 
@@ -39,7 +39,7 @@ const MetaCollectionDatas:MetaCollection[] = [
     //_id: new mongoose.Types.ObjectId(), 
     accessor:'Patient', 
     label:['Patients'], 
-    description: [''], 
+    description: [''] 
   }, 
   {
     //_id: new mongoose.Types.ObjectId(), 

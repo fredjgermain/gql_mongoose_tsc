@@ -1,9 +1,9 @@
-import { mongoose } from "@typegoose/typegoose"; 
+//import { mongoose } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { FeedbackMsg } from '../metamodels/feedback.model'; 
-import { FEEDBACK_MSG } from './feedback'; 
-import { GetMongoModelObject } from './getmodel.util'; 
+//import { FeedbackMsg } from './feedback.class'; 
+import { FEEDBACK_MSG } from '../../mockdata/feedbacks.mockdata'; 
+//import { GetMongoModelObject } from './getmodel.util'; 
 
 
 
@@ -14,21 +14,21 @@ export interface ErrProp {
   [key:string]: any; 
 } 
 
-export interface InputError { 
-  input: object|string; // input (object) or id (string). 
-  errors: ErrProp[]; 
-} 
+// export interface InputError { 
+//   input: object|string; // input (object) or id (string). 
+//   errors: ErrProp[]; 
+// } 
 
 
-// Get modelName MLang label 
-// Get modelName MLang FeedbackMsg 
-export async function FetchMLangFeedbackMsg(modelName:string, feedbackName:string) { 
-  const FeedbackMsgModel = GetMongoModelObject('FeedbackMsg'); 
-  const [found] = (await FeedbackMsgModel.find({name:feedbackName})) as FeedbackMsg[]; 
+// // Get modelName MLang label 
+// // Get modelName MLang FeedbackMsg 
+// export async function FetchMLangFeedbackMsg(modelName:string, feedbackName:string) { 
+//   const FeedbackMsgModel = GetMongoModelObject('FeedbackMsg'); 
+//   const [found] = (await FeedbackMsgModel.find({name:feedbackName})) as FeedbackMsg[]; 
   
-  // pass arguments to string interpolation ?? 
-  return found; 
-} 
+//   // pass arguments to string interpolation ?? 
+//   return found; 
+// } 
 
 
 export function ErrorParsing(error:any):ErrProp[] { 

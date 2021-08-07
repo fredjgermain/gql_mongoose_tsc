@@ -8,7 +8,7 @@ import { getModelWithString } from "@typegoose/typegoose";
 import { ObjectId } from "mongodb"; 
 
 // ------------------------------
-import { ObjectIdScalar, ObjectScalar } from '../models/customscalar'; 
+import { ObjectIdScalar, ObjectScalar } from '../typegql.utils/customscalar'; 
 
 
 function createBaseResolver<T extends ClassType, C extends ClassType, U extends ClassType> 

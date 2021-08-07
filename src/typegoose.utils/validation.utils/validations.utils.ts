@@ -1,6 +1,6 @@
-import { ErrProp, ErrorParsing } from "./getfeedback.util"; 
-import { MongoModel, GetIFields } from './getmodel.util'; 
-import { FEEDBACK_MSG } from './feedback'; 
+import { ErrProp, ErrorParsing } from "../feedback.utils/getfeedback.util"; 
+import { MongoModel, GetIFields } from '../getmodel.util'; 
+import { FEEDBACK_MSG } from '../../mockdata/feedbacks.mockdata'; 
 
 
 export function ParseToCreate(input:object) { 
@@ -61,7 +61,7 @@ export async function IdsExist(model:MongoModel, ids:string[]):Promise<boolean[]
 export function GetDuplicateErrors(model:MongoModel, input:any, toCompare:any[]):ErrProp[] { 
   const indexedFields = GetIFields(model) 
     .filter( field => field?.options?.unique === true ) 
-    .map( field => field.name ); 
+    .map( field => field.accessor ); 
 
   return indexedFields.filter( path => { 
     const value = input[path]; 

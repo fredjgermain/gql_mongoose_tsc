@@ -34,7 +34,7 @@ const validateValue = [
  */
 export class Form extends Base { 
   @prop({label:["fid", "fid"], 
-    required:true, unique:true 
+    required:true, unique:true, abbrev:true  
   }) 
   fid!: string; 
 
