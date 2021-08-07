@@ -1,6 +1,7 @@
-import { FeedbackTypeEnum } from '../typegoose.utils/feedback.utils/feedback.model'; 
+import { FeedbackTypeEnum } from './feedback.utils'; 
 
-export const FEEDBACK_MSG = { 
+
+export const FEEDBACK_MSG_MOCK = { 
   // Errors ...............................................
   ERROR_ITEMNOTFOUND: { 
     name: 'ERROR_ITEMNOTFOUND', 

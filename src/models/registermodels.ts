@@ -9,7 +9,7 @@ import { Question } from './question.model';
 import { ResponseGroup } from './responsegroup.model'; 
 
 import { MetaCollection } from '../typegoose.utils/metacollections.class'; 
-import { FeedbackMsg } from '../typegoose.utils/feedback.utils/feedback.model'; 
+import { FeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
 
 
 // Register collections 

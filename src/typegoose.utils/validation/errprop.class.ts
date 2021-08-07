@@ -1,10 +1,4 @@
-//import { mongoose } from "@typegoose/typegoose"; 
-
-// --------------------------------------------------------
-//import { FeedbackMsg } from './feedback.class'; 
-import { FEEDBACK_MSG } from '../../mockdata/feedbacks.mockdata'; 
-//import { GetMongoModelObject } from './getmodel.util'; 
-
+import { FEEDBACK_MSG } from '../feedback/feedbacks.mockdata'; 
 
 
 export interface ErrProp { 
@@ -13,22 +7,6 @@ export interface ErrProp {
   value: any; 
   [key:string]: any; 
 } 
-
-// export interface InputError { 
-//   input: object|string; // input (object) or id (string). 
-//   errors: ErrProp[]; 
-// } 
-
-
-// // Get modelName MLang label 
-// // Get modelName MLang FeedbackMsg 
-// export async function FetchMLangFeedbackMsg(modelName:string, feedbackName:string) { 
-//   const FeedbackMsgModel = GetMongoModelObject('FeedbackMsg'); 
-//   const [found] = (await FeedbackMsgModel.find({name:feedbackName})) as FeedbackMsg[]; 
-  
-//   // pass arguments to string interpolation ?? 
-//   return found; 
-// } 
 
 
 export function ErrorParsing(error:any):ErrProp[] { 

@@ -3,8 +3,9 @@ import { Args, Resolver, Query, Mutation } from "type-graphql";
 // --------------------------------------------------------
 import { ObjectScalar } from '../typegql.utils/customscalar'; 
 import { MongoModel, GetMongoModelObject, FetchMetaModel } from '../typegoose.utils/getmodel.util'; 
-import { ValidateInputs, Create, Read, Update, Delete } from '../typegoose.utils/crud.actions'; 
-import { FEEDBACK_MSG } from '../mockdata/feedbacks.mockdata'; 
+import { Create, Read, Update, Delete } from '../typegoose.utils/crud.actions'; 
+import { ValidateInputs } from '../typegoose.utils/validation/validations.utils'; 
+import { FEEDBACK_MSG, FetchFeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
 import { CrudResult } from '../typegql.utils/crudresult.class'; 
 import { GQLModel } from '../typegql.utils/model.class'; 
 import { CreateArgs, FeedbackMsgArg, ModelIdsArgs, ModelNameArg, UpdateArgs } from '../typegql.utils/crud.argstypes'; 
@@ -23,7 +24,11 @@ export class CrudResolver {
   // VALIDATE ..............................................
   @Query(type =>  CrudResult) 
   async Validate(@Args() { modelName, inputs, fields }: UpdateArgs) { 
-    const model = GetMongoModelObject(modelName); 
+    
+    // replace with a real function  !!!!!!!!!!!!!! 
+    const {model, modelNotFoundError} = {model:GetMongoModelObject(modelName), modelNotFoundError:{} } 
+    // -------------------------------------------- 
+
     const errors = await ValidateInputs(model, inputs); 
     return new CrudResult(modelName, {errors}, fields); 
   } 
@@ -41,32 +46,28 @@ export class CrudResolver {
   // READ .................................................
   @Query(type => CrudResult) 
   async Read(@Args() { modelName, ids, fields }: ModelIdsArgs) { 
-    const model = GetMongoModelObject(modelName); 
-    const result = await Read(model, ids); 
+    const result = await Read(modelName, ids); 
     return new CrudResult(modelName, result, fields); 
   } 
 
   // CREATE ...............................................
   @Mutation(type => CrudResult) 
   async Create(@Args() { modelName, inputs, fields }: CreateArgs) { 
-    const model = GetMongoModelObject(modelName); 
-    const result = await Create(model, inputs); 
+    const result = await Create(modelName, inputs); 
     return new CrudResult(modelName, result, fields); 
   } 
 
   // UPDATE ...............................................
   @Mutation(type => CrudResult) 
   async Update(@Args() { modelName, inputs, fields }: UpdateArgs) { 
-    const model = GetMongoModelObject(modelName); 
-    const result = await Update(model, inputs); 
+    const result = await Update(modelName, inputs); 
     return new CrudResult(modelName, result, fields); 
   } 
 
   // DELETE ...............................................
   @Mutation(type => CrudResult) 
   async Delete(@Args() { modelName, ids, fields }: ModelIdsArgs) { 
-    const model = GetMongoModelObject(modelName); 
-    const result = await Delete(model, ids); 
+    const result = await Delete(modelName, ids); 
     return new CrudResult(modelName, result, fields); 
   } 
 }

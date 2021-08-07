@@ -8,7 +8,7 @@ import { IField, IType, IMongoField } from '../../lib/ifield.interface';
 export type MongoModel = mongoose.Model<any, {}, {}>; 
 
 export function GetMongoModelObject(modelName:string):MongoModel { 
-  return mongoose.models[modelName]; 
+  return mongoose.models[modelName]; // or return error . 
 } 
 
 export function GetMongoFields(model:MongoModel) { 

@@ -1,6 +1,63 @@
-import { ErrProp, ErrorParsing } from "../feedback.utils/getfeedback.util"; 
+import { ErrProp, ErrorParsing } from "./errprop.class"; 
 import { MongoModel, GetIFields } from '../getmodel.util'; 
-import { FEEDBACK_MSG } from '../../mockdata/feedbacks.mockdata'; 
+import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
+
+
+export async function ValidateInputsToCreate(model:MongoModel, inputs:object[]) { 
+  const toCreate = inputs.map( input => ParseToCreate(input)); 
+  return await ValidateInputs(model, toCreate); 
+} 
+
+export async function ValidateInputsToUpdate(model:MongoModel, inputs:object[]) { 
+  const toUpdate = inputs.map( input => ParseToUpdate(input) ) 
+  const ids = toUpdate.map( item => item._id ); 
+  // test if all ids exist, if not, return an error. 
+  const notFoundError = await GetNotFoundError(model, ids); 
+  if((notFoundError.value as any[]).length > 0) 
+    return [{input:ids, errors:[notFoundError]}] 
+  
+  const updateErrors = (await ValidateInputs(model, toUpdate)) 
+    .map( validation => { 
+      const input = validation.input; 
+      // TO IGNORE 'ERROR_REQUIRED' 
+      const errors = validation.errors.filter( error => error.name != FEEDBACK_MSG.ERROR_REQUIRED.name ) 
+      return {input, errors} 
+    }); 
+  return updateErrors; 
+}
+
+
+
+/** ValidateInputs
+ * test for each iputs 
+ * 
+ * @param model 
+ * @param inputs 
+ * @returns 
+ */
+ export async function ValidateInputs(model:MongoModel, inputs:object[]) { 
+  const ids = inputs.map( input => ParsedItem(input)._id ?? ParsedItem(input).id ); 
+  const collection = (await model.find()).filter( item => !ids.includes(ParseFromDoc(item)._id)); 
+
+  const validations = [] as {input:object, errors:ErrProp[]}[] 
+  for(let i=0; i<inputs.length; i++) { 
+    const input = inputs[i]; 
+    const otherInputs = RemoveAt(i, inputs); 
+    const toCompare = [...otherInputs, ...collection]; 
+    const errors = [ 
+      ...(await GetValidationErrors(model, input)), 
+      ...GetDuplicateErrors(model, input, toCompare) 
+    ]; 
+    validations.push({input, errors}); 
+  } 
+  return validations; 
+}
+
+function RemoveAt(at:number, array:any[]) { 
+  const copy = [...array]; 
+  copy.splice(at, 1); 
+  return copy; 
+}
 
 
 export function ParseToCreate(input:object) { 
@@ -17,6 +74,14 @@ export function ParseToUpdate(input:any): {_id:string, id:string, [key:string]:a
 
 export function ParseFromDoc(docs:any): {_id:string, [key:string]:any} { 
   return JSON.parse(JSON.stringify(docs)); 
+} 
+
+
+export function ParsedItem(item:any): {_id:string, id:string, [key:string]:any} { 
+  let parsedItem = JSON.parse(JSON.stringify(item)); 
+  parsedItem._id = parsedItem._id ?? parsedItem.id ?? ''; 
+  parsedItem.id = parsedItem._id; 
+  return parsedItem; 
 } 
 
 /** ItemsExist 
@@ -104,18 +169,5 @@ export async function GetNotFoundError(model:MongoModel, ids:string[]): Promise<
   return {name, path, value:notFound} 
 }
 
-
-export function ParsedItem(item:any): {_id:string, id:string, [key:string]:any} { 
-  let parsedItem = JSON.parse(JSON.stringify(item)); 
-  parsedItem._id = parsedItem._id ?? parsedItem.id ?? ''; 
-  parsedItem.id = parsedItem._id; 
-  return parsedItem; 
-} 
-
-function RemoveAt(at:number, array:any[]) { 
-  const copy = [...array]; 
-  copy.splice(at, 1); 
-  return copy; 
-}
 
 
