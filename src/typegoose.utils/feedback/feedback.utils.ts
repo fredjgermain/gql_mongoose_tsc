@@ -1,8 +1,6 @@
-import { prop } from "@typegoose/typegoose"; 
+import { mongoose, prop } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { GetMongoModelObject } from '../getmodel.util'; 
-
 
 /** FeedbackTypeEnum 
  * Success, Warning, Notif, Error 
@@ -40,7 +38,7 @@ export class FeedbackMsg {
  * @returns 
  */
  export async function FetchFeedbackMsg(feedbackName:string) { 
-  const model = GetMongoModelObject('FeedbackMsg'); 
+  const model = mongoose.models['FeedbackMsg']; 
   try{ 
     const [feedbackMsg] = await model.find({name:feedbackName}); 
     return feedbackMsg as FeedbackMsg; 
@@ -52,8 +50,12 @@ export class FeedbackMsg {
 
 export const FEEDBACK_MSG = { 
   // Errors ...............................................
-  ERROR_ITEMNOTFOUND: { 
-    name: 'ERROR_ITEMNOTFOUND', 
+  ERROR_MODEL_NOT_FOUND: { 
+    name: 'ERROR_MODEL_NOT_FOUND', 
+    type: FeedbackTypeEnum.Error, 
+  }, 
+  ERROR_ITEM_NOT_FOUND: { 
+    name: 'ERROR_ITEM_NOT_FOUND', 
     type: FeedbackTypeEnum.Error, 
     // msg: ["Item not found", "Item est introuvable"], 
   }, 
@@ -90,8 +92,12 @@ export const FEEDBACK_MSG = {
   }, 
 
   // Success ..............................................
-  SUCCESS_ITEMFOUND: { 
-    name: 'SUCCESS_ITEMFOUND', 
+  SUCCESS_MODEL_FOUND: { 
+    name: 'ERROR_MODEL_FOUND', 
+    type: FeedbackTypeEnum.Error, 
+  }, 
+  SUCCESS_ITEM_FOUND: { 
+    name: 'SUCCESS_ITEM_FOUND', 
     type: FeedbackTypeEnum.Success, 
     // msg: ["Item found", "Item introuvé"], 
   }, 

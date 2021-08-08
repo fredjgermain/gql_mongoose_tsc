@@ -2,9 +2,8 @@ import { Args, Resolver, Query, Mutation } from "type-graphql";
 
 // --------------------------------------------------------
 import { ObjectScalar } from '../typegql.utils/customscalar'; 
-import { MongoModel, GetMongoModelObject, FetchMetaModel } from '../typegoose.utils/getmodel.util'; 
-import { Create, Read, Update, Delete } from '../typegoose.utils/crud.actions'; 
-import { ValidateInputs } from '../typegoose.utils/validation/validations.utils'; 
+import { Model, Create, Read, Update, Delete } from '../typegoose.utils/crud.actions'; 
+//import { ValidateInputs } from '../typegoose.utils/validation/validations.utils'; 
 import { FEEDBACK_MSG, FetchFeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
 import { CrudResult } from '../typegql.utils/crudresult.class'; 
 import { GQLModel } from '../typegql.utils/model.class'; 
@@ -18,20 +17,20 @@ export class CrudResolver {
 // MODEL info ...........................................
   @Query(type => GQLModel) 
   async Model(@Args() { modelName }: ModelNameArg) { 
-    return await FetchMetaModel(modelName); 
+    return await Model(modelName); 
   } 
   
   // VALIDATE ..............................................
-  @Query(type =>  CrudResult) 
-  async Validate(@Args() { modelName, inputs, fields }: UpdateArgs) { 
+  // @Query(type =>  CrudResult) 
+  // async Validate(@Args() { modelName, inputs, fields }: UpdateArgs) { 
     
-    // replace with a real function  !!!!!!!!!!!!!! 
-    const {model, modelNotFoundError} = {model:GetMongoModelObject(modelName), modelNotFoundError:{} } 
-    // -------------------------------------------- 
+  //   // replace with a real function  !!!!!!!!!!!!!! 
+  //   const {model, modelNotFoundError} = {model:GetMongoModelObject(modelName), modelNotFoundError:{} } 
+  //   // -------------------------------------------- 
 
-    const errors = await ValidateInputs(model, inputs); 
-    return new CrudResult(modelName, {errors}, fields); 
-  } 
+  //   const errors = await ValidateInputs(model, inputs); 
+  //   return new CrudResult(modelName, {errors}, fields); 
+  // } 
 
   // FEEDBACKMSG ..........................................
   @Query(type => [ObjectScalar]) 

@@ -8,7 +8,7 @@ import { Patient } from './patient.model';
 import { Question } from './question.model'; 
 import { ResponseGroup } from './responsegroup.model'; 
 
-import { MetaCollection } from '../typegoose.utils/metacollections.class'; 
+import { MetaCollection } from '../typegoose.utils/model/metacollections.class'; 
 import { FeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
 
 

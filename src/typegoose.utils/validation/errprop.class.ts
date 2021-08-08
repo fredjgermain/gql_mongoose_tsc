@@ -1,4 +1,4 @@
-import { FEEDBACK_MSG } from '../feedback/feedbacks.mockdata'; 
+import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
 
 
 export interface ErrProp { 

@@ -3,10 +3,15 @@ import { FeedbackTypeEnum } from './feedback.utils';
 
 export const FEEDBACK_MSG_MOCK = { 
   // Errors ...............................................
-  ERROR_ITEMNOTFOUND: { 
-    name: 'ERROR_ITEMNOTFOUND', 
+  ERROR_MODEL_NOT_FOUND: { 
+    name: 'ERROR_MODEL_NOT_FOUND', 
     type: FeedbackTypeEnum.Error, 
-    msg: ["Item not found", "Item est introuvable"], 
+    msg: ["Model not found", "Model introuvé"], 
+  }, 
+  ERROR_ITEM_NOT_FOUND: { 
+    name: 'ERROR_ITEM_NOT_FOUND', 
+    type: FeedbackTypeEnum.Error, 
+    msg: ["Item not found", "Item introuvé"], 
   }, 
   ERROR_DUPLICATE: { 
     name: 'ERROR_DUPLICATE', 
@@ -41,16 +46,15 @@ export const FEEDBACK_MSG_MOCK = {
   }, 
 
   // Success ..............................................
-  SUCCESS_ITEMFOUND: { 
-    name: 'SUCCESS_ITEMFOUND', 
-    type: FeedbackTypeEnum.Success, 
-    msg: ["Item found", "Item introuvé"], 
+  SUCCESS_MODEL_FOUND: { 
+    name: 'ERROR_MODEL_FOUND', 
+    type: FeedbackTypeEnum.Error, 
+    msg: ["Model found", "Model trouvé"], 
   }, 
-  // Crud success 
-  SUCCESS_CREATE: { 
-    name: 'SUCCESS_CREATE', 
+  SUCCESS_ITEM_FOUND: { 
+    name: 'SUCCESS_ITEM_FOUND', 
     type: FeedbackTypeEnum.Success, 
-    msg: ["Creation successful", "Création réussie"], 
+    msg: ["Item found", "Item trouvé"], 
   }, 
   SUCCESS_UPDATE: { 
     name: 'SUCCESS_UPDATE', 

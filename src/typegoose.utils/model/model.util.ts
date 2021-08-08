@@ -1,14 +1,22 @@
 import { mongoose } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { MetaCollection } from './metacollections.class'; 
-import { IField, IType, IMongoField } from '../../lib/ifield.interface'; 
+import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
+import { IField, IType, IMongoField, IModel } from '../../../lib/ifield.interface'; 
+import { ErrProp } from "../validation/errprop.class"; 
 
 
 export type MongoModel = mongoose.Model<any, {}, {}>; 
 
-export function GetMongoModelObject(modelName:string):MongoModel { 
-  return mongoose.models[modelName]; // or return error . 
+export function GetMongoModelObject(modelName:string):{model?:MongoModel, error?:ErrProp} { 
+  const model = mongoose.models[modelName]; // or return error . 
+  if(!!model) 
+    return {model}; 
+  return {error:{ 
+    name:FEEDBACK_MSG.ERROR_MODEL_NOT_FOUND.name, 
+    path:'modelName', 
+    value:modelName 
+  }}
 } 
 
 export function GetMongoFields(model:MongoModel) { 
@@ -20,17 +28,7 @@ export function GetIFields(model:MongoModel):IField[] {
   return mongofields.map( field => ParseToIField(field) ) // parse fields to convert to IFields ?? 
 }
 
-export async function FetchMetaModel(modelName:string) { 
-  const MetaCollectionModel = GetMongoModelObject('MetaCollection'); 
 
-  const metaCollection = (await MetaCollectionModel.findOne({accessor:modelName}) as MetaCollection); 
-  const {accessor, label, description} = metaCollection; 
-
-  const model = GetMongoModelObject(modelName); 
-  // get Mlang metaCollection ... 
-  const ifields = GetIFields(model); 
-  return {accessor, label, description, ifields}; 
-} 
 
 function ParseToIField(mongoField:IMongoField):IField { 
   const {path, instance, options, $embeddedSchemaType} = mongoField; 

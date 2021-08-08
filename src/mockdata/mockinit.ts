@@ -1,4 +1,4 @@
-import { GetMongoModelObject } from '../typegoose.utils/getmodel.util'; 
+import { GetMongoModelObject } from '../typegoose.utils/model/model.util'; 
 import { mockDatas } from './mockdata'; 
 
 

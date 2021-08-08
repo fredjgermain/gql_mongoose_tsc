@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'; 
 
 // --------------------------------------------------------
-import { MetaCollection } from '../typegoose.utils/metacollections.class'; 
+import { MetaCollection } from '../typegoose.utils/model/metacollections.class'; 
 import { FormDatas } from './forms.mockdata'; 
 import { InstructionDatas } from './instructions.mockdata'; 
 import { ResponseGroupDatas } from './responses.mockdata'; 

@@ -9,6 +9,14 @@ export interface IType {
   isObject?: boolean; 
 } 
 
+export interface IModel { 
+  accessor:string, 
+  label:string[], 
+  description:string[], 
+  ifields:IField[], 
+} 
+
+
 export interface IField {
   accessor: string; 
   type: IType; 
