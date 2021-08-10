@@ -1,30 +1,34 @@
-import { mongoose } from "@typegoose/typegoose"; 
-
-
 // ----------------------------------------------------------------
-import { MongoModel, GetMongoModelObject, GetIFields } from './model/model.util'; 
-import { MetaCollection } from './model/metacollections.class'; 
-//import { FetchFeedbackMsg, FEEDBACK_MSG } from './feedback/feedback.utils'; 
-import { ValidateInputsToCreate, ValidateInputsToUpdate, HasErrors, ValidateIdsToFind } from './validation/validation.action'; 
+import { FetchIModel, GetMongoModel } from './model/model.util'; 
+import { ValidateInputsToCreate, ValidateInputsToUpdate, HasErrors, ValidateIdsToFind, ValidateInputs } 
+  from './validation/validation.action'; 
 import { Input, Item } from './item.utils'; 
 import { IModel } from '../../lib/ifield.interface'; 
 
+type ReturnModel = {model?:IModel, errors?:any[]}; 
+type ReturnItems = {items?:Item[]|Input[], errors?:any[]}; 
 
-type Result = {items?:any[], model?:IModel, errors?:any[]}; 
+
+/** Model -----------------------------------------------
+ * 
+ * @param modelName 
+ * @returns 
+ */
+export async function Model(modelName:string):Promise<ReturnModel> { 
+  const {model, error} = await FetchIModel(modelName); 
+  return !error ? {model} : {errors:[error]}; 
+} 
 
 
-export async function Model(modelName:string):Promise<Result> { 
-  const MetaCollectionModel = mongoose.models['MetaCollection']; 
-  const metaCollection = (await MetaCollectionModel.findOne({accessor:modelName}) as MetaCollection); 
-
-  const {model, error} = GetMongoModelObject(modelName); 
+export async function Validate(modelName:string, inputs:Input[]):Promise<ReturnItems> { 
+  const {model, error} = GetMongoModel(modelName); 
   if(!model) 
     return {errors:[error]}; 
-
-  const ifields = GetIFields(model); 
-  return {model:{...metaCollection, ifields}}; 
+  const validations = await ValidateInputs(model, inputs); 
+  if(HasErrors(validations)) 
+    return {errors:validations}; 
+  return {items:inputs}; 
 }
-
 
 // Create -----------------------------------------------
 /**
@@ -38,7 +42,11 @@ export async function Model(modelName:string):Promise<Result> {
  * @param toCreate 
  * @returns 
  */
-export async function Create(model:MongoModel, toCreate:Input[]):Promise<Result> { 
+export async function Create(modelName:string, toCreate:Input[]):Promise<ReturnItems> { 
+  const {model, error} = GetMongoModel(modelName); 
+  if(!!error) 
+    return {errors:[error]}; 
+
   const createErrors = await ValidateInputsToCreate(model, toCreate); 
   if(HasErrors(createErrors)) 
     return {errors:createErrors}; 
@@ -64,7 +72,11 @@ export async function Create(model:MongoModel, toCreate:Input[]):Promise<Result>
  * @param ids 
  * @returns 
  */
-export async function Read(model:MongoModel, ids:string[]):Promise<Result> { 
+export async function Read(modelName:string, ids:string[]):Promise<ReturnItems> { 
+  const {model, error} = GetMongoModel(modelName); 
+  if(!!error) 
+    return {errors:[error]}; 
+
   const notFoundError = await ValidateIdsToFind(model, ids); 
   if(HasErrors(notFoundError)) 
     return {errors:notFoundError}; 
@@ -96,7 +108,11 @@ export async function Read(model:MongoModel, ids:string[]):Promise<Result> {
  * @param toUpdate 
  * @returns 
  */
-export async function Update(model:MongoModel, toUpdate:Item[]): Promise<Result> { 
+export async function Update(modelName:string, toUpdate:Item[]): Promise<ReturnItems> { 
+  const {model, error} = GetMongoModel(modelName); 
+  if(!!error) 
+    return {errors:[error]}; 
+
   const ids = toUpdate.map( item => item._id ); 
   const updateErrors = await ValidateInputsToUpdate(model, toUpdate); 
   if(HasErrors(updateErrors)) 
@@ -128,7 +144,11 @@ export async function Update(model:MongoModel, toUpdate:Item[]): Promise<Result>
  * @param ids 
  * @returns 
  */
-export async function Delete(model:MongoModel, ids:string[]):Promise<Result> { 
+export async function Delete(modelName:string, ids:string[]):Promise<ReturnItems> { 
+  const {model, error} = GetMongoModel(modelName); 
+  if(!!error) 
+    return {errors:[error]}; 
+
   if(!ids || ids.length === 0) 
     return {items:[]} 
   // test if all ids exist, if not return an error. 

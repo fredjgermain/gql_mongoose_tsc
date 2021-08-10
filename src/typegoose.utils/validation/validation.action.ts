@@ -1,9 +1,9 @@
 import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
 import { GetDuplicateErrors, GetNotFoundError, GetValidationErrors } from './validations.utils'; 
-import { IdsExist, ItemsExist, ParseFromDoc, Item, ParseToCreate, ParseToUpdate, ParsedItem } from '../item.utils'; 
+import { ParseFromDoc, Item, ParseToCreate, ParseToUpdate, ParsedItem } from '../item.utils'; 
 
 import { ErrProp } from './errprop.class'; 
-import { MongoModel } from '../model/model.util'; 
+//import { MongoModel } from '../model/model.util'; 
 
 
 
@@ -80,7 +80,7 @@ export async function ValidateInputsToUpdate(model:MongoModel, inputs:object[]):
   const ids = inputs.map( input => ParsedItem(input)._id ?? ParsedItem(input).id ); 
 
   // all existing items excluding updates inputs 
-  const collection = (await model.find()).filter( item => !ids.includes(ParseFromDoc(item)._id)); 
+  const collection = (await model.find()).filter( (item:Item) => !ids.includes(ParseFromDoc(item)._id)); 
 
   const validations = [] as {input:object, errors:ErrProp[]}[] 
   for(let i=0; i<inputs.length; i++) { 

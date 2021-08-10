@@ -1,7 +1,7 @@
-import mongoose from 'mongoose'; 
+// import mongoose from 'mongoose'; 
 
 // --------------------------------------------------------
-import { MetaCollection } from '../typegoose.utils/model/metacollections.class'; 
+import { TypegooseModel } from '../typegoose.utils/model/typegoosemodel.class'; 
 import { FormDatas } from './forms.mockdata'; 
 import { InstructionDatas } from './instructions.mockdata'; 
 import { ResponseGroupDatas } from './responses.mockdata'; 
@@ -10,7 +10,7 @@ import { PatientDatas } from './patients.mockdata';
 import { AnswerDatas } from './answers.mockdata'; 
 
 // Mock Collections -----------------------------
-const MetaCollectionDatas:MetaCollection[] = [ 
+const MetaCollectionDatas:TypegooseModel[] = [ 
   { 
     //_id: new mongoose.Types.ObjectId(), 
     accessor:'ResponseGroup', 

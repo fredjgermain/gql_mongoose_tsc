@@ -1,4 +1,4 @@
-import { FeedbackTypeEnum } from './feedback.utils'; 
+import { FeedbackTypeEnum } from './feedback.class'; 
 
 
 export const FEEDBACK_MSG_MOCK = { 

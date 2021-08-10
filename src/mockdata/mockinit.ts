@@ -1,4 +1,4 @@
-import { GetMongoModelObject } from '../typegoose.utils/model/model.util'; 
+import { GetMongoModel } from '../typegoose.utils/model/model.util'; 
 import { mockDatas } from './mockdata'; 
 
 
@@ -19,7 +19,9 @@ export async function MockDatas() {
 
 export async function MockCollection(modelName:string) { 
   const data = (mockDatas as any)[modelName+'Datas']; 
-  const model = GetMongoModelObject(modelName); 
+  const {model} = GetMongoModel(modelName); 
+
+
   //await model.deleteMany(); 
   try{ 
     await model.deleteMany(); 
@@ -28,8 +30,5 @@ export async function MockCollection(modelName:string) {
     console.log(modelName, read.length); 
   }catch(err){ 
     console.log(err); 
-  }
-
-  
-  
+  } 
 }

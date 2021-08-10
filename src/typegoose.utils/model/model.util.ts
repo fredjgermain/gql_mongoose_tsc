@@ -1,26 +1,43 @@
-import { mongoose } from "@typegoose/typegoose"; 
-
-// --------------------------------------------------------
+import {mongoose} from '@typegoose/typegoose'; 
+// -------------------------------------------------------- 
 import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
-import { IField, IType, IMongoField, IModel } from '../../../lib/ifield.interface'; 
-import { ErrProp } from "../validation/errprop.class"; 
+import { IField, IType, IModel } from '../../../lib/ifield.interface'; 
+import { TypegooseModel } from "./typegoosemodel.class"; 
+import { ErrProp } from '../validation/errprop.class'; 
 
 
-export type MongoModel = mongoose.Model<any, {}, {}>; 
 
-export function GetMongoModelObject(modelName:string):{model?:MongoModel, error?:ErrProp} { 
-  const model = mongoose.models[modelName]; // or return error . 
-  if(!!model) 
-    return {model}; 
-  return {error:{ 
+/** FetchIModel ===========================================
+ * 
+ * @param modelName 
+ * @returns 
+ */
+export async function FetchIModel(modelName:string):Promise<{model?:IModel, error?:ErrProp}> { 
+  const TypegooseModels = mongoose.models['TypegooseModel']; 
+  const {accessor, description, label} = (await TypegooseModels.findOne({accessor:modelName}) as TypegooseModel); 
+
+  const {model:mongooseModel, error} = GetMongoModel(modelName); 
+  if(!mongooseModel) 
+    return {error} 
+  const ifields = GetIFields(mongooseModel); 
+  const model = {accessor, description, label, ifields}; 
+  return {model} 
+} 
+
+
+type ReturnMongoModel = {model?:MongoModel, error?:ErrProp}; 
+export function GetMongoModel(modelName:string):ReturnMongoModel { 
+  const model = mongoose.models[modelName]; 
+  const error = { 
     name:FEEDBACK_MSG.ERROR_MODEL_NOT_FOUND.name, 
     path:'modelName', 
     value:modelName 
-  }}
+  } 
+  return !model ? {error} : {model} 
 } 
 
 export function GetMongoFields(model:MongoModel) { 
-  return Object.values(model.schema.paths) as any[] as IMongoField[]; 
+  return Object.values(model.schema.paths) as any[] as MongoField[]; 
 } 
 
 export function GetIFields(model:MongoModel):IField[] { 
@@ -28,9 +45,7 @@ export function GetIFields(model:MongoModel):IField[] {
   return mongofields.map( field => ParseToIField(field) ) // parse fields to convert to IFields ?? 
 }
 
-
-
-function ParseToIField(mongoField:IMongoField):IField { 
+function ParseToIField(mongoField:MongoField):IField { 
   const {path, instance, options, $embeddedSchemaType} = mongoField; 
   const type = ParseToIType(mongoField); 
   const {label, abbrev, format, order, _options} = options; 
@@ -44,7 +59,7 @@ function ParseToIField(mongoField:IMongoField):IField {
   } 
 } 
 
-function ParseToIType(mongoField:IMongoField): IType { 
+function ParseToIType(mongoField:MongoField): IType { 
   const {instance, options, $embeddedSchemaType} = mongoField; 
   const type = {} as IType; 
   

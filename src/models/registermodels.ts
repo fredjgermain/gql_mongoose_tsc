@@ -8,13 +8,13 @@ import { Patient } from './patient.model';
 import { Question } from './question.model'; 
 import { ResponseGroup } from './responsegroup.model'; 
 
-import { MetaCollection } from '../typegoose.utils/model/metacollections.class'; 
-import { FeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
+import { TypegooseModel } from '../typegoose.utils/model/typegoosemodel.class'; 
+import { FeedbackMsg } from '../typegoose.utils/feedback/feedback.class'; 
 
 
 // Register collections 
 export async function RegisterModels() { 
-  getModelForClass(MetaCollection); 
+  getModelForClass(TypegooseModel); 
   getModelForClass(FeedbackMsg); 
 
   getModelForClass(Answer); 

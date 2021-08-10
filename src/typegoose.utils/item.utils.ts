@@ -1,7 +1,5 @@
-
-
 // -------------------------------------------------------- 
-import { MongoModel } from './model/model.util'; 
+//import { MongoModel } from './model/model.util'; 
 
 
 export interface Input { 
@@ -65,6 +63,6 @@ export async function ItemsExist(model:MongoModel, items:object[]):Promise<boole
  * @returns Promise<boolean[]> 
  */
 export async function IdsExist(model:MongoModel, ids:string[]):Promise<boolean[]> { 
-  const collectionIds = (await model.find()).map( item => ParseFromDoc(item)._id ); 
+  const collectionIds = (await model.find()).map( (item:any) => ParseFromDoc(item)._id ); 
   return ids.map( id => collectionIds.includes(id) ); 
 } 

@@ -1,13 +1,16 @@
 import { Field, ObjectType } from "type-graphql"; 
+import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
+//import {} from '../typegql.utils/'
 
 // --------------------------------------------------------
 import { ObjectScalar } from './customscalar'; 
 
 
+
 // CRUD RESULT ############################################
 @ObjectType() 
 export class CrudResult { 
-  constructor (modelName:string, result:{items?:any[], errors?:any[]}, fields?:string[]) { 
+  constructor (modelName:string, result:{items?:any[], errors?:ErrProp[]}, fields?:string[]) { 
     this.modelName = modelName; 
     this.items = result.items?.map( item => SubItem(item, fields)) ?? []; 
     this.count = this.items.length; 
@@ -27,6 +30,8 @@ export class CrudResult {
   errors: object[]; 
 } 
 
+
+
 function SubItem(item:any, fields?:string[]) { 
   if(!fields || fields.length == 0) 
     return item; 
@@ -34,6 +39,31 @@ function SubItem(item:any, fields?:string[]) {
   fields.forEach( field => subItem[field] = item[field]) 
   return subItem; 
 }
+
+
+
+// MODELOBJECTTYPE ########################################
+@ObjectType() 
+export class GQLModel { 
+  @Field() 
+  accessor: string; 
+  
+  @Field(type => [String]) 
+  label: string[]; 
+
+  @Field(type => [String]) 
+  description: string[]; 
+
+  @Field(type => [ObjectScalar]) // replace with IField type ?? 
+  ifields: object[]; 
+} 
+
+
+
+
+
+
+
 
 /**
  * 

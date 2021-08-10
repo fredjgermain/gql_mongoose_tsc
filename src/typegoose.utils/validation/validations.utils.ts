@@ -1,5 +1,5 @@
 import { ErrProp, ErrorParsing } from "./errprop.class"; 
-import { MongoModel, GetIFields } from '../model/model.util'; 
+import { GetIFields } from '../model/model.util'; 
 import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
 import { IdsExist } from '../item.utils'; 
 
