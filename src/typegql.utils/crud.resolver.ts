@@ -1,28 +1,34 @@
 import { Args, Resolver, Query, Mutation } from "type-graphql"; 
 
 // --------------------------------------------------------
-import { ObjectScalar } from '../typegql.utils/customscalar'; 
+import { ObjectScalar } from './customscalar'; 
 import { Model, Validate, Create, Read, Update, Delete } from '../typegoose.utils/typegoose.actions'; 
 //import { ValidateInputs } from '../typegoose.utils/validation/validations.utils'; 
 import { FEEDBACK_MSG, FetchFeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
-import { CrudResult, GQLModel } from '../typegql.utils/return.class'; 
-import { FeedbackMsgArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, ValidateArg } from '../typegql.utils/argstypes'; 
+import { CrudResult, GQLError, GQLModel, GQLModelError } from './return.class'; 
+import { FeedbackMsgArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, ValidateArg } from './argstypes'; 
+import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
 
 
+class TestError extends Error { 
+  errors:ErrProp[]; 
+}
 
 // RESOLVER ###############################################
 @Resolver() 
 export class CrudResolver { 
-// MODEL info ...........................................
+  
   @Query(type => GQLModel) 
   async Model(@Args() { modelName }: ModelNameArg) { 
-    return await Model(modelName); 
+    const {model, errors} = await Model(modelName); 
+    return new GQLModel(model, errors); 
   } 
   
   // VALIDATE ..............................................
   @Query(type => CrudResult) 
   async Validate(@Args() { modelName, inputs }:ValidateArg ) { 
-    return await Validate(modelName, inputs); 
+    const result = await Validate(modelName, inputs); 
+    return new CrudResult(modelName, result); 
   } 
 
   // FEEDBACKMSG ..........................................

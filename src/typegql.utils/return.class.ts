@@ -1,10 +1,25 @@
-import { Field, ObjectType } from "type-graphql"; 
+import { Field, ObjectType, createUnionType } from "type-graphql"; 
+import { IModel } from "../../lib/ifield.interface";
 import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
-//import {} from '../typegql.utils/'
 
 // --------------------------------------------------------
 import { ObjectScalar } from './customscalar'; 
 
+
+@ObjectType() 
+export class GQLError implements ErrProp{ 
+
+  @Field() 
+  name: string; 
+
+  @Field() 
+  path: string; 
+
+  @Field(type => ObjectScalar) 
+  value: any; 
+
+  //[key:string]: any;   
+}
 
 
 // CRUD RESULT ############################################
@@ -26,8 +41,8 @@ export class CrudResult {
   @Field(type => [ObjectScalar]) 
   items: object[]; 
 
-  @Field(type => [ObjectScalar]) // replace with IField type ?? 
-  errors: object[]; 
+  @Field(type => [ObjectScalar], { nullable: true }) // replace with IField type ?? 
+  errors?: object[]; 
 } 
 
 
@@ -45,6 +60,14 @@ function SubItem(item:any, fields?:string[]) {
 // MODELOBJECTTYPE ########################################
 @ObjectType() 
 export class GQLModel { 
+  constructor(model?:IModel, errors?:ErrProp[]) { 
+    this.accessor = model?.accessor ?? ''; 
+    this.label = model?.label ?? []; 
+    this.description = model?.description ?? []; 
+    this.ifields = model?.ifields ?? []; 
+    this.errors = errors; 
+  }
+
   @Field() 
   accessor: string; 
   
@@ -56,10 +79,16 @@ export class GQLModel {
 
   @Field(type => [ObjectScalar]) // replace with IField type ?? 
   ifields: object[]; 
+
+  @Field(type => [ObjectScalar], { nullable: true }) // replace with IField type ?? 
+  errors?: object[]; 
 } 
 
 
-
+export const GQLModelError = createUnionType({ 
+  name: "GQLModelError", // the name of the GraphQL union
+  types: () => [GQLModel, GQLError] as const, // function that returns tuple of object types classes
+});
 
 
 

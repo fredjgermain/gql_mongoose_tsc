@@ -7,18 +7,43 @@ import { ErrProp } from '../validation/errprop.class';
 
 
 
+export type MongoModel = mongoose.Model<any, {}, {}> 
+
+interface MongoField {
+  path:string;  // accessor 
+  instance:string; 
+  validators: any; 
+  options: { 
+    ref?: string; 
+    label?: string; 
+    sortType?: string; 
+    defaultValue?: any; 
+    format?: string; 
+    order?: number; 
+    enum?: any[]; 
+    abbrev?: boolean; 
+    [key:string]:any; 
+  }; 
+  $embeddedSchemaType?:{ 
+    instance:string; 
+  }; 
+  [key:string]:any; 
+}
+
+
+
 /** FetchIModel ===========================================
  * 
  * @param modelName 
  * @returns 
  */
 export async function FetchIModel(modelName:string):Promise<{model?:IModel, error?:ErrProp}> { 
-  const TypegooseModels = mongoose.models['TypegooseModel']; 
-  const {accessor, description, label} = (await TypegooseModels.findOne({accessor:modelName}) as TypegooseModel); 
-
+  //console.log("Fetch:", modelName); 
   const {model:mongooseModel, error} = GetMongoModel(modelName); 
   if(!mongooseModel) 
     return {error} 
+  const TypegooseModels = mongoose.models['TypegooseModel']; 
+  const {accessor, description, label} = (await TypegooseModels.findOne({accessor:modelName}) as TypegooseModel); 
   const ifields = GetIFields(mongooseModel); 
   const model = {accessor, description, label, ifields}; 
   return {model} 

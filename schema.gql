@@ -5,7 +5,7 @@
 
 type CrudResult {
   count: Float!
-  errors: [ObjectScalar!]!
+  errors: [ObjectScalar!]
   items: [ObjectScalar!]!
   modelName: String!
 }
@@ -13,6 +13,7 @@ type CrudResult {
 type GQLModel {
   accessor: String!
   description: [String!]!
+  errors: [ObjectScalar!]
   ifields: [ObjectScalar!]!
   label: [String!]!
 }
@@ -28,7 +29,7 @@ scalar ObjectScalar
 
 type Query {
   FeedbackMsg(feedbackNames: [String!]!): [ObjectScalar!]!
-  Model(fields: [String!], modelName: String!): GQLModel!
+  Model(modelName: String!): GQLModel!
   Read(fields: [String!], ids: [ID!], modelName: String!): CrudResult!
-  Validate(fields: [String!], inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }

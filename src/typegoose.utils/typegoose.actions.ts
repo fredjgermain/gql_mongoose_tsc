@@ -16,7 +16,8 @@ type ReturnItems = {items?:Item[]|Input[], errors?:any[]};
  */
 export async function Model(modelName:string):Promise<ReturnModel> { 
   const {model, error} = await FetchIModel(modelName); 
-  return !error ? {model} : {errors:[error]}; 
+  
+  return !error ? {model} : {model, errors:[error]}; 
 } 
 
 
@@ -44,7 +45,7 @@ export async function Validate(modelName:string, inputs:Input[]):Promise<ReturnI
  */
 export async function Create(modelName:string, toCreate:Input[]):Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
-  if(!!error) 
+  if(!model) 
     return {errors:[error]}; 
 
   const createErrors = await ValidateInputsToCreate(model, toCreate); 
@@ -74,7 +75,7 @@ export async function Create(modelName:string, toCreate:Input[]):Promise<ReturnI
  */
 export async function Read(modelName:string, ids:string[]):Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
-  if(!!error) 
+  if(!model) 
     return {errors:[error]}; 
 
   const notFoundError = await ValidateIdsToFind(model, ids); 
@@ -110,7 +111,7 @@ export async function Read(modelName:string, ids:string[]):Promise<ReturnItems> 
  */
 export async function Update(modelName:string, toUpdate:Item[]): Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
-  if(!!error) 
+  if(!model) 
     return {errors:[error]}; 
 
   const ids = toUpdate.map( item => item._id ); 
@@ -146,7 +147,7 @@ export async function Update(modelName:string, toUpdate:Item[]): Promise<ReturnI
  */
 export async function Delete(modelName:string, ids:string[]):Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
-  if(!!error) 
+  if(!model) 
     return {errors:[error]}; 
 
   if(!ids || ids.length === 0) 

@@ -3,7 +3,7 @@ import { GetDuplicateErrors, GetNotFoundError, GetValidationErrors } from './val
 import { ParseFromDoc, Item, ParseToCreate, ParseToUpdate, ParsedItem } from '../item.utils'; 
 
 import { ErrProp } from './errprop.class'; 
-//import { MongoModel } from '../model/model.util'; 
+import { MongoModel } from '../model/model.util'; 
 
 
 

@@ -3,7 +3,7 @@ import { NonEmptyArray }
 
 
 // --------------------------------------------------------
-import { CrudResolver } from './resolvers/crud.resolver'; 
+import { CrudResolver } from './typegql.utils/crud.resolver'; 
 //import { CrudTestResolver } from './resolvers/crudtest.resolver'; 
 import { RegisterModels } from './models/registermodels'; 
 

@@ -10,7 +10,7 @@ import { PatientDatas } from './patients.mockdata';
 import { AnswerDatas } from './answers.mockdata'; 
 
 // Mock Collections -----------------------------
-const MetaCollectionDatas:TypegooseModel[] = [ 
+const TypegooseModelDatas:TypegooseModel[] = [ 
   { 
     //_id: new mongoose.Types.ObjectId(), 
     accessor:'ResponseGroup', 
@@ -48,4 +48,4 @@ const MetaCollectionDatas:TypegooseModel[] = [
     description: [''], 
   }, 
 ]; 
-export const mockDatas = {MetaCollectionDatas, FormDatas, InstructionDatas, ResponseGroupDatas, QuestionDatas, PatientDatas, AnswerDatas}; 
+export const mockDatas = {TypegooseModelDatas, FormDatas, InstructionDatas, ResponseGroupDatas, QuestionDatas, PatientDatas, AnswerDatas}; 
