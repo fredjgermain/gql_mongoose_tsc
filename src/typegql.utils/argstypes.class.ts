@@ -1,4 +1,4 @@
-import { Field, ID, ArgsType } from "type-graphql"; 
+import { Field, ID, Int, ArgsType } from "type-graphql"; 
 
 // --------------------------------------------------------
 import { ObjectScalar } from './customscalar'; 
@@ -6,7 +6,16 @@ import { Item, Input } from "../typegoose.utils/item.utils";
 
 
 
-// ARGSTYPES ############################################## 
+// ARGSTYPES ##############################################
+/*@ArgsType() 
+export class MLangLabelArg { 
+  @Field(type => [String]) 
+  labelName: string[]; 
+
+  @Field(type => [Int], {nullable:true}) 
+  langIndex: number[]; 
+} */
+
 @ArgsType() 
 export class FeedbackMsgArg { 
   @Field(type => [String]) 

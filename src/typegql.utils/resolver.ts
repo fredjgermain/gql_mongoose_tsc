@@ -1,4 +1,6 @@
 import { Args, Resolver, Query, Mutation } from "type-graphql"; 
+import { NonEmptyArray } from "type-graphql"; 
+
 
 // --------------------------------------------------------
 import { ObjectScalar } from './customscalar'; 
@@ -6,7 +8,7 @@ import { Model, Validate, Create, Read, Update, Delete } from '../typegoose.util
 //import { ValidateInputs } from '../typegoose.utils/validation/validations.utils'; 
 import { FEEDBACK_MSG, FetchFeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
 import { CrudResult, GQLError, GQLModel, GQLModelError } from './return.class'; 
-import { FeedbackMsgArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, ValidateArg } from './argstypes'; 
+import { FeedbackMsgArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, ValidateArg } from './argstypes.class'; 
 import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
 
 
@@ -16,7 +18,7 @@ class TestError extends Error {
 
 // RESOLVER ###############################################
 @Resolver() 
-export class CrudResolver { 
+class CrudResolver { 
   
   @Query(type => GQLModel) 
   async Model(@Args() { modelName }: ModelNameArg) { 
@@ -69,3 +71,5 @@ export class CrudResolver {
     return new CrudResult(modelName, result, fields); 
   } 
 }
+
+export const Resolvers = [CrudResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 

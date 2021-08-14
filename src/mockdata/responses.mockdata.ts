@@ -20,7 +20,7 @@ function Range_DaysPerMonth() {
 
 
 // RESPONSE -------------------------------------
-export const ResponseGroupDatas:ResponseGroup[] = [ 
+export const data:ResponseGroup[] = [ 
   { 
     _id:new mongoose.Types.ObjectId(), 
     rid: 'pdqd5', 

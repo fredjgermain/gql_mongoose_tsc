@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import { Form } from '../models/form.model'; 
 
 // FORM -----------------------------------------
-export const FormDatas:Form[] = [ 
+export const data:Form[] = [ 
   { 
     _id: new mongoose.Types.ObjectId(), 
     fid: 'pdqd5', 

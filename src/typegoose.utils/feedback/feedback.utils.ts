@@ -1,6 +1,6 @@
 import { mongoose } from "@typegoose/typegoose"; 
 // -------------------------------------------------------- 
-import { FeedbackMsg, FeedbackTypeEnum } from './feedback.class'; 
+import { FeedbackMsg, FeedbackTypeEnum } from './feedback.model'; 
 
 
 /** FetchFeedbackMsg --------------------------------------

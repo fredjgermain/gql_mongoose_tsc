@@ -17,3 +17,24 @@ export class TypegooseModel {
   @prop({type: [String], required:true}) 
   description: string[]; 
 } 
+
+export const TypegooseModelDatas = [
+  { 
+    //_id: new mongoose.Types.ObjectId(), 
+    accessor:'TypegooseModel', 
+    label:['TypegooseModel'], 
+    description: [''], 
+  }, 
+  { 
+    //_id: new mongoose.Types.ObjectId(), 
+    accessor:'FeedbackMsg', 
+    label:['FeedbackMsg'], 
+    description: [''], 
+  }, 
+  { 
+    //_id: new mongoose.Types.ObjectId(), 
+    accessor:'MLangLabel', 
+    label:['MLangLabel'], 
+    description: [''], 
+  }, 
+]

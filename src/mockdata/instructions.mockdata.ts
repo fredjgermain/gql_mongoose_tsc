@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { Instruction } from '../models/instruction.model'; 
 
 // INSTRUCTION ----------------------------------
-export const InstructionDatas:Instruction[] = [ 
+export const data:Instruction[] = [ 
   { 
     _id: new mongoose.Types.ObjectId(), 
     iid: "i_pdqd5_1", 

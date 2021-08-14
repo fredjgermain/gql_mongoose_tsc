@@ -20,12 +20,12 @@ export class Answer extends Base {
     required:true}) 
   patient: Patient; 
 
-  @prop({label: ["question", "question"], 
+  @prop({label: ["Question", "Question"], 
     ref:'Question', 
     required:true}) 
   question: Question; 
 
-  @prop({label: ["date", "date"], 
+  @prop({label: ["Date", "Date"], 
     required:true}) 
   date: Date; 
 

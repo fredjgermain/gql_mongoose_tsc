@@ -1,3 +1,4 @@
+
 // ----------------------------------------------------------------
 import { FetchIModel, GetMongoModel } from './model/model.util'; 
 import { ValidateInputsToCreate, ValidateInputsToUpdate, HasErrors, ValidateIdsToFind, ValidateInputs } 
@@ -9,7 +10,7 @@ type ReturnModel = {model?:IModel, errors?:any[]};
 type ReturnItems = {items?:Item[]|Input[], errors?:any[]}; 
 
 
-/** Model -----------------------------------------------
+/** Model ------------------------------------------------- 
  * 
  * @param modelName 
  * @returns 
@@ -21,6 +22,12 @@ export async function Model(modelName:string):Promise<ReturnModel> {
 } 
 
 
+/** Validate 
+ * 
+ * @param modelName 
+ * @param inputs 
+ * @returns 
+ */
 export async function Validate(modelName:string, inputs:Input[]):Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
   if(!model) 

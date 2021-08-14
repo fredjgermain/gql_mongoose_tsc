@@ -1,51 +1,20 @@
 // import mongoose from 'mongoose'; 
 
 // --------------------------------------------------------
-import { TypegooseModel } from '../typegoose.utils/model/typegoosemodel.class'; 
-import { FormDatas } from './forms.mockdata'; 
-import { InstructionDatas } from './instructions.mockdata'; 
-import { ResponseGroupDatas } from './responses.mockdata'; 
-import { QuestionDatas } from './questions.mockdata'; 
-import { PatientDatas } from './patients.mockdata'; 
-import { AnswerDatas } from './answers.mockdata'; 
+import { data as Form } from './forms.mockdata'; 
+import { data as Instruction } from './instructions.mockdata'; 
+import { data as ResponseGroup } from './responses.mockdata'; 
+import { data as Question } from './questions.mockdata'; 
+import { data as Patient } from './patients.mockdata'; 
+import { data as Answer } from './answers.mockdata'; 
 
-// Mock Collections -----------------------------
-const TypegooseModelDatas:TypegooseModel[] = [ 
-  { 
-    //_id: new mongoose.Types.ObjectId(), 
-    accessor:'ResponseGroup', 
-    label:['Responses'], 
-    description: [''], 
-  }, 
-  { 
-    //_id: new mongoose.Types.ObjectId(), 
-    accessor:'Instruction', 
-    label:['Instructions'], 
-    description: [''], 
-  }, 
-  {
-    //_id: new mongoose.Types.ObjectId(), 
-    accessor:'Form', 
-    label:['Forms'], 
-    description: [''], 
-  }, 
-  {
-    //_id: new mongoose.Types.ObjectId(), 
-    accessor:'Question', 
-    label:['Questions'], 
-    description: [''], 
-  }, 
-  {
-    //_id: new mongoose.Types.ObjectId(), 
-    accessor:'Patient', 
-    label:['Patients'], 
-    description: [''] 
-  }, 
-  {
-    //_id: new mongoose.Types.ObjectId(), 
-    accessor:'Answer', 
-    label:['Answers'], 
-    description: [''], 
-  }, 
-]; 
-export const mockDatas = {TypegooseModelDatas, FormDatas, InstructionDatas, ResponseGroupDatas, QuestionDatas, PatientDatas, AnswerDatas}; 
+import { Models } from '../models/models'; 
+
+
+export const datas = {Form, Instruction, ResponseGroup, Question, Patient, Answer}; 
+
+export const modelDatas = Models.map( model => { 
+  return {...model, data:(datas as any)[model.modelName] } 
+}) 
+
+

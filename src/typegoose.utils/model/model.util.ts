@@ -1,8 +1,8 @@
-import {mongoose} from '@typegoose/typegoose'; 
+import {mongoose, getModelForClass } from '@typegoose/typegoose'; 
 // -------------------------------------------------------- 
 import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
 import { IField, IType, IModel } from '../../../lib/ifield.interface'; 
-import { TypegooseModel } from "./typegoosemodel.class"; 
+import { TypegooseModel } from "./typegoosemodel.model"; 
 import { ErrProp } from '../validation/errprop.class'; 
 
 
@@ -30,6 +30,44 @@ interface MongoField {
   [key:string]:any; 
 }
 
+
+
+
+/** RegisterModel 
+ * 
+ * @param toRegister 
+ * @param modelItem 
+ * @returns 
+ */
+ export async function RegisterModel(toRegister:any, modelItem:TypegooseModel) { 
+  const {model} = GetMongoModel('TypegooseModel'); 
+  if(!model) 
+    return 
+  getModelForClass(toRegister); 
+  await model.create(modelItem); 
+} 
+
+
+
+/** MockData ----------------------------------------------
+ * 
+ * @param modelName 
+ * @param data 
+ */
+ export async function MockData(modelName:string, data:any, reset:boolean = true) { 
+  try{ 
+    const {model} = GetMongoModel(modelName); 
+    if(!model) 
+      throw new Error(`model ${modelName} not found`); 
+    if(reset) 
+      await model.deleteMany(); 
+    await model.create(data); 
+    const read = await model.find(); 
+    console.log(modelName, read.length); 
+  }catch(err){ 
+    console.log(err); 
+  } 
+} 
 
 
 /** FetchIModel ===========================================

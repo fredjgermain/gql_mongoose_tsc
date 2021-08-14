@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'; 
 
 // --------------------------------------------------------
-import { FormDatas } from './forms.mockdata'; 
-import { InstructionDatas } from './instructions.mockdata'; 
-import { ResponseGroupDatas } from './responses.mockdata'; 
+import { data as FormDatas } from './forms.mockdata'; 
+import { data as InstructionDatas } from './instructions.mockdata'; 
+import { data as ResponseGroupDatas } from './responses.mockdata'; 
 
 /*
 import { Form } from '../models/form.model'; 
@@ -201,7 +201,7 @@ const edec_questions = edec_q.map( ({label}, i) => {
 }) 
 
 
-export const QuestionDatas = [...asrs_questions, ...pdqd5_questions, ...whodas_questions, ...edec_questions]; 
+export const data = [...asrs_questions, ...pdqd5_questions, ...whodas_questions, ...edec_questions]; 
 
 
 

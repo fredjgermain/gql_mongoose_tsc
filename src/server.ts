@@ -5,15 +5,15 @@ import "reflect-metadata";
 import { buildSchema } from "type-graphql"; 
 import { connect } from "mongoose"; 
 
-import cors from "cors";
+import cors from "cors"; 
 
 
 
 // Local-import -------------------------------------------
 import { mongodbUrl } from './mongodb.connectionurl'; 
 // resolvers
-import { Resolvers } from './prepping'; 
-import { MockDatas } from './mockdata/mockinit'; 
+import { Resolvers } from './typegql.utils/resolver'; 
+import { InitMockDatas } from './mockdata/mockinit'; 
 
 
 const main = async () => {
@@ -44,7 +44,7 @@ const main = async () => {
 
 
   // INIT MOCK DATA ----------------
-  MockDatas() 
+  InitMockDatas() 
   // init mock data ... 
 
   app.listen({ port: PORT }, () => 

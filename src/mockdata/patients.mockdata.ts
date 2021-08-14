@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import { Patient } from '../models/patient.model'; 
 
 // PATIENTS -------------------------------------
-export const PatientDatas:Patient[] = [
+export const data:Patient[] = [
   {
     _id: new mongoose.Types.ObjectId(), 
     firstname: 'Frédéric', 
