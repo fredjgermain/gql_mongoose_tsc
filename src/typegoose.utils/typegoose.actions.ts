@@ -5,6 +5,8 @@ import { ValidateInputsToCreate, ValidateInputsToUpdate, HasErrors, ValidateIdsT
   from './validation/validation.action'; 
 import { Input, Item } from './item.utils'; 
 import { IModel } from '../../lib/ifield.interface'; 
+import { MLangLabel } from './mlang/mlanglabel.model'; 
+import { FeedbackMsg } from './feedback/feedback.model';
 
 type ReturnModel = {model?:IModel, errors?:any[]}; 
 type ReturnItems = {items?:Item[]|Input[], errors?:any[]}; 
@@ -20,6 +22,26 @@ export async function Model(modelName:string):Promise<ReturnModel> {
   
   return !error ? {model} : {model, errors:[error]}; 
 } 
+
+
+// MLANGLABEL 
+export async function GetMLangLabel(names:string[]):Promise<ReturnItems> { 
+  const {items, errors} = await Read('MLangLabel'); 
+  if(!items) 
+    return {errors} 
+  const filteredItems = items.filter( item => names.includes( (item as any as MLangLabel).name )) 
+  return {items:filteredItems}; 
+} 
+
+// Feedback
+export async function GetFeedbackMsg(names:string[]):Promise<ReturnItems> { 
+  const {items, errors} = await Read('FeedbackMsg'); 
+  if(!items) 
+    return {errors} 
+  const filteredItems = items.filter( item => names.includes( (item as any as FeedbackMsg).name )) 
+  return {items:filteredItems}; 
+} 
+
 
 
 /** Validate 
@@ -59,6 +81,9 @@ export async function Create(modelName:string, toCreate:Input[]):Promise<ReturnI
   if(HasErrors(createErrors)) 
     return {errors:createErrors}; 
 
+  // createErrors does not detect duplication ?? 
+  console.log('create', createErrors); 
+
   try { 
     return {items:await model.create(toCreate)}; 
   }catch(err) { 
@@ -80,14 +105,17 @@ export async function Create(modelName:string, toCreate:Input[]):Promise<ReturnI
  * @param ids 
  * @returns 
  */
-export async function Read(modelName:string, ids:string[]):Promise<ReturnItems> { 
+export async function Read(modelName:string, ids?:string[]):Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
   if(!model) 
     return {errors:[error]}; 
-
+  
+  if(!ids) 
+    return {items:await model.find()} 
+  
   const notFoundError = await ValidateIdsToFind(model, ids); 
   if(HasErrors(notFoundError)) 
-    return {errors:notFoundError}; 
+    return {errors:notFoundError};
 
   try{ 
     const selector = ids && ids.length > 0 ? {_id: {$in: ids} }: {}; 
@@ -128,8 +156,8 @@ export async function Update(modelName:string, toUpdate:Item[]): Promise<ReturnI
 
   try { 
     for(let i=0; i<toUpdate.length; i++) { 
-      const {id, ...parsedItem} = toUpdate[i]; 
-      await model.updateOne({_id:id}, parsedItem); 
+      const {_id, ...parsedItem} = toUpdate[i]; 
+      await model.updateOne({_id:_id}, parsedItem); 
     } 
     // fetch item after updates 
     return {items:await model.find({_id:{$in:ids}})} 
@@ -152,7 +180,7 @@ export async function Update(modelName:string, toUpdate:Item[]): Promise<ReturnI
  * @param ids 
  * @returns 
  */
-export async function Delete(modelName:string, ids:string[]):Promise<ReturnItems> { 
+export async function Delete(modelName:string, ids?:string[]):Promise<ReturnItems> { 
   const {model, error} = GetMongoModel(modelName); 
   if(!model) 
     return {errors:[error]}; 

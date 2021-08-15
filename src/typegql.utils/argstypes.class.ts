@@ -17,9 +17,9 @@ export class MLangLabelArg {
 } */
 
 @ArgsType() 
-export class FeedbackMsgArg { 
+export class LabelNamesArg { 
   @Field(type => [String]) 
-  feedbackNames: string[]; 
+  names: string[]; 
 } 
 
 @ArgsType() 

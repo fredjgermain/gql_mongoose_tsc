@@ -111,13 +111,13 @@ export function GetIFields(model:MongoModel):IField[] {
 function ParseToIField(mongoField:MongoField):IField { 
   const {path, instance, options, $embeddedSchemaType} = mongoField; 
   const type = ParseToIType(mongoField); 
-  const {label, abbrev, format, order, _options} = options; 
+  const {label, abbrev, format, order} = options; 
 
   return { 
     accessor: path ?? '', 
     label: label ?? '', 
     isRef: !!options?.ref, 
-    options: _options, 
+    options, 
     type, abbrev, format, order, 
   } 
 } 

@@ -1,20 +1,13 @@
 import { Args, Resolver, Query, Mutation } from "type-graphql"; 
 import { NonEmptyArray } from "type-graphql"; 
 
-
 // --------------------------------------------------------
 import { ObjectScalar } from './customscalar'; 
-import { Model, Validate, Create, Read, Update, Delete } from '../typegoose.utils/typegoose.actions'; 
-//import { ValidateInputs } from '../typegoose.utils/validation/validations.utils'; 
-import { FEEDBACK_MSG, FetchFeedbackMsg } from '../typegoose.utils/feedback/feedback.utils'; 
-import { CrudResult, GQLError, GQLModel, GQLModelError } from './return.class'; 
-import { FeedbackMsgArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, ValidateArg } from './argstypes.class'; 
-import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
+import { Model, GetMLangLabel, GetFeedbackMsg, Validate, Create, Read, Update, Delete } from '../typegoose.utils/typegoose.actions'; 
+import { CrudResult, GQLModel } from './return.class'; 
+import { LabelNamesArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, ValidateArg } from './argstypes.class'; 
 
 
-class TestError extends Error { 
-  errors:ErrProp[]; 
-}
 
 // RESOLVER ###############################################
 @Resolver() 
@@ -35,12 +28,16 @@ class CrudResolver {
 
   // FEEDBACKMSG ..........................................
   @Query(type => [ObjectScalar]) 
-  async FeedbackMsg(@Args() { feedbackNames }: FeedbackMsgArg) { 
-    return Object.entries(FEEDBACK_MSG) 
-      .filter( f => { 
-        const [name] = f; 
-        return feedbackNames.includes(name); 
-      }) 
+  async MLangLabel(@Args() { names }: LabelNamesArg) { 
+    const result = await GetMLangLabel(names); 
+    return new CrudResult('MLangLabel', result); 
+  } 
+
+  // FEEDBACKMSG ..........................................
+  @Query(type => [ObjectScalar]) 
+  async FeedbackMsg(@Args() { names }: LabelNamesArg) { 
+    const result = await GetFeedbackMsg(names); 
+    return new CrudResult('FeedbackMsg', result); 
   } 
 
   // CREATE ...............................................

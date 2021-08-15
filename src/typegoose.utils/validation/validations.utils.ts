@@ -19,6 +19,8 @@ export function GetDuplicateErrors(model:MongoModel, input:any, toCompare:any[])
   const indexedFields = GetIFields(model) 
     .filter( field => field?.options?.unique === true ) 
     .map( field => field.accessor ); 
+  
+  // console.log("GetDuplicate", GetIFields(model) ); 
 
   return indexedFields.filter( path => { 
     const value = input[path]; 
