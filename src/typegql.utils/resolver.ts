@@ -1,4 +1,4 @@
-import { Args, Resolver, Query, Mutation } from "type-graphql"; 
+import { Args, Resolver, Query, Mutation, Arg } from "type-graphql"; 
 import { NonEmptyArray } from "type-graphql"; 
 
 // --------------------------------------------------------
@@ -12,6 +12,11 @@ import { LabelNamesArg, ModelNameArg, ModelIdsArgs, CreateArgs, UpdateArgs, Vali
 // RESOLVER ###############################################
 @Resolver() 
 class CrudResolver { 
+
+  @Query(type => ObjectScalar) 
+  async Test(@Args() { modelName }: ModelNameArg) { 
+    return {test:modelName}; 
+  } 
   
   @Query(type => GQLModel) 
   async Model(@Args() { modelName }: ModelNameArg) { 

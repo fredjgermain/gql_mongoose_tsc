@@ -32,5 +32,6 @@ type Query {
   MLangLabel(names: [String!]!): [ObjectScalar!]!
   Model(modelName: String!): GQLModel!
   Read(fields: [String!], ids: [ID!], modelName: String!): CrudResult!
+  Test(modelName: String!): ObjectScalar!
   Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
 }
