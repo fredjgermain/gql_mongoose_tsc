@@ -3,11 +3,35 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""The DummyA model"""
+type A {
+  _id: ObjectId!
+  name: String!
+  otherName: String!
+}
+
+"""The DummyA model"""
+type B {
+  _id: ObjectId!
+  name: String!
+  nested: A!
+}
+
 type CrudResult {
   count: Float!
   errors: [ObjectScalar!]
   items: [ObjectScalar!]!
   modelName: String!
+}
+
+type CrudResultA {
+  errors: [ObjectScalar!]
+  items: [A!]!
+}
+
+type CrudResultB {
+  errors: [ObjectScalar!]
+  items: [B!]!
 }
 
 type GQLModel {
@@ -19,10 +43,19 @@ type GQLModel {
 }
 
 type Mutation {
-  Create(fields: [String!], inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
-  Delete(fields: [String!], ids: [ID!], modelName: String!): CrudResult!
-  Update(fields: [String!], inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  Create(inputs: [ObjectScalar!]!, modelName: String!, subfields: [String!]): CrudResult!
+  CreateA(toCreate: [ObjectScalar!]!): CrudResultA!
+  CreateB(toCreate: [ObjectScalar!]!): CrudResultB!
+  Delete(ids: [ID!], modelName: String!, subfields: [String!]): CrudResult!
+  DeleteA(ids: [String!]!): CrudResultA!
+  DeleteB(ids: [String!]!): CrudResultB!
+  Update(inputs: [ObjectScalar!]!, modelName: String!, subfields: [String!]): CrudResult!
+  UpdateA(toUpdate: [ObjectScalar!]!): CrudResultA!
+  UpdateB(toUpdate: [ObjectScalar!]!): CrudResultB!
 }
+
+"""Mongo object id scalar type"""
+scalar ObjectId
 
 """Simulates Object"""
 scalar ObjectScalar
@@ -31,7 +64,14 @@ type Query {
   FeedbackMsg(names: [String!]!): [ObjectScalar!]!
   MLangLabel(names: [String!]!): [ObjectScalar!]!
   Model(modelName: String!): GQLModel!
-  Read(fields: [String!], ids: [ID!], modelName: String!): CrudResult!
-  Test(modelName: String!): ObjectScalar!
+  Model_A: ObjectScalar!
+  Model_B: ObjectScalar!
+  Read(ids: [ID!], modelName: String!, subfields: [String!]): CrudResult!
+  ReadA(ids: [String!]): CrudResultA!
+  ReadB(ids: [String!]): CrudResultB!
+  Test(modelName: String!): CrudResult!
+  TestSubFields(modelName: String!, subfields: ObjectScalar): CrudResult!
   Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
+  ValidateA(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateB(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
 }

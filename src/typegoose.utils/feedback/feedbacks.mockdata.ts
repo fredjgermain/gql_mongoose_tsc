@@ -13,6 +13,11 @@ export const FEEDBACK_MSG_MOCK = {
     type: FeedbackTypeEnum.Error, 
     labels: ["Item not found", "Item introuvé"], 
   }, 
+  ERROR_VALIDATION: { 
+    name: 'ERROR_VALIDATION', 
+    type: FeedbackTypeEnum.Error, 
+    // msg: ["This item is not valide", "L'item n,est pas valid"], 
+  }, 
   ERROR_DUPLICATE: { 
     name: 'ERROR_DUPLICATE', 
     type: FeedbackTypeEnum.Error, 

@@ -1,6 +1,6 @@
 
 // ----------------------------------------------------------------
-import { FetchIModel, GetMongoModel } from './model/model.util'; 
+import { FetchIModel, GetMongoModel, GetIFields } from './model/model.util'; 
 import { ValidateInputsToCreate, ValidateInputsToUpdate, HasErrors, ValidateIdsToFind, ValidateInputs } 
   from './validation/validation.action'; 
 import { Input, Item } from './item.utils'; 
@@ -10,6 +10,33 @@ import { FeedbackMsg } from './feedback/feedback.model';
 
 type ReturnModel = {model?:IModel, errors?:any[]}; 
 type ReturnItems = {items?:Item[]|Input[], errors?:any[]}; 
+
+
+
+
+export type Subfield = {[key:string]:boolean|Subfield} 
+export async function ReadSubField(modelName:string, subfields:Subfield, id:string) { 
+  let subObject = {} as any; 
+  const {model} = GetMongoModel(modelName); 
+  if(!model) 
+    return {}; 
+  const ifields = GetIFields(model); 
+  const [src] = await model.find({_id:id}); 
+
+  const entries = Object.entries(subfields); 
+  for(let i=0; i<entries.length; i++) { 
+    const [key, subfield] = entries[i]; 
+    const ifield = ifields.find( ifield => ifield.accessor===key ); 
+
+    if(typeof subfield === "boolean" && subfield) { 
+      subObject[key] = src[key]; 
+    } else if(ifield?.options?.ref && typeof subfield === "object") { 
+      subObject[key] = await ReadSubField(ifield.options.ref, subfield, src[key]); 
+    } 
+  } 
+  return subObject; 
+} 
+
 
 
 /** Model ------------------------------------------------- 

@@ -30,6 +30,11 @@ export const FEEDBACK_MSG = {
     type: FeedbackTypeEnum.Error, 
     // msg: ["Item not found", "Item est introuvable"], 
   }, 
+  ERROR_VALIDATION: { 
+    name: 'ERROR_VALIDATION', 
+    type: FeedbackTypeEnum.Error, 
+    // msg: ["This field must have a unique value", "Ce champ doit avoir une valeur unique"], 
+  }, 
   ERROR_DUPLICATE: { 
     name: 'ERROR_DUPLICATE', 
     type: FeedbackTypeEnum.Error, 

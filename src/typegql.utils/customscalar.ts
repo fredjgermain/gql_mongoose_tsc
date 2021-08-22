@@ -34,7 +34,9 @@ export const ObjectScalar = new GraphQLScalarType({
   // PARSE LITERAL ----------------------------------------
   parseLiteral(ast): Object { 
     //console.log('parsed literal'); 
+
     let parsedObject = ParseObjectValue(ast as ObjectValue) 
+    //console.log(parsedObject); 
     if (ast.kind !== Kind.OBJECT) { 
       throw new Error("ObjectScalar can only parse object values (Literal)"); 
     } 
@@ -78,11 +80,16 @@ function ParseListValue(toParse:ListValue):any[] {
 } 
 
 function SwitchByKind(toParse:Nested):any { 
+  //console.log("Switch", toParse); 
+  //console.log("Switch", toParse); 
+
   if(toParse.kind === 'ListValue') 
     return ParseListValue(toParse as ListValue) 
-  else if(toParse.kind === 'ObjectField') 
+  else if(toParse.kind === 'ObjectValue') 
     return ParseObjectValue(toParse as ObjectValue) 
   return ParseScalarValue(toParse as ScalarValue) 
+  /*else if(toParse.kind === 'ObjectField') 
+    return ParseObjectValue(toParse as ObjectValue) */
 } 
 
 function ParseObjectValue(toParse:ObjectValue) { 

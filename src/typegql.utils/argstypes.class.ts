@@ -29,9 +29,15 @@ export class ModelNameArg {
 }
 
 @ArgsType() 
-export class FieldsArg extends ModelNameArg { 
+export class TestSubFieldsArg extends ModelNameArg { 
+  @Field(type => ObjectScalar, {nullable:true}) 
+  subfields: object; 
+} 
+
+@ArgsType() 
+export class SubFieldsArg extends ModelNameArg { 
   @Field(type => [String], {nullable:true}) 
-  fields: string[]; 
+  subfields: string[]; 
 }
 
 @ArgsType() 
@@ -41,19 +47,19 @@ export class ValidateArg extends ModelNameArg {
 } 
 
 @ArgsType() 
-export class ModelIdsArgs extends FieldsArg { 
+export class ModelIdsArgs extends SubFieldsArg { 
   @Field(type => [ID], {nullable:true} ) 
   ids: string[]; 
 }
 
 @ArgsType() 
-export class CreateArgs extends FieldsArg { 
+export class CreateArgs extends SubFieldsArg { 
   @Field(type => [ObjectScalar] ) 
   inputs: Input[]; 
 } 
 
 @ArgsType() 
-export class UpdateArgs extends FieldsArg { 
+export class UpdateArgs extends SubFieldsArg { 
   @Field(type => [ObjectScalar] ) 
   inputs: Item[]; 
 } 

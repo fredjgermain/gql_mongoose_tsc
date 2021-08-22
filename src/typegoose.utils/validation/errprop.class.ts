@@ -5,6 +5,7 @@ export interface ErrProp {
   name: string; 
   path: string; 
   value: any; 
+  errors?: ErrProp[]; 
   [key:string]: any; 
 } 
 
