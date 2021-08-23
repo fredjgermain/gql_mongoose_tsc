@@ -1,4 +1,4 @@
-import { FEEDBACK } from '../feedback/feedback.utils'; 
+import { FEEDBACK } from '../feedback.utils'; 
 
 
 export interface ErrProp { 

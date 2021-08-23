@@ -1,93 +1,72 @@
 import { getModelForClass } from '@typegoose/typegoose'; 
 
 // --------------------------------------------------------
-import { RegisterModel, GetMongoModel } from '../typegoose.utils/typegoosemodel/typegoosemodel.util'; 
-
 // Feedback 
-import { Feedback, FeedbackModelDescriptor } from '../typegoose.utils/feedback/feedback.model'; 
-import { feedbackData } from '../typegoose.utils/feedback/feedbacks.data'; 
-// MLangLabel 
-import { MLangLabel, MLangLabelDescriptor } from '../typegoose.utils/mlang/mlanglabel.model'; 
-// Typegoose 
-import { TypegooseModel, TypegooseModelDescriptor } from '../typegoose.utils/typegoosemodel/typegoosemodel.model'; 
+import { FEEDBACK } from '../typegoose.utils/feedback.utils'; 
+// MLabel 
+import { MLabel, MLabelDescriptor, MLabelResolver } from './mlabel.resolver'; 
+// GQLModel  
+import { GQLModel, GQLModelDescriptor, ExtendFactoredModelResolver, RegisterGQLModel } from './gqlmodel.resolver'; 
 
-/*
-x Gather class 
-- Decorator for TypegooseModelDescriptions. 
-x Method to Register model and create item of typegooseModel for each model ... 
-- 
-
-*/
+// Resolvers 
+// import { ModelResolver } from './model.resolver'; 
 
 
-
-
+/* 
+ x Gather class 
+ - Decorator for TypegooseModelDescriptions. 
+ x Method to Register model and create item of typegooseModel for each model ... 
+ - Gather and export Resolvers. 
+*/ 
 
 
 export type Populator = { 
-  modelName:string, 
   model:any, 
+  modelDescriptor:GQLModel, 
   data:any[], 
-  modelDescriptor:TypegooseModel 
 } 
 
+const feedbackdatas = Object.values(FEEDBACK); 
+const minimalPopulators = [ 
+  { 
+    model: GQLModel, 
+    modelDescriptor: GQLModelDescriptor, 
+    data:[] 
+  }, 
+  { 
+    model:MLabel, 
+    modelDescriptor:MLabelDescriptor, 
+    data: feedbackdatas 
+  }, 
+] as Populator[]; 
+
+
 export async function InitBaseModelDatas() { 
-  /*[TypegooseModel, FeedbackMsg, MLangLabel].forEach( model => { 
-    getModelForClass(model)
-  })*/
-  // getModelForClass(TypegooseModel); 
-  // getModelForClass(FeedbackMsg); 
-  // getModelForClass(MLangLabel); 
-
-  const feedbackdatas = Object.values(feedbackData); 
-  
-
-  const modelDatas = [ 
-    {modelName:'TypegooseModel', model:TypegooseModel, data:[], modelDescriptor:TypegooseModelDescriptor}, 
-    {modelName:'FeedbackMsg', model:Feedback, data: feedbackdatas, modelDescriptor:MLangLabelDescriptor}, 
-    {modelName:'MLangLabel', model:MLangLabel, data: [], modelDescriptor:FeedbackModelDescriptor}, 
-  ] as Populator[]; 
-
-  modelDatas.forEach( modeldata => getModelForClass(modeldata.model) ) 
-  
-  await MockDatas(modelDatas); 
+  const gqlModel = getModelForClass(GQLModel); 
+  // Reset TypegooseModelData 
+  await gqlModel.deleteMany(); 
+  await RegisterModels(minimalPopulators); 
 } 
 
 
 export async function RegisterModels(modeldatas:Populator[]) { 
   modeldatas.forEach( async model => { 
-    await RegisterModel(model.model, model.modelDescriptor); 
+    await RegisterGQLModel(model.model, model.modelDescriptor); 
   }) 
 } 
+
 
 export async function PopulateModels(modeldatas:Populator[]) { 
-  modeldatas.forEach( async modeldata => { 
-    const {modelName, data} = modeldata; 
-    await PopulateModel(modelName, data); 
-  }) 
-}
-
-
-
-/** MockData ----------------------------------------------
- * 
- * @param modelName 
- * @param data 
- */
- export async function PopulateModel(modelName:string, data:any, reset:boolean = true) { 
-  try{ 
-    const {model} = GetMongoModel(modelName); 
-    if(!model) 
-      throw new Error(`model ${modelName} not found`); 
-    if(reset) 
-      await model.deleteMany(); 
-    await model.create(data); 
+  modeldatas.forEach( async populator => { 
+    const model = getModelForClass(populator.model); 
+    // reset data before polating 
+    await model.deleteMany(); 
+    await model.create(populator.data); 
     const read = await model.find(); 
-    console.log(modelName, read.length); 
-  }catch(err){ 
-    console.log(err); 
-  } 
+    console.log(`${populator.modelDescriptor.accessor}: ${read.length}`); 
+  }) 
 } 
+
 
 
 // import { NonEmptyArray } from "type-graphql"; 

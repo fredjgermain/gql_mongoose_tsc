@@ -1,11 +1,11 @@
 import mongoose, { ObjectId } from 'mongoose'; 
-//import "reflect-metadata";
-
+//import "reflect-metadata"; 
 
 import { Field, ID, Int, ObjectType, InputType } 
   from "type-graphql"; 
 //import { getModelWithString } from "@typegoose/typegoose"; 
-import { prop, getModelForClass, Ref } from "@typegoose/typegoose"; 
+import { prop, getModelForClass, Ref } 
+  from "@typegoose/typegoose"; 
 
 
 // ---------------------------------------------------------------
@@ -13,13 +13,10 @@ import { ObjectIdScalar } from '../typegql.utils/customscalar/objectid.scalar';
 
 
 
-
 @ObjectType({ description: "The DummyA model" })
 export class A { 
   @Field(type => ObjectIdScalar) 
   readonly _id: ObjectId; 
-  // @Field(() => ID) 
-  // id: string; 
 
   @Field(type => String) 
   @prop({type:String, required:true }) 
@@ -34,8 +31,6 @@ export class A {
 export class B { 
   @Field(type => ObjectIdScalar) 
   readonly _id: ObjectId; 
-  // @Field(() => ID) 
-  // id: string; 
 
   @Field(type => String) 
   @prop({type:String}) 

@@ -1,8 +1,8 @@
 import { ErrorParsing, ErrProp } from './errprop.class'; 
 import { GetDuplicateErrors, GetNotFoundError, GetValidationErrors } from './validations.utils'; 
-import { MongoModel } from '../typegoosemodel/typegoosemodel.util'; 
+import { MongoModel } from '../typegoosemodel.util'; 
 import { Input, Item, ParseFromDoc } from '../item.utils'; 
-import { FEEDBACK } from '../feedback/feedback.utils'; 
+import { FEEDBACK } from '../feedback.utils'; 
 
 
 

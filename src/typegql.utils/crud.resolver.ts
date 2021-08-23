@@ -12,7 +12,7 @@ import { ObjectScalar } from "./customscalar/object.scalar";
 import { ValidateInputs, ValidateToCreate, ValidateIdsToFind } from '../typegoose.utils/validation/validation.action'; 
 import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
 import { GqlResultFactory, GQLModel } from "./return.class"; 
-import { GetMongoModel, FetchIModel } from "../typegoose.utils/typegoosemodel/typegoosemodel.util"; 
+import { GetMongoModel, FetchIModel } from "../typegoose.utils/typegoosemodel.util"; 
 import * as CrudAction from '../typegoose.utils/crud.actions'; 
 
 
@@ -34,21 +34,7 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
 
   // Factored abstract CrudResolver class 
   @Resolver({ isAbstract: true }) 
-  abstract class CrudBaseResolverClass { 
-    
-
-    /** MODEL ----------------------------------------------
-     * 
-     * @returns 
-     */
-    @Query(type => GQLModel, {name:`Model_${itemSuffix}`}) 
-    async Model(): Promise<GQLModel> { 
-      const {model} = await FetchIModel(itemSuffix); 
-      if(!model) 
-        throw new Error("Model error"); 
-      return model; 
-    }
-
+  abstract class CrudResolverClass { 
 
 
     /** VALIDATE ------------------------------------------
@@ -139,7 +125,7 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
       return await CrudAction.Delete(model, ids); 
     } 
   } 
-  return CrudBaseResolverClass; 
+  return CrudResolverClass; 
 } 
 
 

@@ -4,7 +4,6 @@ import { ObjectScalar } from "./customscalar/object.scalar";
 
 
 
-
 /** GglResultFactory ====================================== 
  * Factors a GqlResult class of type T 
  * items : the results of a successful Query or Mutation. 
@@ -30,60 +29,3 @@ import { ObjectScalar } from "./customscalar/object.scalar";
   return GqlResultClass; 
 }
 
-
-
-// GQLModel ===============================================
-@ObjectType() 
-export class GQLModel { 
-  /*constructor(model?:IModel, errors?:ErrProp[]) { 
-    this.accessor = model?.accessor ?? ''; 
-    this.label = model?.label ?? []; 
-    this.description = model?.description ?? []; 
-    this.ifields = model?.ifields ?? []; 
-  }*/
-
-  @Field() 
-  accessor: string; 
-  
-  @Field(type => [String]) 
-  label: string[]; 
-
-  @Field(type => [String]) 
-  description: string[]; 
-
-  @Field(type => [ObjectScalar]) // replace with IField type ?? 
-  ifields: object[]; 
-} 
-
-
-
-
-// CrudResultModel ==============================================
-@ObjectType() 
-export class CrudResultModel{ 
-  @Field(type => [GQLModel]) 
-  items: GQLModel[]; 
-
-  @Field(() => [ObjectScalar], {nullable:true}) 
-  errors?: ErrProp[]; 
-}
-
-
-// // --------------------------------------------------------
-// @ObjectType() 
-// export class GQLError implements ErrProp{ 
-
-//   @Field() 
-//   name: string; 
-
-//   @Field() 
-//   path: string; 
-
-//   @Field(type => ObjectScalar) 
-//   value: any; 
-
-//   @Field(type => [GQLError], {nullable:true}) 
-//   errors?: GQLError[]; 
-
-//   //[key:string]: any; 
-// }

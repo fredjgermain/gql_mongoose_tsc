@@ -8,7 +8,7 @@ import { ObjectId } from "mongoose";
 
 // --------------------------------------------------------
 import { A, B, } from './dummies.model'; 
-import { ExtendFactoredResolver, CrudResolverFactory } from '../typegql.utils/factory.resolver'; 
+import { ExtendFactoredResolver, CrudResolverFactory } from '../typegql.utils/crud.resolver'; 
 
 
 const AResolver = ExtendFactoredResolver(A); 

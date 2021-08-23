@@ -1,9 +1,9 @@
 import {mongoose, getModelForClass } from '@typegoose/typegoose'; 
 // -------------------------------------------------------- 
-import { FEEDBACK } from '../feedback/feedback.utils'; 
-import { IField, IType, IModel } from '../../../lib/ifield.interface'; 
-import { TypegooseModel } from "./typegoosemodel.model"; 
-import { ErrProp } from '../validation/errprop.class'; 
+import { FEEDBACK } from './feedback.utils'; 
+import { IField, IType, IModel } from '../../lib/ifield.interface'; 
+//import { TypegooseModel } from "./typegoosemodel/typegoosemodel.model"; 
+import { ErrProp } from './validation/errprop.class'; 
 
 
 
@@ -32,37 +32,38 @@ interface MongoField {
 
 
 
-/** RegisterModel 
- * 
- * @param toRegister 
- * @param modelDescriptor 
- * @returns 
- */
- export async function RegisterModel(toRegister:any, modelDescriptor:TypegooseModel) { 
-  const model = getModelForClass(TypegooseModel); 
-  if(!model) 
-    return 
-  getModelForClass(toRegister); 
-  await model.create(modelDescriptor); 
-} 
 
 
-/** FetchIModel ===========================================
- * 
- * @param modelName 
- * @returns 
- */
-export async function FetchIModel(modelName:string):Promise<{model?:IModel, error?:ErrProp}> { 
-  //console.log("Fetch:", modelName); 
-  const {model:mongooseModel, error} = GetMongoModel(modelName); 
-  if(!mongooseModel) 
-    return {error} 
-  const TypegooseModels = mongoose.models['TypegooseModel']; 
-  const {accessor, description, label} = (await TypegooseModels.findOne({accessor:modelName}) as TypegooseModel); 
-  const ifields = GetIFields(mongooseModel); 
-  const model = {accessor, description, label, ifields}; 
-  return {model} 
-} 
+// /** RegisterModel 
+//  * 
+//  * @param toRegister 
+//  * @param modelDescriptor 
+//  * @returns 
+//  */
+//  export async function RegisterModel(toRegister:any, modelDescriptor:any) { 
+//   const model = getModelForClass(TypegooseModel); 
+//   if(!model) 
+//     return 
+//   getModelForClass(toRegister); 
+//   await model.create(modelDescriptor); 
+// } 
+
+// /** FetchIModel ===========================================
+//  * 
+//  * @param modelName 
+//  * @returns 
+//  */
+// export async function FetchIModel(modelName:string):Promise<{model?:IModel, error?:ErrProp}> { 
+//   //console.log("Fetch:", modelName); 
+//   const {model:mongooseModel, error} = GetMongoModel(modelName); 
+//   if(!mongooseModel) 
+//     return {error} 
+//   const TypegooseModels = mongoose.models['TypegooseModel']; 
+//   const {accessor, description, label} = (await TypegooseModels.findOne({accessor:modelName}) as TypegooseModel); 
+//   const ifields = GetIFields(mongooseModel); 
+//   const model = {accessor, description, label, ifields}; 
+//   return {model} 
+// } 
 
 
 type ReturnMongoModel = {model?:MongoModel, error?:ErrProp}; 

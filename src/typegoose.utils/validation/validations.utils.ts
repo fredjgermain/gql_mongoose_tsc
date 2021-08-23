@@ -1,6 +1,6 @@
 import { ErrProp, ErrorParsing } from "./errprop.class"; 
-import { MongoModel, GetIFields } from '../typegoosemodel/typegoosemodel.util'; 
-import { FEEDBACK } from '../feedback/feedback.utils'; 
+import { MongoModel, GetIFields } from '../typegoosemodel.util'; 
+import { FEEDBACK } from '../feedback.utils'; 
 import { IdsExist } from '../item.utils'; 
 
 
