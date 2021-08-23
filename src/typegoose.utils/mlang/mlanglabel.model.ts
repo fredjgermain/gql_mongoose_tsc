@@ -2,6 +2,12 @@ import { prop } from "@typegoose/typegoose";
 import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
 
 
+export const MLangLabelDescriptor = { 
+    //_id: new mongoose.Types.ObjectId(), 
+    accessor:'MLangLabel', 
+    label:['MLangLabel'], 
+    description: [''], 
+  } 
 /** MLangLabel 
  * 
  */

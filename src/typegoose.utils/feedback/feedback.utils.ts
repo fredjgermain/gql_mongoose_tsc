@@ -1,6 +1,6 @@
 import { mongoose } from "@typegoose/typegoose"; 
 // -------------------------------------------------------- 
-import { FeedbackMsg, FeedbackTypeEnum } from './feedback.model'; 
+import { Feedback, FeedbackTypeEnum } from './feedback.model'; 
 
 
 /** FetchFeedbackMsg --------------------------------------
@@ -8,18 +8,18 @@ import { FeedbackMsg, FeedbackTypeEnum } from './feedback.model';
  * @param feedbackName 
  * @returns 
  */
- export async function FetchFeedbackMsg(feedbackName:string) { 
+ export async function FetchFeedback(feedbackName:string) { 
   const model = mongoose.models['FeedbackMsg']; 
   try{ 
     const [feedbackMsg] = await model.find({name:feedbackName}); 
-    return feedbackMsg as FeedbackMsg; 
+    return feedbackMsg as Feedback; 
   }catch(err) { 
     return; // FeedbackMsg not found. 
   } 
 }
 
 
-export const FEEDBACK_MSG = { 
+export const FEEDBACK = { 
   // Errors ...............................................
   ERROR_MODEL_NOT_FOUND: { 
     name: 'ERROR_MODEL_NOT_FOUND', 

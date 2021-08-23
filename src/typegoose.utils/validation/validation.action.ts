@@ -1,35 +1,35 @@
-import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
+import { ErrorParsing, ErrProp } from './errprop.class'; 
 import { GetDuplicateErrors, GetNotFoundError, GetValidationErrors } from './validations.utils'; 
-import { ParseFromDoc, Item, ParseToCreate, ParseToUpdate, ParsedItem } from '../item.utils'; 
-
-import { ErrProp } from './errprop.class'; 
-import { MongoModel } from '../model/model.util'; 
-
+import { MongoModel } from '../typegoosemodel/typegoosemodel.util'; 
+import { Input, Item, ParseFromDoc } from '../item.utils'; 
+import { FEEDBACK } from '../feedback/feedback.utils'; 
 
 
-type ValidationResult = {input: object, errors?: ErrProp[] } 
-/** HasErrors ------------------------------------------------------
- * 
- * @param errors 
- * @returns 
- */
-export function HasErrors(errors:ValidationResult[]) { 
-  return errors.some( error => (error.errors?.length ?? 0) > 0 ); 
+
+export async function ValidateToCreate(model:MongoModel, inputs:Input[]):Promise<ErrProp[]> { 
+  const validationErrors = await ValidateInputs(model, inputs); 
+  validationErrors.map( errors => { 
+    return {...errors, name:FEEDBACK.ERROR_CREATE.name} 
+  }); 
+  return validationErrors; 
 } 
 
+export async function ValidateToUpdate(model:MongoModel, inputs:Input[]):Promise<ErrProp[]> { 
+  // getError not found
+  const toUpdate = await GetDocsToUpdate(model, inputs); 
+  const ids = toUpdate.map( item => item._id ); 
 
+  // test if all ids exist, if not, return an error. 
+  const notFoundError = await ValidateIdsToFind(model, ids); 
+  if(notFoundError.length > 0)
+    return notFoundError; 
 
-/** Validate Inputs To Create --------------------------------------
- * 
- * @param model 
- * @param inputs 
- * @returns 
- */
-export async function ValidateInputsToCreate(model:MongoModel, inputs:object[]):Promise<ValidationResult[]> { 
-  const toCreate = inputs.map( input => ParseToCreate(input)); 
-  return await ValidateInputs(model, toCreate); 
-} 
-
+  const validationErrors = await ValidateInputs(model, toUpdate); 
+  validationErrors.map( error => { 
+    return {...error, name:FEEDBACK.ERROR_UPDATE.name} 
+  }) 
+  return validationErrors; 
+}
 
 
 /** Validate Ids To Find ---------------------------------------------
@@ -38,67 +38,49 @@ export async function ValidateInputsToCreate(model:MongoModel, inputs:object[]):
  * @param inputs 
  * @returns 
  */
-export async function ValidateIdsToFind(model:MongoModel, ids:string[]):Promise<ValidationResult[]> { 
+ export async function ValidateIdsToFind(model:MongoModel, ids:string[]):Promise<ErrProp[]> { 
   const notFoundError = await GetNotFoundError(model, ids); 
   if(!ids || ids.length === 0 || (notFoundError.value as any[]).length === 0) 
     return []; 
-  return [{input:ids, errors:[notFoundError]}]; 
+  return [notFoundError]; 
 }
 
 
 
-/** Validate Inputs To Update -----------------------------------------
- * 
- * @param model 
- * @param inputs 
- * @returns 
- */
-export async function ValidateInputsToUpdate(model:MongoModel, inputs:object[]):Promise<ValidationResult[]> { 
-  const toUpdate = inputs.map( input => ParseToUpdate(input) ) 
-  const ids = toUpdate.map( item => item._id ); 
-  // test if all ids exist, if not, return an error. 
-  const idsFound = await ValidateIdsToFind(model, ids); 
-  if(HasErrors(idsFound)) 
-    return idsFound; 
+export async function ValidateInputs(model:MongoModel, inputs:Input[]):Promise<ErrProp[]> { 
+  const ids = GetIdsFromInputs(inputs); 
 
-  return (await ValidateInputs(model, toUpdate)) 
-    .filter( result => { 
-      return result.errors?.some( error => error.name != FEEDBACK_MSG.ERROR_REQUIRED.name ) 
+  const existingItems = (await model.find()) 
+    .filter( item => !ids.includes(ParseFromDoc(item)._id) ); 
+
+  const errors = [] as ErrProp[]; 
+  for(let i =0; i < inputs.length; i++) { 
+    const input = inputs[i]; 
+    const _inputs = inputs.filter( (e, idx) => idx != i ); 
+    const toCompare = [..._inputs, ...existingItems]; 
+    const duplicationErrors = await GetDuplicateErrors(model, input, toCompare); 
+    const validationErrors = await GetValidationErrors(model, input); 
+    const error = { name:'', path:'', value:input, 
+      errors:[...duplicationErrors, ...validationErrors] 
+    } as ErrProp; 
+    if((error.errors?.length ?? 0) > 0) 
+      errors.push(error); 
+  } 
+  return errors; 
+} 
+
+
+async function GetDocsToUpdate(model:MongoModel, inputs:any[]) { 
+  const ids = GetIdsFromInputs(inputs); 
+  return (await model.find({_id:{$in:ids}})) 
+    .map( doc => { 
+      const item = ParseFromDoc(doc); 
+      const input = inputs.find( input => input._id === item._id) 
+      return {...item, ...input} as Item; 
     }); 
 }
 
-
-
-/** ValidateInputs ----------------------------------------------------
- * test for each iputs 
- * 
- * @param model 
- * @param inputs 
- * @returns 
- */
- export async function ValidateInputs(model:MongoModel, inputs:object[]):Promise<ValidationResult[]> { 
-  const ids = inputs.map( input => ParsedItem(input)._id ?? ParsedItem(input).id ); 
-
-  // all existing items excluding updates inputs 
-  const collection = (await model.find()).filter( (item:Item) => !ids.includes(ParseFromDoc(item)._id)); 
-
-  const validations = [] as {input:object, errors:ErrProp[]}[] 
-  for(let i=0; i<inputs.length; i++) { 
-    const input = inputs[i]; 
-    const otherInputs = RemoveAt(i, inputs); 
-    const toCompare = [...otherInputs, ...collection]; 
-    const errors = [ 
-      ...(await GetValidationErrors(model, input)), 
-      ...GetDuplicateErrors(model, input, toCompare) 
-    ]; 
-    validations.push({input, errors}); 
-  } 
-  return validations; 
-}
-
-function RemoveAt(at:number, array:any[]) { 
-  const copy = [...array]; 
-  copy.splice(at, 1); 
-  return copy; 
-}
-
+function GetIdsFromInputs(inputs:Input[]) { 
+  return inputs.map( input => input._id) 
+    .filter( id => typeof id === 'string' ) as string[]; 
+} 

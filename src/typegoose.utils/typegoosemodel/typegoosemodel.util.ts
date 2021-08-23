@@ -1,6 +1,6 @@
 import {mongoose, getModelForClass } from '@typegoose/typegoose'; 
 // -------------------------------------------------------- 
-import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
+import { FEEDBACK } from '../feedback/feedback.utils'; 
 import { IField, IType, IModel } from '../../../lib/ifield.interface'; 
 import { TypegooseModel } from "./typegoosemodel.model"; 
 import { ErrProp } from '../validation/errprop.class'; 
@@ -28,45 +28,22 @@ interface MongoField {
     instance:string; 
   }; 
   [key:string]:any; 
-}
-
+} 
 
 
 
 /** RegisterModel 
  * 
  * @param toRegister 
- * @param modelItem 
+ * @param modelDescriptor 
  * @returns 
  */
- export async function RegisterModel(toRegister:any, modelItem:TypegooseModel) { 
-  const {model} = GetMongoModel('TypegooseModel'); 
+ export async function RegisterModel(toRegister:any, modelDescriptor:TypegooseModel) { 
+  const model = getModelForClass(TypegooseModel); 
   if(!model) 
     return 
   getModelForClass(toRegister); 
-  await model.create(modelItem); 
-} 
-
-
-
-/** MockData ----------------------------------------------
- * 
- * @param modelName 
- * @param data 
- */
- export async function MockData(modelName:string, data:any, reset:boolean = true) { 
-  try{ 
-    const {model} = GetMongoModel(modelName); 
-    if(!model) 
-      throw new Error(`model ${modelName} not found`); 
-    if(reset) 
-      await model.deleteMany(); 
-    await model.create(data); 
-    const read = await model.find(); 
-    console.log(modelName, read.length); 
-  }catch(err){ 
-    console.log(err); 
-  } 
+  await model.create(modelDescriptor); 
 } 
 
 
@@ -92,7 +69,7 @@ type ReturnMongoModel = {model?:MongoModel, error?:ErrProp};
 export function GetMongoModel(modelName:string):ReturnMongoModel { 
   const model = mongoose.models[modelName]; 
   const error = { 
-    name:FEEDBACK_MSG.ERROR_MODEL_NOT_FOUND.name, 
+    name:FEEDBACK.ERROR_MODEL_NOT_FOUND.name, 
     path:'modelName', 
     value:modelName 
   } 

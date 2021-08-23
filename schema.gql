@@ -17,13 +17,6 @@ type B {
   nested: A!
 }
 
-type CrudResult {
-  count: Float!
-  errors: [ObjectScalar!]
-  items: [ObjectScalar!]!
-  modelName: String!
-}
-
 type CrudResultA {
   errors: [ObjectScalar!]
   items: [A!]!
@@ -37,19 +30,15 @@ type CrudResultB {
 type GQLModel {
   accessor: String!
   description: [String!]!
-  errors: [ObjectScalar!]
   ifields: [ObjectScalar!]!
   label: [String!]!
 }
 
 type Mutation {
-  Create(inputs: [ObjectScalar!]!, modelName: String!, subfields: [String!]): CrudResult!
   CreateA(toCreate: [ObjectScalar!]!): CrudResultA!
   CreateB(toCreate: [ObjectScalar!]!): CrudResultB!
-  Delete(ids: [ID!], modelName: String!, subfields: [String!]): CrudResult!
   DeleteA(ids: [String!]!): CrudResultA!
   DeleteB(ids: [String!]!): CrudResultB!
-  Update(inputs: [ObjectScalar!]!, modelName: String!, subfields: [String!]): CrudResult!
   UpdateA(toUpdate: [ObjectScalar!]!): CrudResultA!
   UpdateB(toUpdate: [ObjectScalar!]!): CrudResultB!
 }
@@ -61,17 +50,10 @@ scalar ObjectId
 scalar ObjectScalar
 
 type Query {
-  FeedbackMsg(names: [String!]!): [ObjectScalar!]!
-  MLangLabel(names: [String!]!): [ObjectScalar!]!
-  Model(modelName: String!): GQLModel!
-  Model_A: ObjectScalar!
-  Model_B: ObjectScalar!
-  Read(ids: [ID!], modelName: String!, subfields: [String!]): CrudResult!
+  Model_A: GQLModel!
+  Model_B: GQLModel!
   ReadA(ids: [String!]): CrudResultA!
   ReadB(ids: [String!]): CrudResultB!
-  Test(modelName: String!): CrudResult!
-  TestSubFields(modelName: String!, subfields: ObjectScalar): CrudResult!
-  Validate(inputs: [ObjectScalar!]!, modelName: String!): CrudResult!
   ValidateA(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateB(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
 }

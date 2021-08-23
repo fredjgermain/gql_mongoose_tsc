@@ -1,4 +1,4 @@
-import { InitBaseModelDatas, MockDatas, RegisterModels,  } from '../typegoose.utils/prepping'; 
+import { InitBaseModelDatas, MockDatas, RegisterModels,  } from '../typegql.utils/prepping'; 
 import { modelDatas } from './mockdata'; 
 
 

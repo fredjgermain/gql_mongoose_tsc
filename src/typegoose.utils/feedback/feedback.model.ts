@@ -13,12 +13,21 @@ export enum FeedbackTypeEnum {
   Error 
 } 
 
+
+export const FeedbackModelDescriptor = { 
+    //_id: new mongoose.Types.ObjectId(), 
+    accessor:'FeedbackMsg', 
+    label:['FeedbackMsg'], 
+    description: [''], 
+  }  
+
+
 /** FeedbackMsg MODEL -------------------------------------------
  * FeedbackMsg stores multilingual messages 
  * Includes success messages, confirmation messages, error messages 
  * ?FeedbackMsg ought to be searched by name, rather than by Id? 
 */ 
-export class FeedbackMsg extends MLangLabel { 
+export class Feedback extends MLangLabel { 
   /* Enums: Success, Error */ 
   @prop({ enum: FeedbackTypeEnum, type: Number }) 
   type: FeedbackTypeEnum; 

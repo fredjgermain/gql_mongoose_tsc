@@ -1,5 +1,5 @@
 // -------------------------------------------------------- 
-import { MongoModel } from './model/model.util'; 
+import { MongoModel } from './typegoosemodel/typegoosemodel.util'; 
 
 
 export interface Input { 

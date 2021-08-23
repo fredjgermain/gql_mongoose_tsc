@@ -4,53 +4,16 @@ import { ClassType, Resolver, Query, Mutation, Arg,
   from "type-graphql"; 
 //import { Type } from '@nestjs/common'; 
 import { getModelWithString } from "@typegoose/typegoose"; 
-import { ObjectScalar } from "../typegql.utils/customscalar"; 
+import { ObjectScalar } from "./customscalar/object.scalar"; 
 
 //import { prop as Property, getModelForClass } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { ValidateInputs, ValidateToCreate, ValidateIdsToFind } from './validation.utils'; 
+import { ValidateInputs, ValidateToCreate, ValidateIdsToFind } from '../typegoose.utils/validation/validation.action'; 
 import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
-import { GqlResultFactory, GQLError, GQLModel } from "./return.class"; 
-import { FetchIModel } from "../typegoose.utils/model/model.util";
-import { ItemsExist } from "../typegoose.utils/item.utils";
-import { IModel } from "../../lib/ifield.interface";
-//import { GQLError } from "./return.class"; 
-
-
-@ObjectType() 
-class CrudResultModel{ 
-  @Field(type => [GQLModel]) 
-  items: GQLModel[]; 
-
-  @Field(() => [ObjectScalar], {nullable:true}) 
-  errors?: ErrProp[]; 
-}
-
-
-@Resolver() 
-export class ModelResolver { 
-  /** MODELS ------------------------------------------
-   * Validates inputs 
-   * - test mongoose validations. 
-   * - test for duplicate fields values. 
-   * 
-   * @param modelsName 
-   * @returns ErrProp containning all inputs errors, if any. 
-   */
-  @Query(type => CrudResultModel) 
-  async Models( @Arg("modelsName", type => [String]) modelsName:string[] ): Promise<CrudResultModel> { 
-    const crudResultModel = {items:[] as GQLModel[], errors:[] as ErrProp[]}; 
-    for(let i =0; i < modelsName.length; i++) { 
-      const {model, error} = await FetchIModel(modelsName[i]); 
-      if(!!model) 
-        crudResultModel.items.push(model); 
-      else if (!!error) 
-        crudResultModel.errors.push(error); 
-    } 
-    return crudResultModel; 
-  }
-}
+import { GqlResultFactory, GQLModel } from "./return.class"; 
+import { GetMongoModel, FetchIModel } from "../typegoose.utils/typegoosemodel/typegoosemodel.util"; 
+import * as CrudAction from '../typegoose.utils/crud.actions'; 
 
 
 
@@ -62,22 +25,31 @@ export class ModelResolver {
 export function CrudResolverFactory<T extends ClassType>(itemClass:T):any { 
   const itemSuffix = itemClass.name; 
 
+
+  // Factor generic CrudResult class containing errors and results items. 
   @ObjectType(`CrudResult${itemSuffix}`) 
   class CrudResult extends GqlResultFactory(itemClass) {} 
 
 
+
+  // Factored abstract CrudResolver class 
   @Resolver({ isAbstract: true }) 
   abstract class CrudBaseResolverClass { 
     
-    @Query(type => ObjectScalar, {name:`Model_${itemSuffix}`}) 
-    async Model(): Promise<any> { 
-      console.log(itemSuffix); 
+
+    /** MODEL ----------------------------------------------
+     * 
+     * @returns 
+     */
+    @Query(type => GQLModel, {name:`Model_${itemSuffix}`}) 
+    async Model(): Promise<GQLModel> { 
       const {model} = await FetchIModel(itemSuffix); 
-      console.log(model); 
       if(!model) 
         throw new Error("Model error"); 
       return model; 
     }
+
+
 
     /** VALIDATE ------------------------------------------
      * Validates inputs 
@@ -107,18 +79,10 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
      */
     @Mutation(type => CrudResult, { name: `Create${itemSuffix}` }) 
     async Create( @Arg("toCreate", type => [ObjectScalar]) toCreate:any[] ): Promise<CrudResult> { 
-      const model = getModelWithString(itemSuffix); 
+      const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
-      const errors = await ValidateToCreate(model, toCreate); 
-      if(errors.length > 0) 
-        return {items:[], errors} 
-      try{ 
-        const items = await model.create(toCreate); 
-        return {items} 
-      } catch(err) { 
-        throw err; 
-      } 
+      return await CrudAction.Create(model, toCreate); 
     } 
 
 
@@ -133,19 +97,10 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
      */
     @Query((type) => CrudResult, { name: `Read${itemSuffix}` }) 
     async Read( @Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<CrudResult> { 
-      const model = getModelWithString(itemSuffix); 
+      const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
-      const errors = ids ? await ValidateIdsToFind(model, ids): [] as ErrProp[]; 
-      if(errors.length > 0) 
-        return {items:[], errors} 
-      try { 
-        const selector = ids ? {_id: {$in: ids}} : {}; 
-        const items = await model.find(selector); 
-        return {items}; 
-      } catch(err) { 
-        throw err; 
-      } 
+      return await CrudAction.Read(model, ids); 
     }
 
 
@@ -159,25 +114,12 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
      * @returns 
      */
     @Mutation(type => CrudResult, { name: `Update${itemSuffix}` })
-    async Update( @Arg("toUpdate", type => [ObjectScalar]) toUpdate:any[] ): Promise<CrudResult> { 
-      const model = getModelWithString(itemSuffix); 
+    async Update( @Arg("toUpdate", type => [ObjectScalar]) inputs:any[] ): Promise<CrudResult> { 
+      const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
-      const errors = await ValidateInputs(model, toUpdate); 
-      if(errors.length > 0) 
-        return {items:[], errors} 
-      try { 
-        for(let i = 0; i < toUpdate.length; i++) { 
-          const {_id, ...parsedItem} = toUpdate[i]; 
-          await model.updateOne({_id:_id}, parsedItem); 
-        } 
-        const ids = toUpdate.map( item => item._id ); 
-        const items = await model.find({_id: {$in: ids}}); 
-        return {items}; 
-      } catch(err) { 
-        throw err; 
-      } 
-    }
+      return await CrudAction.Read(model, inputs); 
+    } 
 
 
 
@@ -191,24 +133,14 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
      */
     @Mutation(type => CrudResult, { name: `Delete${itemSuffix}` }) 
     async Delete( @Arg("ids", type => [String]) ids:string[] ): Promise<CrudResult> { 
-      const model = getModelWithString(itemSuffix); 
+      const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
-      const errors = ids ? await ValidateIdsToFind(model, ids): [] as ErrProp[]; 
-      if(errors.length > 0) 
-        return {items:[], errors} 
-      try { 
-        const items = await model.find({_id: {$in: ids}}); 
-        await model.deleteMany({_id: {$in: ids}}); 
-        return {items}; 
-      } catch(err) { 
-        throw err; 
-      } 
-    }
-
-  }
+      return await CrudAction.Delete(model, ids); 
+    } 
+  } 
   return CrudBaseResolverClass; 
-}
+} 
 
 
 /** ExtendsFactoredResolver 

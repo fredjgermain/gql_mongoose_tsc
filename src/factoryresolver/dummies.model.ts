@@ -9,7 +9,7 @@ import { prop, getModelForClass, Ref } from "@typegoose/typegoose";
 
 
 // ---------------------------------------------------------------
-import { ObjectIdScalar } from './objectid.scalar'; 
+import { ObjectIdScalar } from '../typegql.utils/customscalar/objectid.scalar'; 
 
 
 

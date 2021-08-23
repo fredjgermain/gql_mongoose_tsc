@@ -1,6 +1,6 @@
 import { ErrProp, ErrorParsing } from "./errprop.class"; 
-import { MongoModel, GetIFields } from '../model/model.util'; 
-import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
+import { MongoModel, GetIFields } from '../typegoosemodel/typegoosemodel.util'; 
+import { FEEDBACK } from '../feedback/feedback.utils'; 
 import { IdsExist } from '../item.utils'; 
 
 
@@ -27,7 +27,7 @@ export function GetDuplicateErrors(model:MongoModel, input:any, toCompare:any[])
     const values = toCompare.map( i => i[path]) 
     return values.filter( v => !!v && !!value && v === value ).length > 0; 
   }).map( path => { 
-    return {name:FEEDBACK_MSG.ERROR_DUPLICATE.name, path, value:input[path]} as ErrProp 
+    return {name:FEEDBACK.ERROR_DUPLICATE.name, path, value:input[path]} as ErrProp 
   }) 
 } 
 
@@ -59,7 +59,7 @@ export async function GetValidationErrors(model:MongoModel, input:object):Promis
 export async function GetNotFoundError(model:MongoModel, ids:string[]): Promise<ErrProp> { 
   const exist = await IdsExist(model, ids); 
   const notFound = ids.filter( (id, i) => !exist[i] ); 
-  return {name:FEEDBACK_MSG.ERROR_ITEM_NOT_FOUND.name, 
+  return {name:FEEDBACK.ERROR_ITEM_NOT_FOUND.name, 
     path:'_id', 
     value:notFound 
   } 

@@ -1,4 +1,4 @@
-import { FEEDBACK_MSG } from '../feedback/feedback.utils'; 
+import { FEEDBACK } from '../feedback/feedback.utils'; 
 
 
 export interface ErrProp { 
@@ -15,7 +15,7 @@ export function ErrorParsing(error:any):ErrProp[] {
   if('name' in error && 'keyPattern' in error && 'keyValue' in error && error.name === 'MongoError') { 
     const [path] = Object.keys(error['keyPattern']); 
     const [value] = Object.values(error['keyValue']); 
-    return [{name:FEEDBACK_MSG.ERROR_DUPLICATE.name, path, value}] 
+    return [{name:FEEDBACK.ERROR_DUPLICATE.name, path, value}] 
   } 
 
   // Validation Error 
@@ -24,7 +24,7 @@ export function ErrorParsing(error:any):ErrProp[] {
       .map( (e:any) => { 
         // error type 'required'
         if(e.kind === 'required') 
-          return {name:FEEDBACK_MSG.ERROR_REQUIRED.name, path:e.path, value:null} 
+          return {name:FEEDBACK.ERROR_REQUIRED.name, path:e.path, value:null} 
         // other validation errors 
         return e.properties; 
       }) as ErrProp[]; 

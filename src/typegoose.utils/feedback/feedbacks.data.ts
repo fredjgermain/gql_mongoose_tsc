@@ -1,7 +1,7 @@
 import { FeedbackTypeEnum } from './feedback.model'; 
 
 
-export const FEEDBACK_MSG_MOCK = { 
+export const feedbackData = { 
   // Errors ...............................................
   ERROR_MODEL_NOT_FOUND: { 
     name: 'ERROR_MODEL_NOT_FOUND', 

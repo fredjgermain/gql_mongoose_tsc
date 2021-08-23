@@ -1,6 +1,6 @@
 //import { getModelForClass } from "@typegoose/typegoose"; 
 // --------------------------------------------------------
-import { TypegooseModel } from '../typegoose.utils/model/typegoosemodel.model'; 
+import { TypegooseModel } from '../typegoose.utils/typegoosemodel/typegoosemodel.model'; 
 
 import { Answer } from './answer.model'; 
 import { Form } from './form.model'; 

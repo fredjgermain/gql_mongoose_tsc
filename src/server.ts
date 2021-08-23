@@ -15,15 +15,15 @@ import { mongodbUrl } from './mongodb.connectionurl';
 // resolvers
 import { RegisterModel } from './factoryresolver/dummies.model'; 
 import { dummiesResolver } from './factoryresolver/dummies.resolver'; 
-import { Resolvers } from './typegql.utils/resolver'; 
-import { ObjectIdScalar }  from './factoryresolver/objectid.scalar'; 
+//import { Resolvers } from './typegql.utils/resolver'; 
+import { ObjectIdScalar }  from './typegql.utils/customscalar/objectid.scalar'; 
 
 import { InitMockDatas } from './mockdata/mockinit'; 
 
 
 const main = async () => {
   const schema = await buildSchema({ 
-    resolvers: [...Resolvers, ...dummiesResolver] as NonEmptyArray<Function> | NonEmptyArray<string>,  
+    resolvers: [...dummiesResolver] as NonEmptyArray<Function> | NonEmptyArray<string>,  
     scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }], 
     emitSchemaFile: true, 
     validate: false, 
