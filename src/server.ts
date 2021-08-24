@@ -13,8 +13,7 @@ import cors from "cors";
 // Local-import -------------------------------------------
 import { mongodbUrl } from './mongodb.connectionurl'; 
 // resolvers
-import { RegisterModel } from './factoryresolver/dummies.model'; 
-import { dummiesResolver } from './factoryresolver/dummies.resolver'; 
+import { PreppingWithDummies, dummiesResolvers } from './factoryresolver/dummies.resolver'; 
 //import { Resolvers } from './typegql.utils/resolver'; 
 import { ObjectIdScalar }  from './typegql.utils/customscalar/objectid.scalar'; 
 
@@ -23,7 +22,7 @@ import { InitMockDatas } from './mockdata/mockinit';
 
 const main = async () => {
   const schema = await buildSchema({ 
-    resolvers: [...dummiesResolver] as NonEmptyArray<Function> | NonEmptyArray<string>,  
+    resolvers: [...dummiesResolvers] as NonEmptyArray<Function> | NonEmptyArray<string>,  
     scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }], 
     emitSchemaFile: true, 
     validate: false, 
@@ -50,8 +49,7 @@ const main = async () => {
 
 
   // INIT MOCK DATA ----------------
-  InitMockDatas(); 
-  RegisterModel(); 
+  PreppingWithDummies(); 
   // init mock data ... 
 
   app.listen({ port: PORT }, () => 

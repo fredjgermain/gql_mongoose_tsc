@@ -28,10 +28,18 @@ type CrudResultB {
 }
 
 type GQLModel {
+  _id: ObjectId!
   accessor: String!
   description: [String!]!
   ifields: [ObjectScalar!]!
   label: [String!]!
+}
+
+"""Multi lingual label"""
+type MLabel {
+  _id: ObjectId!
+  label: [String!]!
+  name: String!
 }
 
 type Mutation {
@@ -50,8 +58,11 @@ scalar ObjectId
 scalar ObjectScalar
 
 type Query {
-  Model_A: GQLModel!
-  Model_B: GQLModel!
+  GQLModels: [GQLModel!]!
+  GQLModelsA: GQLModel!
+  GQLModelsB: GQLModel!
+  GQLModelsMLabel: GQLModel!
+  MLabel(labelsName: [String!]): [MLabel!]!
   ReadA(ids: [String!]): CrudResultA!
   ReadB(ids: [String!]): CrudResultB!
   ValidateA(toValidate: [ObjectScalar!]!): [ObjectScalar!]!

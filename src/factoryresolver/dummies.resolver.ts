@@ -1,20 +1,37 @@
-import { ClassType, Field, ID, Int, ObjectType, Ctx, Root, Info, 
-  Resolver, Query, Mutation, Arg, NonEmptyArray, InputType, FieldResolver } 
-  from "type-graphql"; 
-//import { getModelWithString } from "@typegoose/typegoose"; 
-import { getModelForClass } from "@typegoose/typegoose"; 
-import { ObjectId } from "mongoose";
+import { NonEmptyArray } from "type-graphql"; 
+
+// -------------------------------------------------------- 
+import { A, B, descriptorA, descriptorB, dataA, dataB } from './dummies.model'; 
+import { InitBaseModelDatas, RegisterModels, PopulateModels, basicResolvers } from '../typegql.utils/prepping'; 
+import { ExtendFactoredResolver } from '../typegql.utils/crud.resolver'; 
+import { ExtendFactoredModelResolver, GQLModel } from '../typegql.utils/gqlmodel.resolver'; 
 
 
-// --------------------------------------------------------
-import { A, B, } from './dummies.model'; 
-import { ExtendFactoredResolver, CrudResolverFactory } from '../typegql.utils/crud.resolver'; 
+
+const populateDummies = [ 
+  {model:A, modelDescriptor:descriptorA as GQLModel, data:dataA}, 
+  {model:B, modelDescriptor:descriptorB as GQLModel, data:dataB} 
+] 
 
 
+
+export function PreppingWithDummies() { 
+  InitBaseModelDatas(); 
+  RegisterModels(populateDummies); 
+  PopulateModels(populateDummies); 
+} 
 const AResolver = ExtendFactoredResolver(A); 
 const BResolver = ExtendFactoredResolver(B); 
+const AModelResolver = ExtendFactoredModelResolver(A); 
+const BModelResolver = ExtendFactoredModelResolver(B); 
 
-export const dummiesResolver = [AResolver, BResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
+
+
+export const dummiesResolvers = [
+  AResolver, AModelResolver, 
+  BResolver, BModelResolver, 
+  ...basicResolvers
+] as NonEmptyArray<Function> | NonEmptyArray<string>; 
 
 
 

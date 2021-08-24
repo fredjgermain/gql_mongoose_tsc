@@ -1,6 +1,5 @@
 //import { ObjectId } from "mongodb"; 
-import { ClassType, Resolver, Query, Mutation, Arg, 
-  ObjectType, Field, Int  } 
+import { ClassType, Resolver, Query, Mutation, Arg, ObjectType } 
   from "type-graphql"; 
 //import { Type } from '@nestjs/common'; 
 import { getModelWithString } from "@typegoose/typegoose"; 
@@ -9,10 +8,10 @@ import { ObjectScalar } from "./customscalar/object.scalar";
 //import { prop as Property, getModelForClass } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { ValidateInputs, ValidateToCreate, ValidateIdsToFind } from '../typegoose.utils/validation/validation.action'; 
+import { ValidateInputs } from '../typegoose.utils/validation/validation.action'; 
 import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
-import { GqlResultFactory, GQLModel } from "./return.class"; 
-import { GetMongoModel, FetchIModel } from "../typegoose.utils/typegoosemodel.util"; 
+import { GqlResultFactory } from "./return.class"; 
+import { GetMongoModel } from "../typegoose.utils/typegoosemodel.util"; 
 import * as CrudAction from '../typegoose.utils/crud.actions'; 
 
 

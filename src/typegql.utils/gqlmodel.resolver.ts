@@ -1,12 +1,13 @@
 import { ObjectId } from "mongodb"; 
-import { ClassType, Resolver, Query, ObjectType, Field } 
+import { ClassType, Resolver, Query, ObjectType, Field, FieldResolver } 
   from "type-graphql"; 
 import { prop, getModelForClass } from "@typegoose/typegoose"; 
+
 
 // -------------------------------------------------------- 
 import { ObjectScalar } from "./customscalar/object.scalar"; 
 import { ObjectIdScalar } from "./customscalar/objectid.scalar"; 
-import { GetIFields, GetMongoModel } from "../typegoose.utils/typegoosemodel.util";
+import { GetIFields, GetMongoModel } from "../typegoose.utils/typegoosemodel.util"; 
 
 
 
@@ -38,8 +39,13 @@ export class GQLModel {
   description: string[]; 
 
   @Field(type => [ObjectScalar]) // replace with IField type ?? 
-  @prop({ type:[ObjectScalar], required:true }) 
-  ifields: any[]; 
+  ifields(): object[] { 
+    const _this = (this as any)._doc as GQLModel; 
+    const {model} = GetMongoModel(_this.accessor); 
+    if(!model) 
+      return []; 
+    return GetIFields(model); 
+  } 
 } 
 
 
@@ -60,14 +66,33 @@ export function ModelResolverFactory<T extends ClassType>(itemClass:T):any {
      * @returns 
      */
     @Query(type => GQLModel, {name:`GQLModels${itemSuffix}`}) 
-    async GQLModels(): Promise<GQLModel> { 
+    async GQLModel(): Promise<GQLModel> { 
       const gqlmodel = getModelForClass(GQLModel); 
-      const [found] =  await gqlmodel.find({accessor:itemSuffix}) 
+      const [found] = await gqlmodel.find({accessor:itemSuffix}) 
       return found; 
     } 
   } 
   return ModelResolverFactoryClass; 
 } 
+
+
+
+/** GQLModelResolver ======================================
+ * 
+ */
+@Resolver() 
+export class GQLModelResolver{ 
+
+  /** GQLModels ===========================================
+   * 
+   * @returns 
+   */
+  @Query(type => [GQLModel]) 
+  async GQLModels(): Promise<GQLModel[]> { 
+    const gqlmodel = getModelForClass(GQLModel); 
+    return await gqlmodel.find() 
+  } 
+}
 
 
 
@@ -99,6 +124,5 @@ export async function RegisterGQLModel( toRegister:any, modelDescriptor:GQLModel
   const {model} = GetMongoModel(modelDescriptor.accessor); 
   if(!model) 
     return; 
-  modelDescriptor.ifields = GetIFields(model); 
   await gqlModel.create(modelDescriptor); 
 } 

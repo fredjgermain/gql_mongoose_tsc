@@ -1,62 +1,45 @@
 import { getModelForClass } from '@typegoose/typegoose'; 
+import { NonEmptyArray } from "type-graphql"; 
 
 // --------------------------------------------------------
 // Feedback 
 import { FEEDBACK } from '../typegoose.utils/feedback.utils'; 
 // MLabel 
 import { MLabel, MLabelDescriptor, MLabelResolver } from './mlabel.resolver'; 
-// GQLModel  
-import { GQLModel, GQLModelDescriptor, ExtendFactoredModelResolver, RegisterGQLModel } from './gqlmodel.resolver'; 
+// GQLModel 
+import { ExtendFactoredModelResolver, GQLModel, GQLModelDescriptor, GQLModelResolver, RegisterGQLModel } from './gqlmodel.resolver'; 
 
-// Resolvers 
-// import { ModelResolver } from './model.resolver'; 
-
-
-/* 
- x Gather class 
- - Decorator for TypegooseModelDescriptions. 
- x Method to Register model and create item of typegooseModel for each model ... 
- - Gather and export Resolvers. 
-*/ 
-
-
-export type Populator = { 
-  model:any, 
-  modelDescriptor:GQLModel, 
-  data:any[], 
-} 
 
 const feedbackdatas = Object.values(FEEDBACK); 
-const minimalPopulators = [ 
-  { 
-    model: GQLModel, 
-    modelDescriptor: GQLModelDescriptor, 
-    data:[] 
-  }, 
-  { 
-    model:MLabel, 
-    modelDescriptor:MLabelDescriptor, 
-    data: feedbackdatas 
-  }, 
-] as Populator[]; 
+const GQLModelPopulator = { 
+  model: GQLModel, 
+  modelDescriptor: GQLModelDescriptor as GQLModel, 
+  data:[] 
+}
+const MLabelPopulator = { 
+  model:MLabel, 
+  modelDescriptor:MLabelDescriptor as GQLModel, 
+  data: feedbackdatas 
+}
 
 
 export async function InitBaseModelDatas() { 
   const gqlModel = getModelForClass(GQLModel); 
   // Reset TypegooseModelData 
   await gqlModel.deleteMany(); 
-  await RegisterModels(minimalPopulators); 
+  await RegisterModels([GQLModelPopulator, MLabelPopulator]); 
+  await PopulateModels([MLabelPopulator]); 
 } 
 
 
-export async function RegisterModels(modeldatas:Populator[]) { 
+export async function RegisterModels(modeldatas:{model:any, modelDescriptor:GQLModel}[]) { 
   modeldatas.forEach( async model => { 
     await RegisterGQLModel(model.model, model.modelDescriptor); 
   }) 
 } 
 
 
-export async function PopulateModels(modeldatas:Populator[]) { 
+export async function PopulateModels(modeldatas:{model:any, modelDescriptor:GQLModel, data:any[] } []) { 
   modeldatas.forEach( async populator => { 
     const model = getModelForClass(populator.model); 
     // reset data before polating 
@@ -68,15 +51,8 @@ export async function PopulateModels(modeldatas:Populator[]) {
 } 
 
 
+const MLabelModelResolver = ExtendFactoredModelResolver(MLabel); 
 
-// import { NonEmptyArray } from "type-graphql"; 
-
-
-// // --------------------------------------------------------
-// import { CrudResolver } from './typegql.utils/resolver'; 
-// //import { CrudTestResolver } from './resolvers/crudtest.resolver'; 
-// //import { RegisterModels } from './models/registermodels'; 
-
-// //RegisterModels(); 
-// export const Resolvers = [CrudResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
-// //export const Resolvers = [CrudTestResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
+export const basicResolvers = [ 
+  MLabelResolver, MLabelModelResolver, GQLModelResolver, 
+] as NonEmptyArray<Function> | NonEmptyArray<string>; 

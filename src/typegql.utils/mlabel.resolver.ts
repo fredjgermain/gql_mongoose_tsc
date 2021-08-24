@@ -29,7 +29,7 @@ export class MLabel {
   // @Field(() => ID) 
   // id: string; 
 
-  @Field(type => [String]) 
+  @Field(type => String) 
   @prop({label: ["Name", "Nom"], 
   required:true, unique:true, abbrev:true}) 
   name: string; 
@@ -47,9 +47,9 @@ export class MLabel {
 @Resolver() 
 export class MLabelResolver { 
   @Query(type => [MLabel]) 
-  async MLabel( @Arg("labelsName", type => [String]) labelsName:string[] ): Promise<MLabel[]> { 
+  async MLabel( @Arg("labelsName", type => [String], {nullable:true}) labelsName?:string[] ): Promise<MLabel[]> { 
     const model = getModelForClass(MLabel); 
     const labels = (await model.find()) as MLabel[] 
-    return labels.filter( label => labelsName.includes(label.name) )
+    return labels.filter( label => labelsName?.includes(label.name) ?? true ) 
   }
 }
