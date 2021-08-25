@@ -11,8 +11,6 @@ import cors from "cors";
 
 
 // Local-import -------------------------------------------
-import { Test } from './test.decorator'; 
-
 import { mongodbUrl } from './mongodb.connectionurl'; 
 // resolvers
 import { PreppingWithDummies, dummiesResolvers } from './factoryresolver/dummies.resolver'; 
@@ -21,8 +19,6 @@ import { ObjectIdScalar }  from './typegql.utils/customscalar/objectid.scalar';
 
 import { InitMockDatas } from './mockdata/mockinit'; 
 
-
-console.log(Test()); 
 
 
 const main = async () => {
