@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb"; 
-import { ClassType, Resolver, Query, ObjectType, Field, FieldResolver } 
+import { ClassType, Resolver, Query, ObjectType, Field, Arg } 
   from "type-graphql"; 
 import { prop, getModelForClass } from "@typegoose/typegoose"; 
 
@@ -88,9 +88,9 @@ export class GQLModelResolver{
    * @returns 
    */
   @Query(type => [GQLModel]) 
-  async GQLModels(): Promise<GQLModel[]> { 
-    const gqlmodel = getModelForClass(GQLModel); 
-    return await gqlmodel.find() 
+  async GQLModels( @Arg("modelsName", type => [String], { nullable: true }) modelsName?:string[] ): Promise<GQLModel[]> { 
+    const gqlmodels = getModelForClass(GQLModel); 
+    return (await gqlmodels.find()).filter( gqlmodel => modelsName?.includes(gqlmodel.accessor) ?? true ) 
   } 
 }
 
@@ -102,7 +102,6 @@ export class GQLModelResolver{
  * @returns 
  */ 
 export function ExtendFactoredModelResolver<T extends ClassType>(itemClass:T) { 
-  
   const BaseResolver = ModelResolverFactory(itemClass); 
   @Resolver(of => itemClass) 
   class FactoriedResolver extends BaseResolver {} 

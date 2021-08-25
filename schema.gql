@@ -5,16 +5,23 @@
 
 """The DummyA model"""
 type A {
-  _id: ObjectId!
+  _id: ID!
   name: String!
-  otherName: String!
 }
 
 """The DummyA model"""
 type B {
-  _id: ObjectId!
+  _id: ID!
   name: String!
   nested: A!
+}
+
+"""The DummyA model"""
+type C {
+  _id: ID!
+  manyNested: [B!]
+  name: String!
+  nested: B
 }
 
 type CrudResultA {
@@ -25,6 +32,11 @@ type CrudResultA {
 type CrudResultB {
   errors: [ObjectScalar!]
   items: [B!]!
+}
+
+type CrudResultC {
+  errors: [ObjectScalar!]
+  items: [C!]!
 }
 
 type GQLModel {
@@ -45,10 +57,13 @@ type MLabel {
 type Mutation {
   CreateA(toCreate: [ObjectScalar!]!): CrudResultA!
   CreateB(toCreate: [ObjectScalar!]!): CrudResultB!
+  CreateC(toCreate: [ObjectScalar!]!): CrudResultC!
   DeleteA(ids: [String!]!): CrudResultA!
   DeleteB(ids: [String!]!): CrudResultB!
+  DeleteC(ids: [String!]!): CrudResultC!
   UpdateA(toUpdate: [ObjectScalar!]!): CrudResultA!
   UpdateB(toUpdate: [ObjectScalar!]!): CrudResultB!
+  UpdateC(toUpdate: [ObjectScalar!]!): CrudResultC!
 }
 
 """Mongo object id scalar type"""
@@ -58,13 +73,16 @@ scalar ObjectId
 scalar ObjectScalar
 
 type Query {
-  GQLModels: [GQLModel!]!
+  GQLModels(modelsName: [String!]): [GQLModel!]!
   GQLModelsA: GQLModel!
   GQLModelsB: GQLModel!
+  GQLModelsC: GQLModel!
   GQLModelsMLabel: GQLModel!
   MLabel(labelsName: [String!]): [MLabel!]!
   ReadA(ids: [String!]): CrudResultA!
   ReadB(ids: [String!]): CrudResultB!
+  ReadC(ids: [String!]): CrudResultC!
   ValidateA(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateB(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateC(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
 }

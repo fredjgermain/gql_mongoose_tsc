@@ -1,13 +1,45 @@
 import mongoose, { ObjectId } from 'mongoose'; 
-import { Field, ID, Int, ObjectType, InputType } 
+import { Base } from '@typegoose/typegoose/lib/defaultClasses'; 
+
+import { Field, ObjectType, ID, Resolver, FieldResolver, Root, ClassType } 
   from "type-graphql"; 
-import { prop, getModelForClass, Ref } 
+import { getModelForClass, prop, Ref } 
   from "@typegoose/typegoose"; 
 
 
   
 // --------------------------------------------------------------- 
 import { ObjectIdScalar } from '../typegql.utils/customscalar/objectid.scalar'; 
+
+
+function ToObjectId(value:any) { 
+  if(typeof value === 'string') 
+    return new mongoose.Types.ObjectId(value); 
+  else if("_id" in value) 
+    return value._id; 
+  return value; 
+}
+
+function FromObjectId(itemClass:any,  id:any) {
+  console.log(itemClass.name); 
+  const model = getModelForClass(itemClass); 
+  const found = model.findById(id).exec(); 
+  return found; 
+}
+
+function OneToOne<T extends ClassType>(itemClass:T) {
+  return {
+    set: (value:any) => ToObjectId(value), 
+    get: (id:any) => FromObjectId(itemClass, id) 
+  }
+} 
+
+function OneToMany<T extends ClassType>(itemClass:T) { 
+  return { 
+    set: (values:any[]) => values.map( value => ToObjectId(value)), 
+    get: (ids:any[]) => ids.map( id => FromObjectId(itemClass, id) ) 
+  } 
+} 
 
 
 
@@ -18,17 +50,16 @@ export const descriptorA = {
 } 
 @ObjectType({ description: "The DummyA model" })
 export class A { 
-  @Field(type => ObjectIdScalar) 
-  readonly _id: ObjectId; 
+  @Field(type => ID) 
+  _id: string; 
+  /*@Field(type => ObjectIdScalar) 
+  readonly _id: ObjectId; */
 
   @Field(type => String) 
-  @prop({type:String, required:true }) 
+  @prop({ type:String, required:true }) 
   name: string; 
-
-  @Field(type => String) 
-  @prop({type:String}) 
-  otherName: string; 
 }
+
 
 
 
@@ -39,18 +70,68 @@ export const descriptorB = {
 } 
 @ObjectType({ description: "The DummyA model" })
 export class B { 
-  @Field(type => ObjectIdScalar) 
-  readonly _id: ObjectId; 
+  @Field(type => ID) 
+  _id: string; 
+  /*@Field(type => ObjectIdScalar) 
+  readonly _id: ObjectId; */
 
   @Field(type => String) 
   @prop({type:String}) 
   name: string; 
 
   @Field(() => A) 
-  @prop({ref: () => A, set: (val:A) => val, get: (val:any) => val}) 
+  @prop({ref: () => A, ...OneToOne(A)}) 
   nested: Ref<A> 
 } 
 
+
+
+export const descriptorC = { 
+  accessor: 'C', 
+  label: ['model C'], 
+  description: ['dummy C'] 
+} 
+@ObjectType({ description: "The DummyA model" })
+export class C { 
+  @Field(type => ID) 
+  _id: string; 
+
+  @Field() 
+  @prop({type:String}) 
+  name: string; 
+
+  @Field(() => B, {nullable:true}) 
+  @prop({ref: () => B, ...OneToOne(B)}) 
+  nested?: Ref<B> 
+
+  @Field(() => [B], {nullable:true}) 
+  @prop({ref: () => B, ...OneToMany(B)}) 
+  manyNested?: Ref<B[]> 
+} 
+
+
+// @Resolver(of => C) 
+// export class NestedResolver { 
+
+//   @FieldResolver(() => A) 
+//   async nested(@Root() root:any) { 
+//     const model = getModelForClass(A); 
+//     console.log("root:", root); 
+//     const found = await model.findById(root.nested); 
+//     console.log("found", found); 
+//     return found; 
+//   } 
+// } 
+
+
+// export function NestedClassType<T extends ClassType>(itemClass:T) { 
+//   itemClass.
+// }
+
+
+/*
+
+ */
 
 
 export const dataA = [ 
@@ -67,59 +148,10 @@ export const dataB = [
   { _id: new mongoose.Types.ObjectId(), name: 'test B3', nested:dataA[2]}, 
 ] 
 
+export const dataC = [ 
+  { _id: new mongoose.Types.ObjectId(), name: 'test C1', nested:dataB[0], manyNested:dataB}, 
+  { _id: new mongoose.Types.ObjectId(), name: 'test C2', nested:dataB[1], manyNested:dataB}, 
+  { _id: new mongoose.Types.ObjectId(), name: 'test C3', nested:dataB[2], manyNested:dataB}, 
+] 
 
 
-// export async function RegisterModel() { 
-
-//   // A and B
-//   const modelA = getModelForClass(A); // Necessary to find datas in DB 
-//   const modelB = getModelForClass(B); // Necessary to find datas in DB 
-
-//   const mockA = [ 
-//     {
-//       _id: new mongoose.Types.ObjectId(), 
-//       name: 'test A'} 
-//   ] 
-//   const mockB = [ 
-//     { 
-//       _id: new mongoose.Types.ObjectId(), 
-//       name: 'test of B', 
-//       nested: mockA[0]
-//     } 
-//   ]; 
-
-//   await modelA.deleteMany(); 
-//   await modelB.deleteMany(); 
-  
-//   await modelA.create(mockA); 
-//   await modelB.create(mockB); 
-
-//   const reada = await modelA.find(); 
-//   const readb = await modelB.find(); 
-//   // console.log('reada', reada) 
-//   // console.log('readb', readb) 
-
-
-// }
-
-
-
-// const formatMetadataKey = Symbol("format");
-// function format(formatString: string) {
-//   return Reflect.metadata(formatMetadataKey, formatString);
-// }
-// function getFormat(target: any, propertyKey: string) {
-//   return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
-// }
-
-// class Greeter {
-//   @format("Hello, %s")
-//   greeting: string;
-//   constructor(message: string) {
-//     this.greeting = message;
-//   }
-//   greet() {
-//     let formatString = getFormat(this, "greeting");
-//     return formatString.replace("%s", this.greeting);
-//   }
-// }
