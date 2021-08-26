@@ -9,37 +9,8 @@ import { getModelForClass, prop, Ref }
 
   
 // --------------------------------------------------------------- 
-import { ObjectIdScalar } from '../typegql.utils/customscalar/objectid.scalar'; 
+import { OneToOne, OneToMany } from '../typegoose.utils/typegoosemodel.util'; 
 
-
-function ToObjectId(value:any) { 
-  if(typeof value === 'string') 
-    return new mongoose.Types.ObjectId(value); 
-  else if("_id" in value) 
-    return value._id; 
-  return value; 
-}
-
-function FromObjectId(itemClass:any,  id:any) {
-  console.log(itemClass.name); 
-  const model = getModelForClass(itemClass); 
-  const found = model.findById(id).exec(); 
-  return found; 
-}
-
-function OneToOne<T extends ClassType>(itemClass:T) {
-  return {
-    set: (value:any) => ToObjectId(value), 
-    get: (id:any) => FromObjectId(itemClass, id) 
-  }
-} 
-
-function OneToMany<T extends ClassType>(itemClass:T) { 
-  return { 
-    set: (values:any[]) => values.map( value => ToObjectId(value)), 
-    get: (ids:any[]) => ids.map( id => FromObjectId(itemClass, id) ) 
-  } 
-} 
 
 
 
@@ -139,7 +110,6 @@ export const dataA = [
   { _id: new mongoose.Types.ObjectId(), name: 'test A2'}, 
   { _id: new mongoose.Types.ObjectId(), name: 'test A3'}, 
 ] 
-
 
 
 export const dataB = [ 

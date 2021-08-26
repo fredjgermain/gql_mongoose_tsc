@@ -1,6 +1,6 @@
 import { Field, ObjectType, ClassType } from "type-graphql"; 
-import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
-import { ObjectScalar } from "./customscalar/object.scalar"; 
+import { ErrProp } from "../../typegoose.utils/validation/errprop.class"; 
+import { ObjectScalar } from "../customscalar/object.scalar"; 
 
 
 
@@ -11,10 +11,10 @@ import { ObjectScalar } from "./customscalar/object.scalar";
  * @param itemClass 
  * @returns 
  */
- export function GqlResultFactory<T extends ClassType>(itemClass: T) { 
+ export function CrudResult_FactoryModel<T extends ClassType>(itemClass: T) { 
   // `isAbstract` decorator option is mandatory to prevent registering in schema
   @ObjectType({ isAbstract: true }) 
-  abstract class GqlResultClass { 
+  abstract class CrudResult { 
     /*constructor(items:T[], errors?:ErrProp[]) { 
       this.items = items; 
       this.errors = errors; 
@@ -26,6 +26,6 @@ import { ObjectScalar } from "./customscalar/object.scalar";
     @Field(() => [ObjectScalar], {nullable:true}) 
     errors?: ErrProp[]; 
   } 
-  return GqlResultClass; 
+  return CrudResult; 
 }
 

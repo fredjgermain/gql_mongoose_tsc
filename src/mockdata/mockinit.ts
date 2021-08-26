@@ -1,10 +1,10 @@
-import { InitBaseModelDatas, MockDatas, RegisterModels,  } from '../typegql.utils/prepping'; 
+import { InitPrepping, MockDatas, RegisterModels,  } from '../typegql.utils/basic.prepping'; 
 import { modelDatas } from './mockdata'; 
 
 
 export async function InitMockDatas() { 
   console.log('InitMock'); 
-  InitBaseModelDatas(); 
+  InitPrepping(); 
 
   RegisterModels(modelDatas); 
   MockDatas(modelDatas); 

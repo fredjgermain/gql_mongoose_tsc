@@ -7,11 +7,11 @@ import { A, B, C,
   //NestedResolver
 } 
   from './dummies.model'; 
-import { InitBaseModelDatas, RegisterModels, PopulateModels, basicResolvers } 
-  from '../typegql.utils/prepping'; 
-import { ExtendFactoredResolver } from '../typegql.utils/crud.resolver'; 
-import { ExtendFactoredModelResolver, GQLModel } 
-  from '../typegql.utils/gqlmodel.resolver'; 
+import { InitPrepping, RegisterModels, Populate, basicResolvers } 
+  from '../typegql.utils/basic.prepping'; 
+import { Extend_Crud_FactoryResolver } from '../typegql.utils/crud/crud.factoryresolver'; 
+import { Extend_ModelDescriptor_FactoryResolver, GQLModel } 
+  from '../typegql.utils/modeldescriptor/modeldescriptor.factoryresolver'; 
 
 
 
@@ -24,16 +24,16 @@ const populateDummies = [
 
 
 export function PreppingWithDummies() { 
-  InitBaseModelDatas(); 
+  InitPrepping(); 
   RegisterModels(populateDummies); 
-  PopulateModels(populateDummies); 
+  Populate(populateDummies); 
 } 
-const AResolver = ExtendFactoredResolver(A); 
-const BResolver = ExtendFactoredResolver(B); 
-const CResolver = ExtendFactoredResolver(C); 
-const AModelResolver = ExtendFactoredModelResolver(A); 
-const BModelResolver = ExtendFactoredModelResolver(B); 
-const CModelResolver = ExtendFactoredModelResolver(C); 
+const AResolver = Extend_Crud_FactoryResolver(A); 
+const BResolver = Extend_Crud_FactoryResolver(B); 
+const CResolver = Extend_Crud_FactoryResolver(C); 
+const AModelResolver = Extend_ModelDescriptor_FactoryResolver(A); 
+const BModelResolver = Extend_ModelDescriptor_FactoryResolver(B); 
+const CModelResolver = Extend_ModelDescriptor_FactoryResolver(C); 
 
 
 

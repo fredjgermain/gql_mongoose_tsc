@@ -1,9 +1,45 @@
 import {mongoose, getModelForClass } from '@typegoose/typegoose'; 
+import { ClassType } from 'type-graphql'; 
+
 // -------------------------------------------------------- 
 import { FEEDBACK } from './feedback.utils'; 
 import { IField, IType, IModel } from '../../lib/ifield.interface'; 
 //import { TypegooseModel } from "./typegoosemodel/typegoosemodel.model"; 
 import { ErrProp } from './validation/errprop.class'; 
+
+
+
+
+function ToObjectId(value:any) { 
+  if(typeof value === 'string') 
+    return new mongoose.Types.ObjectId(value); 
+  else if("_id" in value) 
+    return value._id; 
+  return value; 
+}
+
+function FromObjectId(itemClass:any,  id:any) {
+  console.log(itemClass.name); 
+  const model = getModelForClass(itemClass); 
+  const found = model.findById(id).exec(); 
+  return found; 
+}
+
+export function OneToOne<T extends ClassType>(itemClass:T) {
+  return {
+    set: (value:any) => ToObjectId(value), 
+    get: (id:any) => FromObjectId(itemClass, id) 
+  }
+} 
+
+export function OneToMany<T extends ClassType>(itemClass:T) { 
+  return { 
+    set: (values:any[]) => values.map( value => ToObjectId(value)), 
+    get: (ids:any[]) => ids.map( id => FromObjectId(itemClass, id) ) 
+  } 
+} 
+
+
 
 
 

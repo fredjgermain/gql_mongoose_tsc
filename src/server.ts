@@ -12,19 +12,23 @@ import cors from "cors";
 
 // Local-import -------------------------------------------
 import { mongodbUrl } from './mongodb.connectionurl'; 
-// resolvers
-import { PreppingWithDummies, dummiesResolvers } from './factoryresolver/dummies.resolver'; 
-//import { Resolvers } from './typegql.utils/resolver'; 
-import { ObjectIdScalar }  from './typegql.utils/customscalar/objectid.scalar'; 
 
-import { InitMockDatas } from './mockdata/mockinit'; 
+// Preppings 
+import { BusinessPrepping, resolvers } from './business/business.prepping';
+
+// resolvers
+//import { PreppingWithDummies, dummiesResolvers } from './factoryresolver/dummies.resolver'; 
+//import { Resolvers } from './typegql.utils/resolver'; 
+//import { ObjectIdScalar }  from './typegql.utils/customscalar/objectid.scalar'; 
+
+//import { InitMockDatas } from './mockdata/mockinit'; 
 
 
 
 const main = async () => {
   const schema = await buildSchema({ 
-    resolvers: [...dummiesResolvers] as NonEmptyArray<Function> | NonEmptyArray<string>,  
-    scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }], 
+    resolvers: [...resolvers] as NonEmptyArray<Function> | NonEmptyArray<string>,  
+    //scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }], 
     emitSchemaFile: true, 
     validate: false, 
   });
@@ -50,7 +54,7 @@ const main = async () => {
 
 
   // INIT MOCK DATA ----------------
-  PreppingWithDummies(); 
+  BusinessPrepping(); 
   // init mock data ... 
 
   app.listen({ port: PORT }, () => 

@@ -3,16 +3,16 @@ import { ClassType, Resolver, Query, Mutation, Arg, ObjectType }
   from "type-graphql"; 
 //import { Type } from '@nestjs/common'; 
 import { getModelWithString } from "@typegoose/typegoose"; 
-import { ObjectScalar } from "./customscalar/object.scalar"; 
+import { ObjectScalar } from "../customscalar/object.scalar"; 
 
 //import { prop as Property, getModelForClass } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
-import { ValidateInputs } from '../typegoose.utils/validation/validation.action'; 
-import { ErrProp } from "../typegoose.utils/validation/errprop.class"; 
-import { GqlResultFactory } from "./return.class"; 
-import { GetMongoModel } from "../typegoose.utils/typegoosemodel.util"; 
-import * as CrudAction from '../typegoose.utils/crud.actions'; 
+import { ValidateInputs } from '../../typegoose.utils/validation/validation.action'; 
+import { ErrProp } from "../../typegoose.utils/validation/errprop.class"; 
+import { CrudResult_FactoryModel } from "./result.factorymodel"; 
+import { GetMongoModel } from "../../typegoose.utils/typegoosemodel.util"; 
+import * as CrudAction from '../../typegoose.utils/crud.actions'; 
 
 
 
@@ -21,19 +21,19 @@ import * as CrudAction from '../typegoose.utils/crud.actions';
  * @param itemClass 
  * @returns 
  */
-export function CrudResolverFactory<T extends ClassType>(itemClass:T):any { 
+export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any { 
   const itemSuffix = itemClass.name; 
 
 
   // Factor generic CrudResult class containing errors and results items. 
   @ObjectType(`CrudResult${itemSuffix}`) 
-  class CrudResult extends GqlResultFactory(itemClass) {} 
+  class CrudResult extends CrudResult_FactoryModel(itemClass) {} 
 
 
 
   // Factored abstract CrudResolver class 
   @Resolver({ isAbstract: true }) 
-  abstract class CrudResolverClass { 
+  abstract class CrudResolver { 
 
 
     /** VALIDATE ------------------------------------------
@@ -124,8 +124,9 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
       return await CrudAction.Delete(model, ids); 
     } 
   } 
-  return CrudResolverClass; 
+  return CrudResolver; 
 } 
+
 
 
 /** ExtendsFactoredResolver 
@@ -133,9 +134,9 @@ export function CrudResolverFactory<T extends ClassType>(itemClass:T):any {
  * @param itemClass 
  * @returns 
  */
-export function ExtendFactoredResolver<T extends ClassType>(itemClass:T) { 
+export function Extend_Crud_FactoryResolver<T extends ClassType>(itemClass:T) { 
   
-  const BaseResolver = CrudResolverFactory(itemClass); 
+  const BaseResolver = Crud_FactoryResolver(itemClass); 
   @Resolver(of => itemClass) 
   class FactoriedResolver extends BaseResolver {} 
   return FactoriedResolver; 

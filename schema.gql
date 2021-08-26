@@ -39,19 +39,19 @@ type CrudResultC {
   items: [C!]!
 }
 
-type GQLModel {
-  _id: ObjectId!
+"""Multi lingual label"""
+type MLabel {
+  _id: ID!
+  label: [String!]!
+  name: String!
+}
+
+type ModelDescriptor {
+  _id: ID!
   accessor: String!
   description: [String!]!
   ifields: [ObjectScalar!]!
   label: [String!]!
-}
-
-"""Multi lingual label"""
-type MLabel {
-  _id: ObjectId!
-  label: [String!]!
-  name: String!
 }
 
 type Mutation {
@@ -66,19 +66,16 @@ type Mutation {
   UpdateC(toUpdate: [ObjectScalar!]!): CrudResultC!
 }
 
-"""Mongo object id scalar type"""
-scalar ObjectId
-
 """Simulates Object"""
 scalar ObjectScalar
 
 type Query {
-  GQLModels(modelsName: [String!]): [GQLModel!]!
-  GQLModelsA: GQLModel!
-  GQLModelsB: GQLModel!
-  GQLModelsC: GQLModel!
-  GQLModelsMLabel: GQLModel!
-  MLabel(labelsName: [String!]): [MLabel!]!
+  MLabels(labelsName: [String!]): [MLabel!]!
+  ModelDescriptorA: ModelDescriptor!
+  ModelDescriptorB: ModelDescriptor!
+  ModelDescriptorC: ModelDescriptor!
+  ModelDescriptorMLabel: ModelDescriptor!
+  ModelDescriptors(modelsName: [String!]): [ModelDescriptor!]!
   ReadA(ids: [String!]): CrudResultA!
   ReadB(ids: [String!]): CrudResultB!
   ReadC(ids: [String!]): CrudResultC!
