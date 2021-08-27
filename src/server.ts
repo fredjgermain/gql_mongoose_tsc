@@ -59,8 +59,11 @@ const main = async () => {
   BusinessPrepping(); 
   // init mock data ... 
 
-  app.listen({ port: PORT }, () => 
-    console.log(`Server ready and listening at ==> ${PORT}${server.graphqlPath}`)) 
+  app.listen(PORT, () => 
+    console.log(`Server ready and listening at ==> http://localhost:${PORT}${server.graphqlPath}`)) 
+  
+  // app.listen({ port: PORT }, () => 
+  //   console.log(`Server ready and listening at ==> http://localhost:${PORT}${server.graphqlPath}`)) 
 }; 
 main().catch((error)=>{ 
     console.log(error, 'error'); 
