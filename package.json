@@ -2,6 +2,9 @@
   "name": "gql_mongoose_tsc",
   "version": "1.0.0",
   "description": "",
+
+  "type": "module",
+
   "main": "index.js",
   "scripts": {
     "start": "node src/server.ts",
