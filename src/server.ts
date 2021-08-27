@@ -51,7 +51,10 @@ const main = async () => {
     //origin: "https://fjg-demo-typegql-backend.com", 
   })); 
 
-  const server = new ApolloServer({schema}); 
+  const server = new ApolloServer({
+    schema, 
+    introspection:true, 
+  }); 
   server.applyMiddleware({ app }); 
 
 
