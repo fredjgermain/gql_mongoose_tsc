@@ -47,7 +47,8 @@ const main = async () => {
   app.use(cors()); 
   app.use(cors({ 
     //origin: 'http://localhost:3000' 
-    origin: "https://react-mongoose-demo.herokuapp.com", 
+    //origin: "https://react-mongoose-demo.herokuapp.com", 
+    //origin: "https://fjg-demo-typegql-backend.com", 
   })); 
 
   const server = new ApolloServer({schema}); 
@@ -59,7 +60,7 @@ const main = async () => {
   // init mock data ... 
 
   app.listen({ port: PORT }, () => 
-    console.log(`Server ready and listening at ==> http://localhost:${PORT}${server.graphqlPath}`)) 
+    console.log(`Server ready and listening at ==> ${PORT}${server.graphqlPath}`)) 
 }; 
 main().catch((error)=>{ 
     console.log(error, 'error'); 
