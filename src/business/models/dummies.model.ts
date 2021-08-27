@@ -45,7 +45,7 @@ export class B {
   name: string; 
 
   @Field(() => A) 
-  @prop({ref: () => A, ...OneToOne(A)}) 
+  @prop({...OneToOne(A)}) 
   nested: Ref<A> 
 } 
 
@@ -66,10 +66,10 @@ export class C {
   name: string; 
 
   @Field(() => B, {nullable:true}) 
-  @prop({ref: () => B, ...OneToOne(B)}) 
+  @prop({...OneToOne(B)}) 
   nested?: Ref<B> 
 
   @Field(() => [B], {nullable:true}) 
-  @prop({ref: () => B, ...OneToMany(B)}) 
+  @prop({...OneToMany(B)}) 
   manyNested?: Ref<B[]> 
 } 

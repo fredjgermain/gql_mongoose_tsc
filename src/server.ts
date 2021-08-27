@@ -4,17 +4,18 @@ import express from "express";
 import "reflect-metadata"; 
 import { buildSchema, NonEmptyArray } from "type-graphql"; 
 import { connect } from "mongoose";  
-import { ObjectId } from "mongodb"; 
+
 
 import cors from "cors"; 
 
 
 
-// Local-import -------------------------------------------
+// ------------------------------------------------------
+// Mongo Url 
 import { mongodbUrl } from './mongodb.connectionurl'; 
 
 // Preppings 
-import { BusinessPrepping, resolvers } from './business/business.prepping';
+import { BusinessPrepping, resolvers } from './business/business.prepping'; 
 
 // resolvers
 //import { PreppingWithDummies, dummiesResolvers } from './factoryresolver/dummies.resolver'; 
@@ -45,10 +46,10 @@ const main = async () => {
   // Express CORS -------------------
   app.use(cors()); 
   app.use(cors({ 
-    origin: 'http://localhost:3000' 
+    //origin: 'http://localhost:3000' 
+    origin: "https://react-mongoose-demo.herokuapp.com", 
   })); 
 
-  // Express CORS -------------------
   const server = new ApolloServer({schema}); 
   server.applyMiddleware({ app }); 
 

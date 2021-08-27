@@ -9,7 +9,6 @@ import { ErrProp } from './validation/errprop.class';
 
 
 
-
 function ToObjectId(value:any) { 
   if(typeof value === 'string') 
     return new mongoose.Types.ObjectId(value); 
@@ -19,7 +18,7 @@ function ToObjectId(value:any) {
 }
 
 function FromObjectId(itemClass:any,  id:any) {
-  console.log(itemClass.name); 
+  //console.log(itemClass.name); 
   const model = getModelForClass(itemClass); 
   const found = model.findById(id).exec(); 
   return found; 
@@ -27,6 +26,8 @@ function FromObjectId(itemClass:any,  id:any) {
 
 export function OneToOne<T extends ClassType>(itemClass:T) {
   return {
+    //type: itemClass, 
+    ref: () => itemClass, 
     set: (value:any) => ToObjectId(value), 
     get: (id:any) => FromObjectId(itemClass, id) 
   }
@@ -34,6 +35,8 @@ export function OneToOne<T extends ClassType>(itemClass:T) {
 
 export function OneToMany<T extends ClassType>(itemClass:T) { 
   return { 
+    //type: [itemClass], 
+    ref: () => itemClass, 
     set: (values:any[]) => values.map( value => ToObjectId(value)), 
     get: (ids:any[]) => ids.map( id => FromObjectId(itemClass, id) ) 
   } 

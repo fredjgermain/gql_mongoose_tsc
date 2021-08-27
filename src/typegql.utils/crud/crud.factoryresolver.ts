@@ -103,7 +103,7 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
       const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
-      return await CrudAction.Read(model, inputs); 
+      return await CrudAction.Update(model, inputs); 
     } 
 
 

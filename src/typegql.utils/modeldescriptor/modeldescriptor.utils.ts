@@ -31,10 +31,14 @@ export async function SelfRegisterModelDescriptor() {
  * @returns 
  */
  export async function RegisterModel( toRegister:any, modelDescriptor:ModelDescriptor ) { 
+  
   const gqlModel = getModelForClass(ModelDescriptor); 
+  //console.log("Registering --- > ", toRegister); 
   getModelForClass(toRegister); 
+  //console.log("Has registered --- > ", toRegister); 
   const {model} = GetMongoModel(modelDescriptor.accessor); 
   if(!model) 
     return; 
+  
   await gqlModel.create(modelDescriptor); 
 } 

@@ -51,9 +51,10 @@ export async function InitPrepping() {
  * @param modeldatas 
  */
 export async function RegisterModels(modeldatas:{model:ClassType, modelDescriptor:ModelDescriptor}[]) { 
-  modeldatas.forEach( async model => { 
+  for(let i = 0; i < modeldatas.length; i++) { 
+    const model = modeldatas[i]; 
     await RegisterModel(model.model, model.modelDescriptor); 
-  }) 
+  } 
 } 
 
 

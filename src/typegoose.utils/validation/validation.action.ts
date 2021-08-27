@@ -18,7 +18,6 @@ export async function ValidateToUpdate(model:MongoModel, inputs:Input[]):Promise
   // getError not found
   const toUpdate = await GetDocsToUpdate(model, inputs); 
   const ids = toUpdate.map( item => item._id ); 
-
   // test if all ids exist, if not, return an error. 
   const notFoundError = await ValidateIdsToFind(model, ids); 
   if(notFoundError.length > 0)

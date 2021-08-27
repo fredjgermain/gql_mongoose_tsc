@@ -9,6 +9,12 @@ type A {
   name: String!
 }
 
+""""""
+type Answer {
+  _id: ID!
+  patient: Patient!
+}
+
 """The DummyA model"""
 type B {
   _id: ID!
@@ -29,6 +35,11 @@ type CrudResultA {
   items: [A!]!
 }
 
+type CrudResultAnswer {
+  errors: [ObjectScalar!]
+  items: [Answer!]!
+}
+
 type CrudResultB {
   errors: [ObjectScalar!]
   items: [B!]!
@@ -37,6 +48,51 @@ type CrudResultB {
 type CrudResultC {
   errors: [ObjectScalar!]
   items: [C!]!
+}
+
+type CrudResultForm {
+  errors: [ObjectScalar!]
+  items: [Form!]!
+}
+
+type CrudResultInstruction {
+  errors: [ObjectScalar!]
+  items: [Instruction!]!
+}
+
+type CrudResultPatient {
+  errors: [ObjectScalar!]
+  items: [Patient!]!
+}
+
+type CrudResultQuestion {
+  errors: [ObjectScalar!]
+  items: [Question!]!
+}
+
+type CrudResultResponseGroup {
+  errors: [ObjectScalar!]
+  items: [ResponseGroup!]!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+"""Form"""
+type Form {
+  _id: ID!
+  description: [String!]!
+  fid: String!
+  title: [String!]!
+}
+
+"""instruction"""
+type Instruction {
+  _id: ID!
+  iid: String!
+  label: [String!]!
 }
 
 """Multi lingual label"""
@@ -56,30 +112,93 @@ type ModelDescriptor {
 
 type Mutation {
   CreateA(toCreate: [ObjectScalar!]!): CrudResultA!
+  CreateAnswer(toCreate: [ObjectScalar!]!): CrudResultAnswer!
   CreateB(toCreate: [ObjectScalar!]!): CrudResultB!
   CreateC(toCreate: [ObjectScalar!]!): CrudResultC!
+  CreateForm(toCreate: [ObjectScalar!]!): CrudResultForm!
+  CreateInstruction(toCreate: [ObjectScalar!]!): CrudResultInstruction!
+  CreatePatient(toCreate: [ObjectScalar!]!): CrudResultPatient!
+  CreateQuestion(toCreate: [ObjectScalar!]!): CrudResultQuestion!
+  CreateResponseGroup(toCreate: [ObjectScalar!]!): CrudResultResponseGroup!
   DeleteA(ids: [String!]!): CrudResultA!
+  DeleteAnswer(ids: [String!]!): CrudResultAnswer!
   DeleteB(ids: [String!]!): CrudResultB!
   DeleteC(ids: [String!]!): CrudResultC!
+  DeleteForm(ids: [String!]!): CrudResultForm!
+  DeleteInstruction(ids: [String!]!): CrudResultInstruction!
+  DeletePatient(ids: [String!]!): CrudResultPatient!
+  DeleteQuestion(ids: [String!]!): CrudResultQuestion!
+  DeleteResponseGroup(ids: [String!]!): CrudResultResponseGroup!
   UpdateA(toUpdate: [ObjectScalar!]!): CrudResultA!
+  UpdateAnswer(toUpdate: [ObjectScalar!]!): CrudResultAnswer!
   UpdateB(toUpdate: [ObjectScalar!]!): CrudResultB!
   UpdateC(toUpdate: [ObjectScalar!]!): CrudResultC!
+  UpdateForm(toUpdate: [ObjectScalar!]!): CrudResultForm!
+  UpdateInstruction(toUpdate: [ObjectScalar!]!): CrudResultInstruction!
+  UpdatePatient(toUpdate: [ObjectScalar!]!): CrudResultPatient!
+  UpdateQuestion(toUpdate: [ObjectScalar!]!): CrudResultQuestion!
+  UpdateResponseGroup(toUpdate: [ObjectScalar!]!): CrudResultResponseGroup!
 }
 
 """Simulates Object"""
 scalar ObjectScalar
 
+"""Patient"""
+type Patient {
+  _id: ID!
+  birthday: DateTime!
+  firstname: String!
+  lastname: String!
+  ramq: String!
+}
+
 type Query {
   MLabels(labelsName: [String!]): [MLabel!]!
   ModelDescriptorA: ModelDescriptor!
+  ModelDescriptorAnswer: ModelDescriptor!
   ModelDescriptorB: ModelDescriptor!
   ModelDescriptorC: ModelDescriptor!
+  ModelDescriptorForm: ModelDescriptor!
+  ModelDescriptorInstruction: ModelDescriptor!
   ModelDescriptorMLabel: ModelDescriptor!
+  ModelDescriptorPatient: ModelDescriptor!
+  ModelDescriptorQuestion: ModelDescriptor!
+  ModelDescriptorResponseGroup: ModelDescriptor!
   ModelDescriptors(modelsName: [String!]): [ModelDescriptor!]!
   ReadA(ids: [String!]): CrudResultA!
+  ReadAnswer(ids: [String!]): CrudResultAnswer!
   ReadB(ids: [String!]): CrudResultB!
   ReadC(ids: [String!]): CrudResultC!
+  ReadForm(ids: [String!]): CrudResultForm!
+  ReadInstruction(ids: [String!]): CrudResultInstruction!
+  ReadPatient(ids: [String!]): CrudResultPatient!
+  ReadQuestion(ids: [String!]): CrudResultQuestion!
+  ReadResponseGroup(ids: [String!]): CrudResultResponseGroup!
   ValidateA(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateAnswer(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateB(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateC(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateForm(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateInstruction(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidatePatient(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateQuestion(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateResponseGroup(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+}
+
+"""Question"""
+type Question {
+  _id: ID!
+  form: Form!
+  instructions: [Instruction!]!
+  label: [String!]!
+  optional: Boolean!
+  qid: String!
+  responsegroup: ResponseGroup!
+}
+
+"""ResponseGroup"""
+type ResponseGroup {
+  _id: ID!
+  responsechoices: [[String!]!]!
+  rid: String!
 }
