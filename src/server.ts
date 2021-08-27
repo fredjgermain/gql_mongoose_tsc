@@ -46,7 +46,7 @@ const main = async () => {
   // Express CORS -------------------
   app.use(cors()); 
   app.use(cors({ 
-    //origin: 'http://localhost:3000' 
+    origin: 'http://localhost:3000' 
     //origin: "https://react-mongoose-demo.herokuapp.com", 
     //origin: "https://fjg-demo-typegql-backend.com", 
   })); 
