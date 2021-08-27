@@ -8,7 +8,7 @@ export const data:Patient[] = [
     _id: new mongoose.Types.ObjectId() as any as string, 
     firstname: 'Frédéric', 
     lastname: 'Jean-Germain', 
-    ramq: 'JEAF83112314', 
-    birthday: new Date(1983, 11, 83) 
+    ramq: 'JEAF11111111', 
+    birthday: new Date(1990, 11, 11) 
   }
 ]
