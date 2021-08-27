@@ -1,4 +1,5 @@
 // Dependancies
+import 'dotenv/config';
 import { ApolloServer } from "apollo-server-express"; 
 import express from "express"; 
 import "reflect-metadata"; 
@@ -35,6 +36,8 @@ const main = async () => {
   });
 
   const mongodbUrl = process.env.MONGODB_URL as string; 
+
+  console.log( "Connexion:", mongodbUrl ); 
 
   // create mongoose connection
   const mongodbConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true } 
