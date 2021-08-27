@@ -37,7 +37,7 @@ const main = async () => {
 
   const mongodbUrl = process.env.MONGODB_URL as string; 
 
-  console.log( "Connexion:", mongodbUrl ); 
+  //console.log( "Connexion:", mongodbUrl ); 
 
   // create mongoose connection
   const mongodbConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true } 
