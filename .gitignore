@@ -1,2 +1,4 @@
-/node_modules
-/mongodb.connectionurl.ts
+00-trash
+mongodb.connectionurl.ts
+/.env
+node_modules

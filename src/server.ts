@@ -12,7 +12,7 @@ import cors from "cors";
 
 // ------------------------------------------------------
 // Mongo Url 
-import { mongodbUrl } from './mongodb.connectionurl'; 
+//import { mongodbUrl } from './mongodb.connectionurl'; 
 
 // Preppings 
 import { BusinessPrepping, resolvers } from './business/business.prepping'; 
@@ -33,6 +33,8 @@ const main = async () => {
     emitSchemaFile: true, 
     validate: false, 
   });
+
+  const mongodbUrl = process.env.MONGODB_URL as string; 
 
   // create mongoose connection
   const mongodbConnectionOptions = { useNewUrlParser: true, useUnifiedTopology: true } 
