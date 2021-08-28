@@ -1,24 +1,23 @@
 import mongoose from 'mongoose'; 
 
-// --------------------------------------------------------
+// -------------------------------------------------------- 
 import { data as FormDatas } from './forms.mockdata'; 
 import { data as InstructionDatas } from './instructions.mockdata'; 
 import { data as ResponseGroupDatas } from './responses.mockdata'; 
 
-/*
+/* 
 import { Form } from '../models/form.model'; 
 import { Instruction} from '../models/instruction.model'; 
 import { ResponseGroup } from '../models/responsegroup.model'; 
-*/
+*/ 
 import { Question } from '../models/question.model'; 
 
 
 
-
-// PDQD5 --------------------------------------------------
-const pdqd5_f = FormDatas.find( f => f.fid.match('pdqd5')); 
+// PDQD5 -------------------------------------------------- 
+const pdqd5_f = FormDatas.find( f => f.fid.match('pdqd5') ); 
 const pdqd5_i = InstructionDatas.filter( i => i.iid.match('pdqd5') ); 
-const pdqd5_r = ResponseGroupDatas.find( r => r.rid.match('pdqd5')); 
+const pdqd5_r = ResponseGroupDatas.find( r => r.rid.match('pdqd5') ); 
 
 const pdqd5_q = [ 
   {label: ['Eu du mal a vous organiser?']}, 
@@ -202,5 +201,7 @@ const edec_questions = edec_q.map( ({label}, i) => {
 }) 
 
 
-export const data = [...asrs_questions, ...pdqd5_questions, ...whodas_questions, ...edec_questions]; 
-
+export const data = [ 
+  ...asrs_questions, ...pdqd5_questions, 
+  ...whodas_questions, ...edec_questions 
+]; 

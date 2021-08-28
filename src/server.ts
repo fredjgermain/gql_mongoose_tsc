@@ -6,24 +6,13 @@ import "reflect-metadata";
 import { buildSchema, NonEmptyArray } from "type-graphql"; 
 import { connect } from "mongoose";  
 
-
 import cors from "cors"; 
 
 
 
 // ------------------------------------------------------
-// Mongo Url 
-//import { mongodbUrl } from './mongodb.connectionurl'; 
-
 // Preppings 
 import { BusinessPrepping, resolvers } from './business/business.prepping'; 
-
-// resolvers
-//import { PreppingWithDummies, dummiesResolvers } from './factoryresolver/dummies.resolver'; 
-//import { Resolvers } from './typegql.utils/resolver'; 
-//import { ObjectIdScalar }  from './typegql.utils/customscalar/objectid.scalar'; 
-
-//import { InitMockDatas } from './mockdata/mockinit'; 
 
 
 
