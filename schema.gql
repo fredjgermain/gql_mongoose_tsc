@@ -111,15 +111,15 @@ type ModelDescriptor {
 }
 
 type Mutation {
-  CreateA(toCreate: [ObjectScalar!]!): CrudResultA!
-  CreateAnswer(toCreate: [ObjectScalar!]!): CrudResultAnswer!
-  CreateB(toCreate: [ObjectScalar!]!): CrudResultB!
-  CreateC(toCreate: [ObjectScalar!]!): CrudResultC!
-  CreateForm(toCreate: [ObjectScalar!]!): CrudResultForm!
-  CreateInstruction(toCreate: [ObjectScalar!]!): CrudResultInstruction!
-  CreatePatient(toCreate: [ObjectScalar!]!): CrudResultPatient!
-  CreateQuestion(toCreate: [ObjectScalar!]!): CrudResultQuestion!
-  CreateResponseGroup(toCreate: [ObjectScalar!]!): CrudResultResponseGroup!
+  CreateA(inputs: [ObjectScalar!]!): CrudResultA!
+  CreateAnswer(inputs: [ObjectScalar!]!): CrudResultAnswer!
+  CreateB(inputs: [ObjectScalar!]!): CrudResultB!
+  CreateC(inputs: [ObjectScalar!]!): CrudResultC!
+  CreateForm(inputs: [ObjectScalar!]!): CrudResultForm!
+  CreateInstruction(inputs: [ObjectScalar!]!): CrudResultInstruction!
+  CreatePatient(inputs: [ObjectScalar!]!): CrudResultPatient!
+  CreateQuestion(inputs: [ObjectScalar!]!): CrudResultQuestion!
+  CreateResponseGroup(inputs: [ObjectScalar!]!): CrudResultResponseGroup!
   DeleteA(ids: [String!]!): CrudResultA!
   DeleteAnswer(ids: [String!]!): CrudResultAnswer!
   DeleteB(ids: [String!]!): CrudResultB!
@@ -129,15 +129,15 @@ type Mutation {
   DeletePatient(ids: [String!]!): CrudResultPatient!
   DeleteQuestion(ids: [String!]!): CrudResultQuestion!
   DeleteResponseGroup(ids: [String!]!): CrudResultResponseGroup!
-  UpdateA(toUpdate: [ObjectScalar!]!): CrudResultA!
-  UpdateAnswer(toUpdate: [ObjectScalar!]!): CrudResultAnswer!
-  UpdateB(toUpdate: [ObjectScalar!]!): CrudResultB!
-  UpdateC(toUpdate: [ObjectScalar!]!): CrudResultC!
-  UpdateForm(toUpdate: [ObjectScalar!]!): CrudResultForm!
-  UpdateInstruction(toUpdate: [ObjectScalar!]!): CrudResultInstruction!
-  UpdatePatient(toUpdate: [ObjectScalar!]!): CrudResultPatient!
-  UpdateQuestion(toUpdate: [ObjectScalar!]!): CrudResultQuestion!
-  UpdateResponseGroup(toUpdate: [ObjectScalar!]!): CrudResultResponseGroup!
+  UpdateA(inputs: [ObjectScalar!]!): CrudResultA!
+  UpdateAnswer(inputs: [ObjectScalar!]!): CrudResultAnswer!
+  UpdateB(inputs: [ObjectScalar!]!): CrudResultB!
+  UpdateC(inputs: [ObjectScalar!]!): CrudResultC!
+  UpdateForm(inputs: [ObjectScalar!]!): CrudResultForm!
+  UpdateInstruction(inputs: [ObjectScalar!]!): CrudResultInstruction!
+  UpdatePatient(inputs: [ObjectScalar!]!): CrudResultPatient!
+  UpdateQuestion(inputs: [ObjectScalar!]!): CrudResultQuestion!
+  UpdateResponseGroup(inputs: [ObjectScalar!]!): CrudResultResponseGroup!
 }
 
 """Simulates Object"""
@@ -174,15 +174,15 @@ type Query {
   ReadPatient(ids: [String!]): CrudResultPatient!
   ReadQuestion(ids: [String!]): CrudResultQuestion!
   ReadResponseGroup(ids: [String!]): CrudResultResponseGroup!
-  ValidateA(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateAnswer(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateB(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateC(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateForm(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateInstruction(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidatePatient(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateQuestion(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateResponseGroup(toValidate: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateA(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateAnswer(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateB(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateC(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateForm(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateInstruction(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidatePatient(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateQuestion(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateResponseGroup(inputs: [ObjectScalar!]!): [ObjectScalar!]!
 }
 
 """Question"""
