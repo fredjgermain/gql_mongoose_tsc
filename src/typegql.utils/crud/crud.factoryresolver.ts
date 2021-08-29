@@ -41,15 +41,15 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      * - test mongoose validations. 
      * - test for duplicate fields values. 
      * 
-     * @param toValidate 
+     * @param inputs 
      * @returns ErrProp containning all inputs errors, if any. 
      */
     @Query(type => [ObjectScalar], {name:`Validate${itemSuffix}` }) 
-    async Validate( @Arg("toValidate", type => [ObjectScalar]) toValidate:any[] ): Promise<ErrProp[]> { 
+    async Validate( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<ErrProp[]> { 
       const model = getModelWithString(itemSuffix); 
       if(!model) 
         return []; 
-      return await ValidateInputs(model, toValidate); 
+      return await ValidateInputs(model, inputs); 
     }
 
 
@@ -59,15 +59,15 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
       - they will be created and the newly created items will be returned in {items}. 
      * If ANY of the inputs is INVALID, 
       - NONE of the input will be created and errors will be returned in {errors}. 
-     * @param toCreate 
+     * @param inputs 
      * @returns 
      */
     @Mutation(type => CrudResult, { name: `Create${itemSuffix}` }) 
-    async Create( @Arg("toCreate", type => [ObjectScalar]) toCreate:any[] ): Promise<CrudResult> { 
+    async Create( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<CrudResult> { 
       const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
-      return await CrudAction.Create(model, toCreate); 
+      return await CrudAction.Create(model, inputs); 
     } 
 
 
@@ -95,11 +95,11 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
       - they will be updated and the modified items will be returned in {items}. 
      * If ANY of the inputs is INVALID, 
       - NONE of the input will be updated and errors will be returned in {errors}. 
-     * @param toUpdate 
+     * @param inputs
      * @returns 
      */
     @Mutation(type => CrudResult, { name: `Update${itemSuffix}` })
-    async Update( @Arg("toUpdate", type => [ObjectScalar]) inputs:any[] ): Promise<CrudResult> { 
+    async Update( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<CrudResult> { 
       const {model} = GetMongoModel(itemSuffix); 
       if(!model) 
         return {items:[], errors:[]}; 
