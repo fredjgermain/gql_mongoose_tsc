@@ -69,8 +69,8 @@ export async function Populate(modeldatas:{model:ClassType, data:any[] } []) {
     // reset data before polating 
     await model.deleteMany(); 
     await model.create(populator.data); 
-    const read = await model.find(); 
-    console.log(`${populator.model.name}: ${read.length}`); 
+    //const read = await model.find(); 
+    //console.log(`${populator.model.name}: ${read.length}`); 
   }) 
 } 
 

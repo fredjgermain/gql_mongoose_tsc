@@ -4,7 +4,7 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany } from '../../typegoose.utils/typegoosemodel.util'; 
+import { OneToOne, OneToMany, FromObjectId } from '../../typegoose.utils/typegoosemodel.util'; 
 import { Patient } from './patient.model'; 
 import { Question } from './question.model'; 
 
@@ -29,24 +29,33 @@ export class Answer {
   @Field(type => ID) 
   _id: string; 
 
-
   @Field(() => Patient) 
   @prop({label: ["patient", "patient"], 
     required:true, ...OneToOne(Patient) 
   }) 
   patient: Ref<Patient>; 
 
+  @Field(() => Question) 
   @prop({label: ["Question", "Question"], 
     required:true, ...OneToOne(Question), 
   }) 
   question: Ref<Question>; 
 
+  @Field(() => Date) 
   @prop({label: ["Date", "Date"], 
     required:true}) 
   date: Date; 
 
+  @Field(() => Number) 
   @prop({label: ["Answers values", "Valeurs répondues"], 
-    type: [Number], 
+    type: Number, 
     required:true, default:-1}) 
-  answervalues: number[]; 
+  answervalues: number; 
+
+  @Field(() => String, {nullable:true}) 
+  async abbrev() { 
+    const _this = (this as any)._doc as Answer; 
+    const patient = await FromObjectId(Patient, _this.patient) as Patient; 
+    return `${patient.ramq} : ${_this.answervalues}`; 
+  } 
 }

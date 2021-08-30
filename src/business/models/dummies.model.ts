@@ -23,8 +23,12 @@ export class A {
   @Field(type => String) 
   @prop({ type:String, required:true }) 
   name: string; 
-}
 
+  @Field(() => String) 
+  abbrev() { 
+    return ((this as any)._doc).name; 
+  } 
+}
 
 
 
@@ -33,17 +37,8 @@ export const descriptorB = {
   label: ['label B'], 
   description: ['dummy B'] 
 } 
-@ObjectType({ description: "The DummyA model" })
-export class B { 
-  @Field(type => ID) 
-  _id: string; 
-  /*@Field(type => ObjectIdScalar) 
-  readonly _id: ObjectId; */
-
-  @Field(type => String) 
-  @prop({type:String}) 
-  name: string; 
-
+@ObjectType({ description: "The DummyB model" })
+export class B extends A { 
   @Field(() => A) 
   @prop({...OneToOne(A)}) 
   nested: Ref<A> 
@@ -56,18 +51,11 @@ export const descriptorC = {
   label: ['model C'], 
   description: ['dummy C'] 
 } 
-@ObjectType({ description: "The DummyA model" })
-export class C { 
-  @Field(type => ID) 
-  _id: string; 
-
-  @Field() 
-  @prop({type:String}) 
-  name: string; 
-
-  @Field(() => B, {nullable:true}) 
+@ObjectType({ description: "The DummyC model" })
+export class C extends A{ 
+  @Field(() => B) 
   @prop({...OneToOne(B)}) 
-  nested?: Ref<B> 
+  nested: Ref<B> 
 
   @Field(() => [B], {nullable:true}) 
   @prop({...OneToMany(B)}) 

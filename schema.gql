@@ -6,28 +6,35 @@
 """The DummyA model"""
 type A {
   _id: ID!
+  abbrev: String!
   name: String!
 }
 
 """"""
 type Answer {
   _id: ID!
+  abbrev: String
+  answervalues: Float!
+  date: DateTime!
   patient: Patient!
+  question: Question!
 }
 
-"""The DummyA model"""
+"""The DummyB model"""
 type B {
   _id: ID!
+  abbrev: String!
   name: String!
   nested: A!
 }
 
-"""The DummyA model"""
+"""The DummyC model"""
 type C {
   _id: ID!
+  abbrev: String!
   manyNested: [B!]
   name: String!
-  nested: B
+  nested: B!
 }
 
 type CrudResultA {
@@ -146,6 +153,7 @@ scalar ObjectScalar
 """Patient"""
 type Patient {
   _id: ID!
+  abbrev: String
   birthday: DateTime!
   firstname: String!
   lastname: String!

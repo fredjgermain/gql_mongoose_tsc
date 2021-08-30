@@ -62,4 +62,10 @@ export class Patient {
   @Field() 
   @prop({label: ["birthday", "date de naissance"]}) 
   birthday: Date; 
+
+  @Field(() => String, {nullable:true})
+  async abbrev() { 
+    const _this = (this as any)._doc as Patient; 
+    return `${_this.ramq}`; 
+  }
 }
