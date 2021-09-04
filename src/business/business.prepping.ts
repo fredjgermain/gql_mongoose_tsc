@@ -2,12 +2,12 @@ import { NonEmptyArray } from 'type-graphql';
 
 // Business import ------------------------------------------------------ 
 import { A, B, C, descriptorA, descriptorB, descriptorC } from './models/dummies.model'; 
-import { Answer, descriptorAnswer } from './models/answer.model'; 
+import { Answer, descriptorAnswer, AnswerAbbrevResolver } from './models/answer.model'; 
 import { Form, descriptorForm, FormAbbrevResolver } from './models/form.model'; 
-import { Instruction, descriptorInstruction } from './models/instruction.model'; 
-import { Patient, descriptorPatient } from './models/patient.model'; 
-import { Question, descriptorQuestion } from './models/question.model'; 
-import { ResponseGroup, descriptorResponse } from './models/responsegroup.model'; 
+import { Instruction, descriptorInstruction, InstructionAbbrevResolver } from './models/instruction.model'; 
+import { Patient, descriptorPatient, PatientAbbrevResolver } from './models/patient.model'; 
+import { Question, descriptorQuestion, QuestionAbbrevResolver } from './models/question.model'; 
+import { ResponseGroup, descriptorResponse, ResponseGroupAbbrevResolver } from './models/responsegroup.model'; 
 
 // datas 
 import { dataA, dataB, dataC } from './mockdatas/dummies.data'; 
@@ -58,7 +58,10 @@ export async function BusinessPrepping() {
   console.log('\nREADY !!!\n'); 
 } 
 
-const abbrevResolvers = [FormAbbrevResolver]; 
+const abbrevResolvers = [
+  AnswerAbbrevResolver, FormAbbrevResolver, InstructionAbbrevResolver, 
+  QuestionAbbrevResolver, ResponseGroupAbbrevResolver, PatientAbbrevResolver
+]; 
 const businessResolsvers = Extend_Crud_ModelDescriptor_FactoryResolvers( registrations.map( regis => regis.model ) ); 
 export const resolvers = [...basicResolvers,  ...businessResolsvers, ...abbrevResolvers] as NonEmptyArray<Function> | NonEmptyArray<string>; 
 

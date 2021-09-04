@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } 
+import { Field, ObjectType, ID, Resolver, FieldResolver, Root } 
   from "type-graphql"; 
 import { prop, Ref } 
   from "@typegoose/typegoose"; 
@@ -49,3 +49,15 @@ export class ResponseGroup {
     type: [[String]], required:true}) 
   responsechoices: string[][]; 
 }
+
+
+
+// AbbrevResolver -----------------------------------------
+@Resolver(type => ResponseGroup) 
+export class ResponseGroupAbbrevResolver { 
+  @FieldResolver(type => String) 
+  public async abbrev(@Root() root:any) { 
+    const item:ResponseGroup = root._doc; 
+    return `${item.rid}`; 
+  } 
+} 

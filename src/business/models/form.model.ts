@@ -52,7 +52,6 @@ export class FormAbbrevResolver {
   @FieldResolver(type => String) 
   public async abbrev(@Root() root:any) { 
     const item:Form = root._doc; 
-    const abbrev = item.fid; 
-    return abbrev; 
+    return item.fid; 
   } 
 } 

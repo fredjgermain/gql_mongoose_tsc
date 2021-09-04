@@ -30,7 +30,7 @@ export function ToObjectId(value:any) {
  * @param id 
  * @returns 
  */
-export function FromObjectId(itemClass:any,  id:any) {
+export function FindObjectByClassAndId(itemClass:any,  id:any) {
   //console.log(itemClass.name); 
   const model = getModelForClass(itemClass); 
   const found = model.findById(id).exec(); 
@@ -48,7 +48,7 @@ export function OneToOne<T extends ClassType>(itemClass:T) {
     //type: itemClass, 
     ref: () => itemClass, 
     set: (value:any) => ToObjectId(value), 
-    get: (id:any) => FromObjectId(itemClass, id) 
+    get: (id:any) => FindObjectByClassAndId(itemClass, id) 
   }
 } 
 
@@ -57,7 +57,7 @@ export function OneToMany<T extends ClassType>(itemClass:T) {
     //type: [itemClass], 
     ref: () => itemClass, 
     set: (values:any[]) => values.map( value => ToObjectId(value)), 
-    get: (ids:any[]) => ids.map( id => FromObjectId(itemClass, id) ) 
+    get: (ids:any[]) => ids.map( id => FindObjectByClassAndId(itemClass, id) ) 
   } 
 } 
 

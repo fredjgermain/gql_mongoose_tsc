@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } 
+import { Field, ObjectType, ID, Resolver, FieldResolver, Root } 
   from "type-graphql"; 
 import { prop, Ref } 
   from "@typegoose/typegoose"; 
@@ -63,9 +63,20 @@ export class Patient {
   @prop({label: ["birthday", "date de naissance"]}) 
   birthday: Date; 
 
-  @Field(() => String, {nullable:true})
-  async abbrev() { 
-    const _this = (this as any)._doc as Patient; 
-    return `${_this.ramq}`; 
-  }
+  // @Field(() => String, {nullable:true})
+  // async abbrev() { 
+  //   const _this = (this as any)._doc as Patient; 
+  //   return `${_this.ramq}`; 
+  // }
 }
+
+
+// AbbrevResolver -----------------------------------------
+@Resolver(type => Patient) 
+export class PatientAbbrevResolver { 
+  @FieldResolver(type => String) 
+  public async abbrev(@Root() root:any) { 
+    const item:Patient = root._doc; 
+    return `${item.firstname}, ${item.lastname}`;
+  } 
+} 

@@ -4,7 +4,7 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany, FromObjectId } from '../../typegoose.utils/typegoosemodel.util'; 
+import { OneToOne, OneToMany, FindObjectByClassAndId } from '../../typegoose.utils/typegoosemodel.util'; 
 import { Patient } from './patient.model'; 
 import { Question } from './question.model'; 
 
@@ -66,7 +66,8 @@ export class AnswerAbbrevResolver {
   @FieldResolver(type => String) 
   public async abbrev(@Root() root:any) { 
     const item:Answer = root._doc; 
-    const patient = await FromObjectId(Patient, item.patient) as Patient; 
-    return `${patient.ramq} : ${item.answervalues}`; 
+    const patient = await FindObjectByClassAndId(Patient, item.patient) as Patient; 
+    const question = await FindObjectByClassAndId(Question, item.question) as Question; 
+    return `${patient.ramq} : ${question.qid} : ${item.answervalues}`; 
   } 
 } 

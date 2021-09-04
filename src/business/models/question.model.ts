@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } 
+import { Field, ObjectType, ID, Resolver, FieldResolver, Root } 
   from "type-graphql"; 
 import { prop, Ref } 
   from "@typegoose/typegoose"; 
@@ -64,3 +64,14 @@ export class Question {
   @prop({label:["optional", "optionnel"], default:true}) 
   optional: boolean; 
 }
+
+
+// AbbrevResolver -----------------------------------------
+@Resolver(type => Question) 
+export class QuestionAbbrevResolver { 
+  @FieldResolver(type => String) 
+  public async abbrev(@Root() root:any) { 
+    const item:Question = root._doc; 
+    return `${item.qid}`; 
+  } 
+} 
