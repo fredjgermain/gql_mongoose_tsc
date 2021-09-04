@@ -1,4 +1,4 @@
-import { Field, ObjectType, ID } 
+import { Field, ObjectType, ID, Resolver, FieldResolver, Root } 
   from "type-graphql"; 
 import { prop, Ref } 
   from "@typegoose/typegoose"; 
@@ -59,3 +59,4 @@ export class Answer {
     return `${patient.ramq} : ${_this.answervalues}`; 
   } 
 }
+

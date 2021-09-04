@@ -90,6 +90,7 @@ scalar DateTime
 """Form"""
 type Form {
   _id: ID!
+  abbrev: String!
   description: [String!]!
   fid: String!
   title: [String!]!
