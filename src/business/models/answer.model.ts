@@ -52,11 +52,21 @@ export class Answer {
     required:true, default:-1}) 
   answervalues: number; 
 
-  @Field(() => String, {nullable:true}) 
+  /*@Field(() => String, {nullable:true}) 
   async abbrev() { 
     const _this = (this as any)._doc as Answer; 
     const patient = await FromObjectId(Patient, _this.patient) as Patient; 
     return `${patient.ramq} : ${_this.answervalues}`; 
-  } 
+  } */
 }
 
+// AbbrevResolver -----------------------------------------
+@Resolver(type => Answer) 
+export class AnswerAbbrevResolver { 
+  @FieldResolver(type => String) 
+  public async abbrev(@Root() root:any) { 
+    const item:Answer = root._doc; 
+    const patient = await FromObjectId(Patient, item.patient) as Patient; 
+    return `${patient.ramq} : ${item.answervalues}`; 
+  } 
+} 
