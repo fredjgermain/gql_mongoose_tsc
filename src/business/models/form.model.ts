@@ -47,10 +47,11 @@ export class Form {
 
 @Resolver(type => Form) 
 export class FormAbbrevResolver { 
-  
+
   @FieldResolver(type => String) 
   public abbrev(@Root() root:any) { 
-    const item = root._doc; 
-    console.log(item); 
+    const item:Form = root._doc; 
+    const abbrev = item.fid; 
+    return abbrev; 
   } 
 } 
