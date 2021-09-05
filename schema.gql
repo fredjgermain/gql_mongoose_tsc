@@ -13,7 +13,7 @@ type A {
 """"""
 type Answer {
   _id: ID!
-  abbrev: String
+  abbrev: String!
   answervalues: Float!
   date: DateTime!
   patient: Patient!
@@ -99,6 +99,7 @@ type Form {
 """instruction"""
 type Instruction {
   _id: ID!
+  abbrev: String!
   iid: String!
   label: [String!]!
 }
@@ -154,7 +155,7 @@ scalar ObjectScalar
 """Patient"""
 type Patient {
   _id: ID!
-  abbrev: String
+  abbrev: String!
   birthday: DateTime!
   firstname: String!
   lastname: String!
@@ -197,6 +198,7 @@ type Query {
 """Question"""
 type Question {
   _id: ID!
+  abbrev: String!
   form: Form!
   instructions: [Instruction!]!
   label: [String!]!
@@ -208,6 +210,7 @@ type Question {
 """ResponseGroup"""
 type ResponseGroup {
   _id: ID!
+  abbrev: String!
   responsechoices: [[String!]!]!
   rid: String!
 }
