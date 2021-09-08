@@ -23,11 +23,6 @@ export class A {
   @Field(type => String) 
   @prop({ type:String, required:true }) 
   name: string; 
-
-  @Field(() => String) 
-  abbrev() { 
-    return ((this as any)._doc).name; 
-  } 
 }
 
 
@@ -53,6 +48,10 @@ export const descriptorC = {
 } 
 @ObjectType({ description: "The DummyC model" })
 export class C extends A{ 
+  @Field( () => [String] ) 
+  @prop( {type: [String]} ) 
+  array: string[]; 
+
   @Field(() => B) 
   @prop({...OneToOne(B)}) 
   nested: Ref<B> 

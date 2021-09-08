@@ -57,7 +57,8 @@ export function OneToMany<T extends ClassType>(itemClass:T) {
     //type: [itemClass], 
     ref: () => itemClass, 
     set: (values:any[]) => values.map( value => ToObjectId(value)), 
-    get: (ids:any[]) => ids.map( id => FindObjectByClassAndId(itemClass, id) ) 
+    get: (ids:any[]) => ids.map( id => FindObjectByClassAndId(itemClass, id) ),  
+    isArray: true, 
   } 
 } 
 
@@ -73,6 +74,7 @@ interface MongoField {
   validators: any; 
   options: { 
     ref?: string; 
+    isArray?: boolean; 
     label?: string; 
     sortType?: string; 
     defaultValue?: any; 
@@ -127,12 +129,12 @@ function ParseToIField(mongoField:MongoField):IField {
 function ParseToIType(mongoField:MongoField): IType { 
   const {instance, options, $embeddedSchemaType} = mongoField; 
   const type = {} as IType; 
-  
+
   type.name = (options?.ref ?? $embeddedSchemaType?.instance ?? mongoField.instance ?? '').toLowerCase(), 
   type.enums = options?.enum; 
   type.isEnum = !!type.enums; 
-  type.isArray = instance.toLowerCase() === 'array'; 
-  type.isObject = instance.toLowerCase() === 'mixed'; 
+  type.isArray = instance.toLowerCase() === 'array' || !!options?.isArray; 
+  type.isObject = !!options?.ref; 
   type.isScalar = !type.isArray && !type.isObject; 
   type.defaultValue = GetDefaultValue(type.name, options); 
   return type; 

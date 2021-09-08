@@ -56,8 +56,7 @@ export class Question {
 
   @Field(() => [String]) 
   @prop({label:["label", "libel"], 
-    type: [String], 
-    required:true}) 
+    type: [String], required:true}) 
   label!: string[]; 
 
   @Field(() => Boolean) 

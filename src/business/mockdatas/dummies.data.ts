@@ -14,7 +14,7 @@ export const dataB = [
 ] 
 
 export const dataC = [ 
-  { _id: new mongoose.Types.ObjectId(), name: 'test C1', nested:dataB[0], manyNested:dataB}, 
-  { _id: new mongoose.Types.ObjectId(), name: 'test C2', nested:dataB[1], manyNested:dataB}, 
-  { _id: new mongoose.Types.ObjectId(), name: 'test C3', nested:dataB[2], manyNested:dataB}, 
+  { _id: new mongoose.Types.ObjectId(), name: 'test C1', array:['test C1'], nested:dataB[0], manyNested:dataB}, 
+  { _id: new mongoose.Types.ObjectId(), name: 'test C2', array:['test C2'], nested:dataB[1], manyNested:dataB}, 
+  { _id: new mongoose.Types.ObjectId(), name: 'test C3', array:['test C3'], nested:dataB[2], manyNested:dataB}, 
 ] 

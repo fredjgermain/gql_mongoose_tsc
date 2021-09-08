@@ -30,12 +30,12 @@ const registrations = [
   {model:B, modelDescriptor:descriptorB as ModelDescriptor}, 
   {model:C, modelDescriptor:descriptorC as ModelDescriptor}, 
 
-  {model:Patient, modelDescriptor:descriptorPatient}, 
-  {model:Form, modelDescriptor:descriptorForm}, 
-  {model:Instruction, modelDescriptor:descriptorInstruction}, 
-  {model:ResponseGroup, modelDescriptor:descriptorResponse}, 
-  {model:Question, modelDescriptor:descriptorQuestion}, 
-  {model:Answer, modelDescriptor:descriptorAnswer}, 
+  // {model:Patient, modelDescriptor:descriptorPatient}, 
+  // {model:Form, modelDescriptor:descriptorForm}, 
+  // {model:Instruction, modelDescriptor:descriptorInstruction}, 
+  // {model:ResponseGroup, modelDescriptor:descriptorResponse}, 
+  // {model:Question, modelDescriptor:descriptorQuestion}, 
+  // {model:Answer, modelDescriptor:descriptorAnswer}, 
 ] as {model:any, modelDescriptor:ModelDescriptor}[] 
 
 const population = [ 
@@ -43,12 +43,12 @@ const population = [
   {model:B, data:dataB}, 
   {model:C, data:dataC},  
 
-  {model:Patient, data:patientsData}, 
-  {model:Form, data:formsData}, 
-  {model:Instruction, data:instructionsData}, 
-  {model:ResponseGroup, data:responsesData}, 
-  {model:Question, data:questionsData}, 
-  {model:Answer, data:answersData}, 
+  // {model:Patient, data:patientsData}, 
+  // {model:Form, data:formsData}, 
+  // {model:Instruction, data:instructionsData}, 
+  // {model:ResponseGroup, data:responsesData}, 
+  //{model:Question, data:questionsData}, 
+  //{model:Answer, data:answersData}, 
 ] 
 
 export async function BusinessPrepping() { 
