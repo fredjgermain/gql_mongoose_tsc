@@ -3,6 +3,7 @@ import { ClassType, Resolver, Query, ObjectType, Field, Arg }
 import { prop, getModelForClass } from "@typegoose/typegoose"; 
 
 
+
 // -------------------------------------------------------- 
 import { ModelDescriptor } from './modeldescriptor.model'; 
 // import { GetIFields, GetMongoModel } from "../../typegoose.utils/typegoosemodel.util"; 
@@ -50,13 +51,13 @@ export function ModelDescriptor_FactoryResolver<T extends ClassType>(itemClass:T
 } 
 
 
-/** GQLModelResolver ======================================
+/** ModelDescriptorsResolver ======================================
  * 
  */
 @Resolver() 
 export class ModelDescriptorsResolver{ 
 
-  /** GQLModels ===========================================
+  /** ModelDescriptors =========================================== 
    * 
    * @returns 
    */
