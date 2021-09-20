@@ -4,6 +4,10 @@ export function ParseDate(date:any) {
   return {year:dateObject.getFullYear(), month:dateObject.getMonth()+1, date:dateObject.getDate()} 
 }
 
+export function DateToString(date:Date) { 
+  return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`; 
+} 
+
 export function DaysPerMonth(year:number, month:number) { 
   if(month === 2) 
     return IsLeapYear(year)? 29: 28; 
