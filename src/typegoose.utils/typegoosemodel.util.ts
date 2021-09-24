@@ -82,6 +82,8 @@ interface MongoField {
     order?: number; 
     enum?: any[]; 
     abbrev?: boolean; 
+    readable?: boolean; 
+    editable?: boolean; 
     [key:string]:any; 
   }; 
   $embeddedSchemaType?:{ 
@@ -116,14 +118,21 @@ function ParseToIField(mongoField:MongoField):IField {
   const {path, instance, options, $embeddedSchemaType} = mongoField; 
   const type = ParseToIType(mongoField); 
   const {label, abbrev, format, order} = options; 
+  const readableEditable = IsEditableOrReadable(mongoField); 
 
   return { 
     accessor: path ?? '', 
     label: label ?? '', 
     isRef: !!options?.ref, 
-    options, 
+    options:{ ...options, ...readableEditable}, 
     type, abbrev, format, order, 
   } 
+} 
+
+function IsEditableOrReadable(mongoField:MongoField) { 
+  const readable = mongoField.options.readable ?? !['__v'].includes(mongoField.path); 
+  const editable = mongoField.options.editable ?? !['_id', '__v'].includes(mongoField.path); 
+  return {readable, editable}; 
 } 
 
 function ParseToIType(mongoField:MongoField): IType { 
