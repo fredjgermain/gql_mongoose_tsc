@@ -1,8 +1,6 @@
 import mongoose from 'mongoose'; 
 
-// ANSWERS -----------------------------------------
-//import { Answer } from '../models/answer.model'; 
-
+// ANSWERS ----------------------------------------- 
 import { data as patientsData } from './patients.mockdata'; 
 import { data as questionsData } from './questions.mockdata'; 
 

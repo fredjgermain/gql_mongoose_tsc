@@ -4,6 +4,7 @@ import { ClassType } from 'type-graphql';
 // -------------------------------------------------------- 
 import { FEEDBACK } from './feedback.utils'; 
 import { IField, IType } from '../../lib/ifield.interface'; 
+import { GetDefaultValue } from '../../lib/utils/type.utils'; 
 //import { TypegooseModel } from "./typegoosemodel/typegoosemodel.model"; 
 import { ErrProp } from './validation/errprop.class'; 
 
@@ -145,33 +146,33 @@ function ParseToIType(mongoField:MongoField): IType {
   type.isArray = instance.toLowerCase() === 'array' || !!options?.isArray; 
   type.isObject = !!options?.ref; 
   type.isScalar = !type.isArray && !type.isObject; 
-  type.defaultValue = GetDefaultValue(type.name, options); 
+  type.defaultValue = options['defaultValue'] ?? options['default'] ?? GetDefaultValue(type.name); 
   return type; 
 } 
 
-function GetDefaultValue(type:string, options:any):any { 
-  if(options['defaultValue']) 
-    return options['defaultValue']; 
-  if(options['default']) 
-    return options['default']; 
-  return GetDefaultValueByTypeName(type); 
-} 
+// function GetDefaultValue(type:string, options:any):any { 
+//   if(options['defaultValue']) 
+//     return options['defaultValue']; 
+//   if(options['default']) 
+//     return options['default']; 
+//   return GetDefaultValueByTypeName(type); 
+// } 
 
 
-// TEMPORARY function ... move to a proper lib
-function GetDefaultValueByTypeName(typeName:string) { 
-  if(typeName==='boolean') 
-    return false; 
-  if(typeName==='string') 
-    return ''; 
-  if(typeName==='number') 
-    return 0; 
-  if(typeName==='array') 
-    return []; 
-  /*if(typeName==='date') 
-    return new YMD().StringYMD(); */ 
-  if(typeName==='object') 
-    return {}; 
-  return null; 
-} 
+// // TEMPORARY function ... move to a proper lib
+// function GetDefaultValueByTypeName(typeName:string) { 
+//   if(typeName==='boolean') 
+//     return false; 
+//   if(typeName==='string') 
+//     return ''; 
+//   if(typeName==='number') 
+//     return 0; 
+//   if(typeName==='array') 
+//     return []; 
+//   /*if(typeName==='date') 
+//     return new YMD().StringYMD(); */ 
+//   if(typeName==='object') 
+//     return {}; 
+//   return null; 
+// } 
 

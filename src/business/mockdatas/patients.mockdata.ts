@@ -1,6 +1,9 @@
 import mongoose from 'mongoose'; 
-import { DateToString } from '../../../lib/date/date.utils';
-// ----------------------------------------------
+import { DateToString } from '../../../lib/utils/date.utils'; 
+
+
+
+// ----------------------------------------------- 
 import { Patient } from '../models/patient.model'; 
 
 
@@ -12,6 +15,6 @@ export const data = [
     firstname: 'Frédéric', 
     lastname: 'Jean-Germain', 
     ramq: 'JEAF11111111', 
-    birthday: new Date(1990, 11, 11)
+    birthday: new Date(1990, 11, 11) 
   }
 ]
