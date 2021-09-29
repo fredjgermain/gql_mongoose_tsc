@@ -21,6 +21,7 @@ import { data as responsesData } from './mockdatas/responses.mockdata';
 // ---------------------------------------------------------- 
 import { InitPrepping, Populate, RegisterModels, basicResolvers, Extend_Crud_ModelDescriptor_FactoryResolvers } from '../typegql.utils/basic.prepping'; 
 import { ModelDescriptor } from '../typegql.utils/modeldescriptor/modeldescriptor.model';
+import { TestResolver } from '../typegql.utils/testresolver.resolver';
 
 
 
@@ -62,6 +63,15 @@ const abbrevResolvers = [
   AnswerAbbrevResolver, FormAbbrevResolver, InstructionAbbrevResolver, 
   QuestionAbbrevResolver, ResponseGroupAbbrevResolver, PatientAbbrevResolver
 ]; 
+
+const testResolver = [
+  TestResolver
+]
+
 const businessResolsvers = Extend_Crud_ModelDescriptor_FactoryResolvers( registrations.map( regis => regis.model ) ); 
-export const resolvers = [...basicResolvers,  ...businessResolsvers, ...abbrevResolvers] as NonEmptyArray<Function> | NonEmptyArray<string>; 
+export const resolvers = [
+  ...basicResolvers,  
+  ...businessResolsvers, 
+  ...abbrevResolvers, 
+  ...testResolver] as NonEmptyArray<Function> | NonEmptyArray<string>; 
 

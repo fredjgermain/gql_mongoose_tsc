@@ -3,11 +3,12 @@ import { ClassType, Resolver, Query, Mutation, Arg, ObjectType }
   from "type-graphql"; 
 //import { Type } from '@nestjs/common'; 
 import { getModelWithString } from "@typegoose/typegoose"; 
-import { ObjectScalar } from "../customscalar/object.scalar"; 
+
 
 //import { prop as Property, getModelForClass } from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------
+import { ObjectScalar } from "../customscalar/object.scalar"; 
 import { ValidateInputs } from '../../typegoose.utils/validation/validation.action'; 
 import { ErrProp } from "../../typegoose.utils/validation/errprop.class"; 
 import { CrudResult_FactoryModel } from "./result.factorymodel"; 

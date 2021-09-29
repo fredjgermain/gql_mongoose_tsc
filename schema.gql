@@ -182,6 +182,7 @@ type Query {
   ReadPatient(ids: [String!]): CrudResultPatient!
   ReadQuestion(ids: [String!]): CrudResultQuestion!
   ReadResponseGroup(ids: [String!]): CrudResultResponseGroup!
+  TestReadForm(ids: [String!]): [Form!]!
   ValidateA(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateAnswer(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateB(inputs: [ObjectScalar!]!): [ObjectScalar!]!

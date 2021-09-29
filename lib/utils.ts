@@ -15,13 +15,3 @@ export { GetDefaultValue, GetTypeNameByValue, GetTType, GetTTypeFromValue, IsInD
   from './utils/type.utils'; 
 export type { TType } from './utils/type.utils'; 
 
-
-// HTML utils 
-export { GetInputType, GetValueFromInput, InputType_ValueType } 
-  from './utils/html.utils/html.utils'; 
-export type { IEvent } from './utils/html.utils/html.utils'; 
-
-export { ActionAttributes, EnterIsPressed, IsPressed } 
-  from './utils/html.utils/htmlactionattributes.utils'; 
-export type { TActionAttributes } from './utils/html.utils/htmlactionattributes.utils'; 
-
