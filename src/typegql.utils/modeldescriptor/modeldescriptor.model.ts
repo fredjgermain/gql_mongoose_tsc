@@ -5,7 +5,7 @@ import { prop } from "@typegoose/typegoose";
 
 // -------------------------------------------------------- 
 import { ObjectScalar } from "../customscalar/object.scalar"; 
-import { GetIFields, GetMongoModel } from "../../typegoose.utils/typegoosemodel.util"; 
+import { GetIFields, GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
 
 
 
@@ -30,7 +30,7 @@ export class ModelDescriptor {
   @Field(type => [ObjectScalar]) // replace with IField type ?? 
   ifields(): object[] { 
     const _this = (this as any)._doc as ModelDescriptor; 
-    const {model} = GetMongoModel(_this.accessor); 
+    const model = GetMongoModel(_this.accessor); 
     if(!model) 
       return []; 
     return GetIFields(model); 

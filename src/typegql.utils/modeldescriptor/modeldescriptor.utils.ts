@@ -2,10 +2,9 @@ import { getModelForClass } from "@typegoose/typegoose";
 
 // -------------------------------------------------------- 
 import { ModelDescriptor } from './modeldescriptor.model'; 
-import { GetMongoModel } from "../../typegoose.utils/typegoosemodel.util"; 
+import { GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
 
 
-/// Add self Registration with Reset ... 
 
 export const modelDescriptor = { 
   //_id: new mongoose.Types.ObjectId(), 
@@ -36,7 +35,7 @@ export async function SelfRegisterModelDescriptor() {
   //console.log("Registering --- > ", toRegister); 
   getModelForClass(toRegister); 
   //console.log("Has registered --- > ", toRegister); 
-  const {model} = GetMongoModel(modelDescriptor.accessor); 
+  const model = GetMongoModel(modelDescriptor.accessor); 
   if(!model) 
     return; 
   

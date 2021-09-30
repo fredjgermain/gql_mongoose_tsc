@@ -1,9 +1,6 @@
-//import { ObjectId } from "mongodb"; 
 import { ClassType, Resolver, Query, Mutation, Arg, ObjectType } 
   from "type-graphql"; 
-//import { Type } from '@nestjs/common'; 
-import { getModelWithString } from "@typegoose/typegoose"; 
-
+  
 
 
 // --------------------------------------------------------
@@ -13,6 +10,7 @@ import { ErrProp } from "../../typegoose.utils/validation/errprop.class";
 import { CrudResult_FactoryModel } from "./result.factorymodel"; 
 import { GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
 import * as CrudAction from '../../typegoose.utils/crud.actions'; 
+import { IsEmpty } from "../../../lib/utils";
 
 
 
@@ -23,17 +21,16 @@ import * as CrudAction from '../../typegoose.utils/crud.actions';
  */
 export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any { 
   const itemSuffix = itemClass.name; 
-
+  const model = GetMongoModel(itemSuffix); 
 
   // Factor generic CrudResult class containing errors and results items. 
-  @ObjectType(`CrudResult${itemSuffix}`) 
-  class CrudResult extends CrudResult_FactoryModel(itemClass) {} 
-
-
+  // @ObjectType(`CrudResult${itemSuffix}`) 
+  // class CrudResult extends CrudResult_FactoryModel(itemClass) {} 
 
   // Factored abstract CrudResolver class 
   @Resolver({ isAbstract: true }) 
   abstract class CrudResolver { 
+
 
 
     /** VALIDATE ------------------------------------------
@@ -46,13 +43,10 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      */
     @Query(type => [ObjectScalar], {name:`Validate${itemSuffix}` }) 
     async Validate( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<ErrProp[]> { 
-      const model = getModelWithString(itemSuffix); 
-      if(!model) 
-        return []; 
       return await ValidateInputs(model, inputs); 
     }
 
-
+    
 
     /** CREATE --------------------------------------------
      * If the inputs are valid, 
@@ -62,15 +56,15 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      * @param inputs 
      * @returns 
      */
-    @Mutation(type => CrudResult, { name: `Create${itemSuffix}` }) 
-    async Create( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<CrudResult> { 
-      const model = GetMongoModel(itemSuffix); 
-      if(!model) 
-        return {items:[], errors:[]}; 
-      return await CrudAction.Create(model, inputs); 
+    @Mutation(type => [itemClass], { name: `Create${itemSuffix}` }) 
+    async Create( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<T[]> { 
+      const {items, errors} = await CrudAction.Create(model, inputs); 
+      if(IsEmpty(errors)) 
+        throw errors; 
+      return items; 
     } 
 
-
+    
 
     /** READ --------------------------------------------
      * If the ids are found, 
@@ -80,12 +74,12 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      * @param ids 
      * @returns 
      */
-    @Query((type) => CrudResult, { name: `Read${itemSuffix}` }) 
-    async Read( @Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<CrudResult> { 
-      const model = GetMongoModel(itemSuffix); 
-      if(!model) 
-        return {items:[], errors:[]}; 
-      return await CrudAction.Read(model, ids); 
+    @Query((type) => [itemClass], { name: `Read${itemSuffix}` }) 
+    async Read( @Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<T[]>  { 
+      const {items, errors} = await CrudAction.Read(model, ids); 
+      if(IsEmpty(errors)) 
+        throw errors; 
+      return items; 
     }
 
 
@@ -93,17 +87,17 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
     /** UPDATE --------------------------------------------
      * If the inputs are valid, 
       - they will be updated and the modified items will be returned in {items}. 
-     * If ANY of the inputs is INVALID, 
+      * If ANY of the inputs is INVALID, 
       - NONE of the input will be updated and errors will be returned in {errors}. 
-     * @param inputs
-     * @returns 
-     */
-    @Mutation(type => CrudResult, { name: `Update${itemSuffix}` })
-    async Update( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<CrudResult> { 
-      const model = GetMongoModel(itemSuffix); 
-      if(!model) 
-        return {items:[], errors:[]}; 
-      return await CrudAction.Update(model, inputs); 
+      * @param inputs
+      * @returns 
+      */
+    @Mutation(type => [itemClass], { name: `Update${itemSuffix}` })
+    async Update( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<T[]> { 
+      const {items, errors} = await CrudAction.Update(model, inputs); 
+      if(IsEmpty(errors)) 
+        throw errors; 
+      return items; 
     } 
 
 
@@ -111,21 +105,21 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
     /** DELETE --------------------------------------------
      * If the ids are found, 
       - the corresponding items will be deleted and returned in {items} 
-     * If ANY of the IDS is UNFOUND, 
+      * If ANY of the IDS is UNFOUND, 
       - NONE of the items will be deleted and an error will be returned in {errors}. 
-     * @param ids 
-     * @returns 
-     */
-    @Mutation(type => CrudResult, { name: `Delete${itemSuffix}` }) 
-    async Delete( @Arg("ids", type => [String]) ids:string[] ): Promise<CrudResult> { 
-      const model = GetMongoModel(itemSuffix); 
-      if(!model) 
-        return {items:[], errors:[]}; 
-      return await CrudAction.Delete(model, ids); 
+      * @param ids 
+      * @returns 
+      */
+    @Mutation(type => [itemClass], { name: `Delete${itemSuffix}` }) 
+    async Delete( @Arg("ids", type => [String]) ids:string[] ): Promise<T[]> { 
+      const {items, errors} = await CrudAction.Delete(model, ids); 
+      if(IsEmpty(errors)) 
+        throw errors; 
+      return items; 
     } 
   } 
   return CrudResolver; 
-} 
+}
 
 
 
@@ -134,12 +128,11 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
  * @param itemClass 
  * @returns 
  */
-export function Extend_Crud_FactoryResolver<T extends ClassType>(itemClass:T) { 
+ export function Extend_Crud_FactoryResolver<T extends ClassType>(itemClass:T) { 
   
   const BaseResolver = Crud_FactoryResolver(itemClass); 
   @Resolver(of => itemClass) 
   class FactoriedResolver extends BaseResolver {} 
   return FactoriedResolver; 
 } 
-
 

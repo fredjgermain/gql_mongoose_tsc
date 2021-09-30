@@ -1,11 +1,8 @@
 // --------------------------------------------------------
-import { ValidateInputs, ValidateToCreate, ValidateToUpdate, ValidateIdsToFind } from './validation/validation.action'; 
+import { ValidateToCreate, ValidateToUpdate, ValidateIdsToFind } from './validation/validation.action'; 
 import { ErrProp } from "./validation/errprop.class"; 
-import { MongoModel } from "./typegoosemodel.util"; 
+import { MongoModel } from "./mongomodel.parsing"; 
 import { Input } from "./item.utils"; 
-
-
-// Model ================================================== 
 
 
 

@@ -1,6 +1,15 @@
 import { FEEDBACK } from '../feedback.utils'; 
 
 
+export class CrudError extends Error { 
+  public errprops: ErrProp[]; 
+
+  constructor(errprops?:ErrProp[]) { 
+    super('CrudError') 
+    this.errprops = errprops ?? []; 
+  } 
+} 
+
 export interface ErrProp { 
   name: string; 
   path: string; 

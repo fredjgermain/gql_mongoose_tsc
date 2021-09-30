@@ -1,4 +1,3 @@
-//import { ObjectId } from "mongodb"; 
 import { Resolver, Query, Mutation, Arg } 
   from "type-graphql"; 
 
@@ -6,7 +5,7 @@ import { Resolver, Query, Mutation, Arg }
 import { IsEmpty } from '../../lib/utils'
 //import { ObjectScalar } from "./customscalar/object.scalar"; 
 import { Form } from "../business/models/form.model";
-import { GetMongoModel } from "../typegoose.utils/typegoosemodel.util";
+import { GetMongoModel } from "../typegoose.utils/mongomodel.parsing";
 import * as CrudAction from '../typegoose.utils/crud.actions'; 
 import { ErrProp } from "../typegoose.utils/validation/errprop.class";
 
@@ -23,7 +22,7 @@ class TestError extends Error {
 export class TestResolver{ 
   @Query(type => [Form]) 
   async TestReadForm(@Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<Form[]> { 
-    const {model} = GetMongoModel('Form'); 
+    const model = GetMongoModel('Form'); 
     if(!model) 
       return []; 
     const {items, errors} = await CrudAction.Read(model, ids); 

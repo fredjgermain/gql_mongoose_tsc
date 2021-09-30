@@ -35,51 +35,6 @@ type C {
   nested: B!
 }
 
-type CrudResultA {
-  errors: [ObjectScalar!]
-  items: [A!]!
-}
-
-type CrudResultAnswer {
-  errors: [ObjectScalar!]
-  items: [Answer!]!
-}
-
-type CrudResultB {
-  errors: [ObjectScalar!]
-  items: [B!]!
-}
-
-type CrudResultC {
-  errors: [ObjectScalar!]
-  items: [C!]!
-}
-
-type CrudResultForm {
-  errors: [ObjectScalar!]
-  items: [Form!]!
-}
-
-type CrudResultInstruction {
-  errors: [ObjectScalar!]
-  items: [Instruction!]!
-}
-
-type CrudResultPatient {
-  errors: [ObjectScalar!]
-  items: [Patient!]!
-}
-
-type CrudResultQuestion {
-  errors: [ObjectScalar!]
-  items: [Question!]!
-}
-
-type CrudResultResponseGroup {
-  errors: [ObjectScalar!]
-  items: [ResponseGroup!]!
-}
-
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -118,33 +73,33 @@ type ModelDescriptor {
 }
 
 type Mutation {
-  CreateA(inputs: [ObjectScalar!]!): CrudResultA!
-  CreateAnswer(inputs: [ObjectScalar!]!): CrudResultAnswer!
-  CreateB(inputs: [ObjectScalar!]!): CrudResultB!
-  CreateC(inputs: [ObjectScalar!]!): CrudResultC!
-  CreateForm(inputs: [ObjectScalar!]!): CrudResultForm!
-  CreateInstruction(inputs: [ObjectScalar!]!): CrudResultInstruction!
-  CreatePatient(inputs: [ObjectScalar!]!): CrudResultPatient!
-  CreateQuestion(inputs: [ObjectScalar!]!): CrudResultQuestion!
-  CreateResponseGroup(inputs: [ObjectScalar!]!): CrudResultResponseGroup!
-  DeleteA(ids: [String!]!): CrudResultA!
-  DeleteAnswer(ids: [String!]!): CrudResultAnswer!
-  DeleteB(ids: [String!]!): CrudResultB!
-  DeleteC(ids: [String!]!): CrudResultC!
-  DeleteForm(ids: [String!]!): CrudResultForm!
-  DeleteInstruction(ids: [String!]!): CrudResultInstruction!
-  DeletePatient(ids: [String!]!): CrudResultPatient!
-  DeleteQuestion(ids: [String!]!): CrudResultQuestion!
-  DeleteResponseGroup(ids: [String!]!): CrudResultResponseGroup!
-  UpdateA(inputs: [ObjectScalar!]!): CrudResultA!
-  UpdateAnswer(inputs: [ObjectScalar!]!): CrudResultAnswer!
-  UpdateB(inputs: [ObjectScalar!]!): CrudResultB!
-  UpdateC(inputs: [ObjectScalar!]!): CrudResultC!
-  UpdateForm(inputs: [ObjectScalar!]!): CrudResultForm!
-  UpdateInstruction(inputs: [ObjectScalar!]!): CrudResultInstruction!
-  UpdatePatient(inputs: [ObjectScalar!]!): CrudResultPatient!
-  UpdateQuestion(inputs: [ObjectScalar!]!): CrudResultQuestion!
-  UpdateResponseGroup(inputs: [ObjectScalar!]!): CrudResultResponseGroup!
+  CreateA(inputs: [ObjectScalar!]!): [A!]!
+  CreateAnswer(inputs: [ObjectScalar!]!): [Answer!]!
+  CreateB(inputs: [ObjectScalar!]!): [B!]!
+  CreateC(inputs: [ObjectScalar!]!): [C!]!
+  CreateForm(inputs: [ObjectScalar!]!): [Form!]!
+  CreateInstruction(inputs: [ObjectScalar!]!): [Instruction!]!
+  CreatePatient(inputs: [ObjectScalar!]!): [Patient!]!
+  CreateQuestion(inputs: [ObjectScalar!]!): [Question!]!
+  CreateResponseGroup(inputs: [ObjectScalar!]!): [ResponseGroup!]!
+  DeleteA(ids: [String!]!): [A!]!
+  DeleteAnswer(ids: [String!]!): [Answer!]!
+  DeleteB(ids: [String!]!): [B!]!
+  DeleteC(ids: [String!]!): [C!]!
+  DeleteForm(ids: [String!]!): [Form!]!
+  DeleteInstruction(ids: [String!]!): [Instruction!]!
+  DeletePatient(ids: [String!]!): [Patient!]!
+  DeleteQuestion(ids: [String!]!): [Question!]!
+  DeleteResponseGroup(ids: [String!]!): [ResponseGroup!]!
+  UpdateA(inputs: [ObjectScalar!]!): [A!]!
+  UpdateAnswer(inputs: [ObjectScalar!]!): [Answer!]!
+  UpdateB(inputs: [ObjectScalar!]!): [B!]!
+  UpdateC(inputs: [ObjectScalar!]!): [C!]!
+  UpdateForm(inputs: [ObjectScalar!]!): [Form!]!
+  UpdateInstruction(inputs: [ObjectScalar!]!): [Instruction!]!
+  UpdatePatient(inputs: [ObjectScalar!]!): [Patient!]!
+  UpdateQuestion(inputs: [ObjectScalar!]!): [Question!]!
+  UpdateResponseGroup(inputs: [ObjectScalar!]!): [ResponseGroup!]!
 }
 
 """Simulates Object"""
@@ -173,15 +128,15 @@ type Query {
   ModelDescriptorQuestion: ModelDescriptor!
   ModelDescriptorResponseGroup: ModelDescriptor!
   ModelDescriptors(modelsName: [String!]): [ModelDescriptor!]!
-  ReadA(ids: [String!]): CrudResultA!
-  ReadAnswer(ids: [String!]): CrudResultAnswer!
-  ReadB(ids: [String!]): CrudResultB!
-  ReadC(ids: [String!]): CrudResultC!
-  ReadForm(ids: [String!]): CrudResultForm!
-  ReadInstruction(ids: [String!]): CrudResultInstruction!
-  ReadPatient(ids: [String!]): CrudResultPatient!
-  ReadQuestion(ids: [String!]): CrudResultQuestion!
-  ReadResponseGroup(ids: [String!]): CrudResultResponseGroup!
+  ReadA(ids: [String!]): [A!]!
+  ReadAnswer(ids: [String!]): [Answer!]!
+  ReadB(ids: [String!]): [B!]!
+  ReadC(ids: [String!]): [C!]!
+  ReadForm(ids: [String!]): [Form!]!
+  ReadInstruction(ids: [String!]): [Instruction!]!
+  ReadPatient(ids: [String!]): [Patient!]!
+  ReadQuestion(ids: [String!]): [Question!]!
+  ReadResponseGroup(ids: [String!]): [ResponseGroup!]!
   TestReadForm(ids: [String!]): [Form!]!
   ValidateA(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateAnswer(inputs: [ObjectScalar!]!): [ObjectScalar!]!
