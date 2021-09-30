@@ -21,7 +21,6 @@ import { IsEmpty } from "../../../lib/utils";
  */
 export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any { 
   const itemSuffix = itemClass.name; 
-  const model = GetMongoModel(itemSuffix); 
 
   // Factor generic CrudResult class containing errors and results items. 
   // @ObjectType(`CrudResult${itemSuffix}`) 
@@ -43,7 +42,12 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      */
     @Query(type => [ObjectScalar], {name:`Validate${itemSuffix}` }) 
     async Validate( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<ErrProp[]> { 
-      return await ValidateInputs(model, inputs); 
+      try{
+        const model = GetMongoModel(itemSuffix); 
+        return await ValidateInputs(model, inputs); 
+      } catch(err) { 
+        throw err; 
+      }
     }
 
     
@@ -58,10 +62,15 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      */
     @Mutation(type => [itemClass], { name: `Create${itemSuffix}` }) 
     async Create( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<T[]> { 
-      const {items, errors} = await CrudAction.Create(model, inputs); 
-      if(IsEmpty(errors)) 
-        throw errors; 
-      return items; 
+      try{
+        const model = GetMongoModel(itemSuffix); 
+        const {items, errors} = await CrudAction.Create(model, inputs); 
+        if(IsEmpty(errors)) 
+          throw errors; 
+        return items; 
+      }catch(err) { 
+        throw err; 
+      }
     } 
 
     
@@ -76,10 +85,15 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      */
     @Query((type) => [itemClass], { name: `Read${itemSuffix}` }) 
     async Read( @Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<T[]>  { 
-      const {items, errors} = await CrudAction.Read(model, ids); 
-      if(IsEmpty(errors)) 
-        throw errors; 
-      return items; 
+      try{
+        const model = GetMongoModel(itemSuffix); 
+        const {items, errors} = await CrudAction.Read(model, ids); 
+        if(IsEmpty(errors)) 
+          throw errors; 
+        return items; 
+      } catch(err) { 
+        throw err; 
+      }
     }
 
 
@@ -94,10 +108,15 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
       */
     @Mutation(type => [itemClass], { name: `Update${itemSuffix}` })
     async Update( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<T[]> { 
-      const {items, errors} = await CrudAction.Update(model, inputs); 
-      if(IsEmpty(errors)) 
-        throw errors; 
-      return items; 
+      try{
+        const model = GetMongoModel(itemSuffix); 
+        const {items, errors} = await CrudAction.Update(model, inputs); 
+        if(IsEmpty(errors)) 
+          throw errors; 
+        return items; 
+      } catch(err) {
+        throw err; 
+      }
     } 
 
 
@@ -112,11 +131,16 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
       */
     @Mutation(type => [itemClass], { name: `Delete${itemSuffix}` }) 
     async Delete( @Arg("ids", type => [String]) ids:string[] ): Promise<T[]> { 
-      const {items, errors} = await CrudAction.Delete(model, ids); 
-      if(IsEmpty(errors)) 
-        throw errors; 
-      return items; 
-    } 
+      try{
+        const model = GetMongoModel(itemSuffix); 
+        const {items, errors} = await CrudAction.Delete(model, ids); 
+        if(IsEmpty(errors)) 
+          throw errors; 
+        return items; 
+      } catch(err) { 
+        throw err; 
+      }
+    }
   } 
   return CrudResolver; 
 }
