@@ -16,7 +16,7 @@ import { RegisterModel, SelfRegisterModelDescriptor }
   from './modeldescriptor/modeldescriptor.utils'; 
 // Crud Resolver 
 import { Extend_Crud_FactoryResolver } 
-  from './crud/crud2.factory.resolver'; 
+  from './crud/crud.factory.resolver'; 
 
 
 

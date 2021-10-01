@@ -22,7 +22,7 @@ class TestError extends Error {
 export class TestResolver{ 
   @Query(type => [Form]) 
   async TestReadForm(@Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<Form[]> { 
-    const model = GetMongoModel('Form'); 
+    /*const model = GetMongoModel('Form'); 
     if(!model) 
       return []; 
     const {items, errors} = await CrudAction.Read(model, ids); 
@@ -31,6 +31,7 @@ export class TestResolver{
       console.log(errors); 
       throw new TestError(errors); 
     }
-    return items; 
+    return items; */
+    return []; 
   } 
 }
