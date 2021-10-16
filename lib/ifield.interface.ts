@@ -24,15 +24,46 @@ export interface IField {
   label: string; 
   isRef?: boolean; 
   options?: any; 
-  abbrev?: boolean; 
-  format?: string; 
-  order?: number; 
+
+  // required?: boolean; 
+  // unique?: boolean; 
+  // regex?: string; 
 
   // required?: boolean; 
   // unique?: boolean; 
   // regex: string ?? 
-  // format: string ?? 
-  // validators: any[];
-  // abbrev: 
-  
+  // validators: any[]; 
 }
+
+
+
+export interface IMongoField {
+  path:string;  // accessor 
+  instance:string; 
+  validators: any; 
+  options: IFieldOption; 
+  $embeddedSchemaType?:{ 
+    instance:string; 
+  }; 
+  [key:string]:any; 
+} 
+
+
+
+interface IFieldOption {
+  ref?: string; 
+  isArray?: boolean; 
+  label?: string; 
+  sortType?: string; 
+  defaultValue?: any; 
+  format?: string; 
+  order?: number; 
+  enum?: any[]; 
+  readable?: boolean; 
+  editable?: boolean; 
+  required?: boolean; 
+  unique?: boolean; 
+  regex?: string; 
+  [key:string]:any; 
+}; 
+

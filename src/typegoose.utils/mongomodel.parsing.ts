@@ -1,37 +1,13 @@
 import { mongoose } from '@typegoose/typegoose'; 
 
 // -------------------------------------------------------- 
-import { FEEDBACK } from './feedback.utils'; 
-import { IField, IType } from '../../lib/ifield.interface'; 
+//import { FEEDBACK } from './feedback.utils'; 
+import { IField, IType, IMongoField } from '../../lib/ifield.interface'; 
 import { GetDefaultValue } from '../../lib/utils/type.utils'; 
-import { CrudError } from './validation/errprop.class'; 
+//import { CrudError } from './validation/errprop.class'; 
 
 
 export type MongoModel = mongoose.Model<any, {}, {}> 
-
-interface MongoField {
-  path:string;  // accessor 
-  instance:string; 
-  validators: any; 
-  options: { 
-    ref?: string; 
-    isArray?: boolean; 
-    label?: string; 
-    sortType?: string; 
-    defaultValue?: any; 
-    format?: string; 
-    order?: number; 
-    enum?: any[]; 
-    abbrev?: boolean; 
-    readable?: boolean; 
-    editable?: boolean; 
-    [key:string]:any; 
-  }; 
-  $embeddedSchemaType?:{ 
-    instance:string; 
-  }; 
-  [key:string]:any; 
-} 
 
 
 
@@ -49,7 +25,7 @@ export function GetMongoModel(modelName:string):MongoModel {
 } 
 
 export function GetMongoFields(model:MongoModel) { 
-  return Object.values(model.schema.paths) as any[] as MongoField[]; 
+  return Object.values(model.schema.paths) as any[] as IMongoField[]; 
 } 
 
 export function GetIFields(model:MongoModel):IField[] { 
@@ -57,28 +33,27 @@ export function GetIFields(model:MongoModel):IField[] {
   return mongofields.map( field => ParseToIField(field) ) // parse fields to convert to IFields ?? 
 }
 
-function ParseToIField(mongoField:MongoField):IField { 
+function ParseToIField(mongoField:IMongoField):IField { 
   const {path, instance, options, $embeddedSchemaType} = mongoField; 
   const type = ParseToIType(mongoField); 
-  const {label, abbrev, format, order} = options; 
   const readableEditable = IsEditableOrReadable(mongoField); 
 
   return { 
     accessor: path ?? '', 
-    label: label ?? '', 
+    label: options.label ?? '', 
     isRef: !!options?.ref, 
     options:{ ...options, ...readableEditable}, 
-    type, abbrev, format, order, 
+    type, 
   } 
 } 
 
-function IsEditableOrReadable(mongoField:MongoField) { 
+function IsEditableOrReadable(mongoField:IMongoField) { 
   const readable = mongoField.options.readable ?? !['__v'].includes(mongoField.path); 
   const editable = mongoField.options.editable ?? !['_id', '__v'].includes(mongoField.path); 
   return {readable, editable}; 
 } 
 
-function ParseToIType(mongoField:MongoField): IType { 
+function ParseToIType(mongoField:IMongoField): IType { 
   const {instance, options, $embeddedSchemaType} = mongoField; 
   const type = {} as IType; 
 

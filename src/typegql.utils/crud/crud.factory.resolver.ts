@@ -9,7 +9,6 @@ import { ValidateInputs } from '../../typegoose.utils/validation/validation.acti
 import { ErrProp } from "../../typegoose.utils/validation/errprop.class"; 
 import { GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
 import * as CrudAction from '../../typegoose.utils/crud.actions'; 
-import { IsEmpty } from "../../../lib/utils";
 
 
 
