@@ -6,7 +6,7 @@ import { prop, Ref }
 // --------------------------------------------------------------- 
 import { OneToOne, OneToMany, FindObjectByClassAndId } from '../../typegoose.utils/typegoosemodel.util'; 
 import { Patient } from './patient.model'; 
-import { Question } from './question.model'; 
+import { ObjectScalar } from "../../typegql.utils/customscalar/object.scalar";
 
 
 
@@ -30,35 +30,23 @@ export class Answer {
   _id: string; 
 
   @Field(() => Patient) 
-  @prop({label: ["patient", "patient"], 
-    required:true, ...OneToOne(Patient) 
-  }) 
+  @prop({ label: ["patient", "patient"], required:true, ...OneToOne(Patient) }) 
   patient: Ref<Patient>; 
 
-  @Field(() => Question) 
-  @prop({label: ["Question", "Question"], 
-    required:true, ...OneToOne(Question), 
-  }) 
-  question: Ref<Question>; 
-
   @Field(() => Date) 
-  @prop({label: ["Date", "Date"], 
-    required:true}) 
+  @prop({label: ["Date", "Date"], required:true}) 
   date: Date; 
 
-  @Field(() => Number) 
-  @prop({label: ["Answers values", "Valeurs répondues"], 
-    type: Number, 
-    required:true, default:-1}) 
-  answervalues: number; 
+  // @Field(() => Number) 
+  // @prop({label: ["Answers values", "Valeurs répondues"], 
+  //   type: Number, 
+  //   required:true, default:-1}) 
+  // answervalues: number; 
 
-  /*@Field(() => String, {nullable:true}) 
-  async abbrev() { 
-    const _this = (this as any)._doc as Answer; 
-    const patient = await FromObjectId(Patient, _this.patient) as Patient; 
-    return `${patient.ramq} : ${_this.answervalues}`; 
-  } */
-}
+  @Field(() => [ObjectScalar]) 
+  @prop({label: ["Qid_Value", "Qid_Valeur"]}) 
+  answers: {qid:string, value:number}[]; 
+} 
 
 // AbbrevResolver -----------------------------------------
 @Resolver(type => Answer) 
@@ -67,7 +55,6 @@ export class AnswerAbbrevResolver {
   public async abbrev(@Root() root:any) { 
     const item:Answer = root._doc; 
     const patient = await FindObjectByClassAndId(Patient, item.patient) as Patient; 
-    const question = await FindObjectByClassAndId(Question, item.question) as Question; 
-    return `${patient.ramq} : ${question.qid} : ${item.answervalues}`; 
+    return `${patient.ramq} : ${item.date}`; 
   } 
 } 
