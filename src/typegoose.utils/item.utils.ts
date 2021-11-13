@@ -1,7 +1,9 @@
+import { mongoose } from "@typegoose/typegoose";
+
+
+type MongoModel = mongoose.Model<any, {}, {}> 
+
 // -------------------------------------------------------- 
-import { MongoModel } from './mongomodel.parsing'; 
-
-
 export interface Input { 
   _id?:string; 
   [key:string]: any; 

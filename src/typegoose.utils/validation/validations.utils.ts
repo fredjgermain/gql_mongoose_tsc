@@ -1,9 +1,12 @@
+import { mongoose } from "@typegoose/typegoose";
+
 import { ErrProp, ErrorParsing } from "./errprop.class"; 
-import { MongoModel, GetIFields } from '../mongomodel.parsing'; 
+import { GetIFields } from '../mongomodel.parsing'; 
 import { FEEDBACK } from '../feedback.utils'; 
-import { IdsExist } from '../item.utils'; 
+import { IdsExist, Input, Item, ParseFromDoc } from '../item.utils'; 
 
 
+type MongoModel = mongoose.Model<any, {}, {}> 
 
 /** GetDuplicateErrors 
  * Get the fields with the "unique" attributes 
@@ -41,12 +44,9 @@ export function GetDuplicateErrors(model:MongoModel, input:any, toCompare:any[])
  * @returns 
  */
 export async function GetValidationErrors(model:MongoModel, input:object):Promise<ErrProp[]> { 
-  try{ 
-    await model.validate(input) 
-    return []; 
-  } catch(err) { 
-    return ErrorParsing(err); 
-  } 
+  return await model.validate(input) 
+    .then( () => [] ) 
+    .catch( (error:any) => ErrorParsing(error) ) 
 } 
 
 
@@ -63,6 +63,21 @@ export async function GetNotFoundError(model:MongoModel, ids:string[]): Promise<
     path:'_id', 
     value:notFound 
   } 
+} 
+
+
+export async function GetDocsToUpdate(model:MongoModel, inputs:any[]) { 
+  const ids = GetIdsFromInputs(inputs); 
+  return (
+    await model.find({_id:{$in:ids}})) 
+    .map( (doc:any) => { 
+      const item = ParseFromDoc(doc); 
+      const input = inputs.find( input => input._id === item._id) 
+      return {...item, ...input} as Item; 
+    }); 
 }
 
-
+export function GetIdsFromInputs(inputs:Input[]) { 
+  return inputs.map( input => input._id) 
+    .filter( id => typeof id === 'string' ) as string[]; 
+} 

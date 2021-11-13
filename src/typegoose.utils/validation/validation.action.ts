@@ -1,10 +1,11 @@
 import { ErrProp } from './errprop.class'; 
-import { GetDuplicateErrors, GetNotFoundError, GetValidationErrors } from './validations.utils'; 
-import { MongoModel } from '../mongomodel.parsing'; 
+import { GetDuplicateErrors, GetNotFoundError, GetValidationErrors, GetDocsToUpdate, GetIdsFromInputs } from './validations.utils'; 
+//import { MongoModel } from '../mongomodel.parsing'; 
 import { Input, Item, ParseFromDoc } from '../item.utils'; 
 import { FEEDBACK } from '../feedback.utils'; 
+import { mongoose } from '@typegoose/typegoose';
 
-
+type MongoModel = mongoose.Model<any, {}, {}> 
 
 export async function ValidateToCreate(model:MongoModel, inputs:Input[]):Promise<ErrProp[]> { 
   const validationErrors = await ValidateInputs(model, inputs); 
@@ -68,18 +69,3 @@ export async function ValidateInputs(model:MongoModel, inputs:Input[]):Promise<E
   return errors; 
 } 
 
-
-async function GetDocsToUpdate(model:MongoModel, inputs:any[]) { 
-  const ids = GetIdsFromInputs(inputs); 
-  return (await model.find({_id:{$in:ids}})) 
-    .map( doc => { 
-      const item = ParseFromDoc(doc); 
-      const input = inputs.find( input => input._id === item._id) 
-      return {...item, ...input} as Item; 
-    }); 
-}
-
-function GetIdsFromInputs(inputs:Input[]) { 
-  return inputs.map( input => input._id) 
-    .filter( id => typeof id === 'string' ) as string[]; 
-} 

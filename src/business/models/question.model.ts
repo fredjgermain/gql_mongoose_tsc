@@ -4,7 +4,7 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany } from '../../typegoose.utils/typegoosemodel.util'; 
+import { OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
 
 
 import { Form } from './form.model'; 

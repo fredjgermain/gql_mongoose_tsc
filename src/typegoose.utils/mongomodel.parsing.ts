@@ -1,26 +1,19 @@
 import { mongoose } from '@typegoose/typegoose'; 
 
+
+
 // -------------------------------------------------------- 
-//import { FEEDBACK } from './feedback.utils'; 
 import { IField, IType, IMongoField } from '../../lib/ifield.interface'; 
 import { GetDefaultValue } from '../../lib/utils/type.utils'; 
-//import { CrudError } from './validation/errprop.class'; 
+import { FEEDBACK } from './feedback.utils';
 
 
-export type MongoModel = mongoose.Model<any, {}, {}> 
-
-
+type MongoModel = mongoose.Model<any, {}, {}> 
 
 export function GetMongoModel(modelName:string):MongoModel { 
   const model = mongoose.models[modelName]; 
-  /*if(!model) {
-    const error = { 
-      name:FEEDBACK.ERROR_MODEL_NOT_FOUND.name, 
-      path:'modelName', 
-      value:modelName 
-    } 
-    throw new CrudError([error]); 
-  } */
+  if(!model) 
+    throw new Error( `${modelName} ${FEEDBACK.ERROR_MODEL_NOT_FOUND.name}` ); 
   return model; 
 } 
 
@@ -36,7 +29,7 @@ export function GetIFields(model:MongoModel):IField[] {
 function ParseToIField(mongoField:IMongoField):IField { 
   const {path, instance, options, $embeddedSchemaType} = mongoField; 
   const type = ParseToIType(mongoField); 
-  const readableEditable = IsEditableOrReadable(mongoField); 
+  const readableEditable = AddEditableOrReadableOptions(mongoField); 
 
   return { 
     accessor: path ?? '', 
@@ -45,12 +38,6 @@ function ParseToIField(mongoField:IMongoField):IField {
     options:{ ...options, ...readableEditable}, 
     type, 
   } 
-} 
-
-function IsEditableOrReadable(mongoField:IMongoField) { 
-  const readable = mongoField.options.readable ?? !['__v'].includes(mongoField.path); 
-  const editable = mongoField.options.editable ?? !['_id', '__v'].includes(mongoField.path); 
-  return {readable, editable}; 
 } 
 
 function ParseToIType(mongoField:IMongoField): IType { 
@@ -65,4 +52,11 @@ function ParseToIType(mongoField:IMongoField): IType {
   type.isScalar = !type.isArray && !type.isObject; 
   type.defaultValue = options['defaultValue'] ?? options['default'] ?? GetDefaultValue(type.name); 
   return type; 
+} 
+
+
+function AddEditableOrReadableOptions(mongoField:IMongoField) { 
+  const readable = mongoField.options.readable ?? !['__v'].includes(mongoField.path); 
+  const editable = mongoField.options.editable ?? !['_id', '__v'].includes(mongoField.path); 
+  return {readable, editable}; 
 } 

@@ -4,7 +4,7 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
   
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany } from '../../typegoose.utils/typegoosemodel.util'; 
+import { OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
 
 
 
@@ -59,4 +59,27 @@ export class C extends A{
   @Field(() => [B], {nullable:true}) 
   @prop({...OneToMany(B)}) 
   manyNested?: Ref<B[]> 
+} 
+
+
+
+export const descriptorD = { 
+  accessor: 'D', 
+  label: ['model D'], 
+  description: ['dummy D'] 
+} 
+@ObjectType({ description: "The DummyD model" }) 
+export class D extends A { 
+  // @Field(type => String) 
+  // @prop({ type:String, required:true }) 
+  // str: string; 
+
+  @Field(type => Number) 
+  @prop({ type:Number, required:true, 
+    validate:{ 
+      validator: v => v > 0 && v < 100, 
+      message: "`{PATH}` .... `{VALUE}`"
+      // message: "Must be between 0 and 100", 
+    }}) 
+  age: string; 
 } 

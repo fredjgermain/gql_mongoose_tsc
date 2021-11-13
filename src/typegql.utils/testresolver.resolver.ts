@@ -1,27 +1,34 @@
 import { Resolver, Query, Mutation, Arg } 
   from "type-graphql"; 
+import { GetIModel, GetMongoModel } from "../typegoose.utils/model/modeler.utils"; 
+import { ValidateByValidators } from '../typegoose.utils/validation-2/error.utils'; 
+
+
 
 // ---------------------------------------------------------
-import { IsEmpty } from '../../lib/utils'
-//import { ObjectScalar } from "./customscalar/object.scalar"; 
-import { Form } from "../business/models/form.model";
-import { GetMongoModel } from "../typegoose.utils/mongomodel.parsing";
-import * as CrudAction from '../typegoose.utils/crud.actions'; 
-import { ErrProp } from "../typegoose.utils/validation/errprop.class";
-
-class TestError extends Error { 
-  public errprops: ErrProp[]; 
-
-  constructor(errprops?:ErrProp[]) { 
-    super('test') 
-    this.errprops = errprops ?? []; 
-  } 
-}
-
 @Resolver() 
-export class TestResolver{ 
-  @Query(type => [Form]) 
-  async TestReadForm(@Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<Form[]> { 
+export class TestResolver { 
+  @Query(type => String) 
+  async Test(): Promise<String> { 
+
+    const mongoModel = GetMongoModel('D'); 
+    const model = GetIModel('D'); 
+    const ifields = model?.ifields ?? [] as IField[]; 
+    const agefield = ifields.find( f => f.accessor === 'age'); 
+
+    // const input = { age:-1 } 
+    // await mongoModel.validate(input) 
+    //   .then( res => console.log(res) ) 
+    //   .catch( error => console.log(error) ) 
+    // console.log( agefield?.validators ) 
+
+    console.log(ValidateByValidators( agefield?.validators ?? [], {value:-2, msgValues:{PATH:agefield?.accessor}}) ) 
+
+    // ifields.forEach( ifield => { 
+    //   console.log(ifield.accessor, ifield.validators); 
+    // }) 
+
+
     /*const model = GetMongoModel('Form'); 
     if(!model) 
       return []; 
@@ -32,6 +39,20 @@ export class TestResolver{
       throw new TestError(errors); 
     }
     return items; */
-    return []; 
+    return "Test !!!"; 
   } 
+  
+  // async TestReadForm(@Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<Form[]> { 
+  //   /*const model = GetMongoModel('Form'); 
+  //   if(!model) 
+  //     return []; 
+  //   const {items, errors} = await CrudAction.Read(model, ids); 
+
+  //   if(!IsEmpty(errors)) { 
+  //     console.log(errors); 
+  //     throw new TestError(errors); 
+  //   }
+  //   return items; */
+  //   return []; 
+  // } 
 }

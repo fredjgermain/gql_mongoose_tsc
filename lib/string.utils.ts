@@ -12,22 +12,29 @@
  * @param template 
  * @returns 
  */
- export function InterpolateString(values:object, template:string) { 
-  function Interpolate(src:string) { 
-    return eval("`${"+src+"}`") 
-  } 
-
-  function Plural(src:string, singular:string, plural:string) { 
-    const value = Interpolate(src); 
-    return `${value} ${value > 1 ? plural:singular}`; 
-  } 
-
-  try { 
-    return eval("`"+template+"`") 
-  } catch(err) { 
-    return 'error'; 
-  } 
+export function InterpolateString(values:any, template:string, pattern?:string) { 
+  let str = `${template}`; 
+  Object.keys(values).forEach( key => 
+    str = str.replace(`{${key}}`, `${values[key]}`) ) 
+  return str; 
 } 
+
+// export function InterpolateString(values:object, template:string) { 
+//   function Interpolate(src:string) { 
+//     return eval("`${"+src+"}`") 
+//   } 
+
+//   function Plural(src:string, singular:string, plural:string) { 
+//     const value = Interpolate(src); 
+//     return `${value} ${value > 1 ? plural:singular}`; 
+//   } 
+
+//   try { 
+//     return eval("`"+template+"`") 
+//   } catch(err) { 
+//     return 'error'; 
+//   } 
+// } 
 
 
 /*export function InterpolateString(values:object, interpoler:string) { 

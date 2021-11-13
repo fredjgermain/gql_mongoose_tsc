@@ -34,6 +34,13 @@ type C {
   nested: B!
 }
 
+"""The DummyD model"""
+type D {
+  _id: ID!
+  age: Float!
+  name: String!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -76,6 +83,7 @@ type Mutation {
   CreateAnswer(inputs: [ObjectScalar!]!): [Answer!]!
   CreateB(inputs: [ObjectScalar!]!): [B!]!
   CreateC(inputs: [ObjectScalar!]!): [C!]!
+  CreateD(inputs: [ObjectScalar!]!): [D!]!
   CreateForm(inputs: [ObjectScalar!]!): [Form!]!
   CreateInstruction(inputs: [ObjectScalar!]!): [Instruction!]!
   CreatePatient(inputs: [ObjectScalar!]!): [Patient!]!
@@ -85,6 +93,7 @@ type Mutation {
   DeleteAnswer(ids: [String!]!): [Answer!]!
   DeleteB(ids: [String!]!): [B!]!
   DeleteC(ids: [String!]!): [C!]!
+  DeleteD(ids: [String!]!): [D!]!
   DeleteForm(ids: [String!]!): [Form!]!
   DeleteInstruction(ids: [String!]!): [Instruction!]!
   DeletePatient(ids: [String!]!): [Patient!]!
@@ -94,6 +103,7 @@ type Mutation {
   UpdateAnswer(inputs: [ObjectScalar!]!): [Answer!]!
   UpdateB(inputs: [ObjectScalar!]!): [B!]!
   UpdateC(inputs: [ObjectScalar!]!): [C!]!
+  UpdateD(inputs: [ObjectScalar!]!): [D!]!
   UpdateForm(inputs: [ObjectScalar!]!): [Form!]!
   UpdateInstruction(inputs: [ObjectScalar!]!): [Instruction!]!
   UpdatePatient(inputs: [ObjectScalar!]!): [Patient!]!
@@ -120,6 +130,7 @@ type Query {
   ModelDescriptorAnswer: ModelDescriptor!
   ModelDescriptorB: ModelDescriptor!
   ModelDescriptorC: ModelDescriptor!
+  ModelDescriptorD: ModelDescriptor!
   ModelDescriptorForm: ModelDescriptor!
   ModelDescriptorInstruction: ModelDescriptor!
   ModelDescriptorMLabel: ModelDescriptor!
@@ -131,16 +142,18 @@ type Query {
   ReadAnswer(ids: [String!]): [Answer!]!
   ReadB(ids: [String!]): [B!]!
   ReadC(ids: [String!]): [C!]!
+  ReadD(ids: [String!]): [D!]!
   ReadForm(ids: [String!]): [Form!]!
   ReadInstruction(ids: [String!]): [Instruction!]!
   ReadPatient(ids: [String!]): [Patient!]!
   ReadQuestion(ids: [String!]): [Question!]!
   ReadResponseGroup(ids: [String!]): [ResponseGroup!]!
-  TestReadForm(ids: [String!]): [Form!]!
+  Test: String!
   ValidateA(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateAnswer(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateB(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateC(inputs: [ObjectScalar!]!): [ObjectScalar!]!
+  ValidateD(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateForm(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateInstruction(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidatePatient(inputs: [ObjectScalar!]!): [ObjectScalar!]!

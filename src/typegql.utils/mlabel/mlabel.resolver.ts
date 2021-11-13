@@ -1,9 +1,9 @@
-import { Resolver, Arg, Query,  } 
+import { Resolver, Arg, Query } 
   from "type-graphql"; 
 //import { getModelWithString } from "@typegoose/typegoose"; 
 import { getModelForClass, prop } from "@typegoose/typegoose"; 
 
-// ---------------------------------------------------------------
+// --------------------------------------------------------------- 
 import { MLabel } from './mlabel.model'; 
 
 

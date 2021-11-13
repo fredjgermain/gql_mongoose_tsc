@@ -1,3 +1,6 @@
+/// <reference path="./types.d.ts" />
+
+
 // Dependancies
 import 'dotenv/config';
 import { ApolloServer } from "apollo-server-express"; 

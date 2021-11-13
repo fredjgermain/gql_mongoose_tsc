@@ -4,7 +4,7 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany, FindObjectByClassAndId } from '../../typegoose.utils/typegoosemodel.util'; 
+import { OneToOne, OneToMany, FindObjectByClassAndId } from '../../typegoose.utils/datarelation.util'; 
 import { Patient } from './patient.model'; 
 import { ObjectScalar } from "../../typegql.utils/customscalar/object.scalar";
 
