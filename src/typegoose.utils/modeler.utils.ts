@@ -1,30 +1,20 @@
 import { mongoose } from "@typegoose/typegoose";
 
 // -------------------------------------------------------- 
-import { GetDefaultValue } from '../../../lib/utils/type.utils'; 
-
+import { GetDefaultValue } from '../../lib/utils/type.utils'; 
 
 
 type MongoModel = mongoose.Model<any, {}, {}> 
+
 
 export function GetMongoModel(modelName:string):MongoModel { 
   return mongoose.models[modelName]; 
 } 
 
-type TFindDoc = {modelName:string, predicate?:(e:any, i:number, a:any[]) => boolean}; 
-export async function FindEntries({modelName, predicate = () => true }:TFindDoc) { 
-  const mongoModel = GetMongoModel(modelName); 
-  return (await mongoModel.find()).filter(predicate).map(e => ParseFromDoc(e)); 
-} 
-
-function ParseFromDoc(docs:any):IEntry { 
-  return JSON.parse(JSON.stringify(docs)); 
-} 
-
-export function GetIModel(accessor:string):IModel|undefined { 
+export function GetIModel(accessor:string):IModel { 
   const mongoModel = mongoose.models[accessor]; 
-  if(!mongoModel) return; 
-  const [_mongoField] = Object.values(mongoModel.schema.paths) as any[];   
+  if(!mongoModel) return {} as IModel; 
+  const [_mongoField] = Object.values(mongoModel.schema.paths) as any[]; 
   const mongoFields = Object.values(mongoModel.schema.paths) as any[] as IMongoField[]; 
   const ifields = mongoFields.map( field => ParseToIField(field) ) 
   const label = [] as string[]; 
@@ -32,6 +22,16 @@ export function GetIModel(accessor:string):IModel|undefined {
   return { accessor, label, description, ifields} as IModel; 
 } 
 
+
+type PredicateDoc = {modelName:string, predicate?:(e:any, i:number, a:any[]) => boolean}; 
+export async function FindEntries({modelName, predicate = () => true }:PredicateDoc) { 
+  const mongoModel = GetMongoModel(modelName); 
+  return (await mongoModel.find()).filter(predicate).map(e => ParseDocsTo<IEntry>(e)); 
+} 
+
+export function ParseDocsTo<T>(doc:any):T { 
+  return JSON.parse(JSON.stringify(doc)) 
+} 
 
 function ParseToIField(mongoField:IMongoField):IField { 
   const {path, instance, options, $embeddedSchemaType, validators} = mongoField; 

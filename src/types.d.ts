@@ -95,21 +95,18 @@ interface IValidator {
 }
 
 
+
 interface InputError { 
-  input:object, 
-  fieldErrors: FieldError[], 
-  [key:string]: any 
+  input:object; 
+  errors: ErrProp[]; 
+  [key:string]: any; 
 }
 
-interface FieldError { 
-  name: string, 
-  value: any, 
-  errors: ErrProp[], 
-  [key:string]: any 
-}
 
 interface ErrProp { 
-  name: string, 
-  [key:string]: any 
+  name: string; 
+  value: any; 
+  path: string; 
+  message?: string; 
+  [key:string]: any; 
 } 
-

@@ -5,9 +5,6 @@ import { ClassType, Resolver, Query, Mutation, Arg, ObjectType }
 
 // --------------------------------------------------------
 import { ObjectScalar } from "../customscalar/object.scalar"; 
-import { ValidateInputs } from '../../typegoose.utils/validation/validation.action'; 
-import { ErrProp } from "../../typegoose.utils/validation/errprop.class"; 
-import { GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
 import * as CrudAction from '../../typegoose.utils/crud.actions'; 
 
 

@@ -1,4 +1,4 @@
-import {mongoose, getModelForClass } from '@typegoose/typegoose'; 
+import { mongoose, getModelForClass } from '@typegoose/typegoose'; 
 import { ClassType } from 'type-graphql'; 
 
 

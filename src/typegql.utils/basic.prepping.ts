@@ -3,7 +3,7 @@ import { ClassType, NonEmptyArray } from "type-graphql";
 
 // --------------------------------------------------------
 // Feedback 
-import { FEEDBACK } from '../typegoose.utils/feedback.utils'; 
+import { FEEDBACK } from '../feedback.utils'; 
 // MLabel 
 import { MLabel, MLabelDescriptor } from './mlabel/mlabel.model'; 
 import { MLabelResolver } from './mlabel/mlabel.resolver'; 
