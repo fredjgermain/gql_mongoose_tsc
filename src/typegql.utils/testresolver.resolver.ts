@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, Arg } 
   from "type-graphql"; 
 import { FindEntries, GetIModel, GetMongoModel } from "../typegoose.utils/modeler.utils"; 
-import { ValidateByInputs, ValidateToCreate, ValidateToUpdate, IsErrorFree } 
-  from "../typegoose.utils/validation"; 
+// import { ValidateByInputs, ValidateToCreate, ValidateToUpdate, IsErrorFree } 
+//   from "../typegoose.utils/validation"; 
 
 
 
@@ -22,9 +22,9 @@ export class TestResolver {
     let [first] = await FindEntries({modelName:'D'}); 
     first.age = -6; 
   
-    const inputerrors = await ValidateToUpdate(model, [first]); 
-    console.log(inputerrors.map(i => i.errors))
-    console.log(IsErrorFree(inputerrors)); 
+    // const inputerrors = await ValidateToUpdate(model, [first]); 
+    // console.log(inputerrors.map(i => i.errors))
+    // console.log(IsErrorFree(inputerrors)); 
 
     return "Test !!!"; 
   } 

@@ -1,8 +1,8 @@
-import { getModelForClass } from "@typegoose/typegoose"; 
+import { getModelForClass, getModelWithString } from "@typegoose/typegoose"; 
 
 // -------------------------------------------------------- 
 import { ModelDescriptor } from './modeldescriptor.model'; 
-import { GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
+//import { GetMongoModel } from "../../typegoose.utils/mongomodel.parsing"; 
 
 
 
@@ -35,9 +35,9 @@ export async function SelfRegisterModelDescriptor() {
   //console.log("Registering --- > ", toRegister); 
   getModelForClass(toRegister); 
   //console.log("Has registered --- > ", toRegister); 
-  const model = GetMongoModel(modelDescriptor.accessor); 
+  /*const model = GetMongoModel(modelDescriptor.accessor); 
   if(!model) 
-    return; 
+    return; */
   
   await gqlModel.create(modelDescriptor); 
 } 

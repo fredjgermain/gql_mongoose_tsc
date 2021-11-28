@@ -3,7 +3,7 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""The DummyA model"""
+"""The DummyA model from decorator"""
 type A {
   _id: ID!
   name: String!

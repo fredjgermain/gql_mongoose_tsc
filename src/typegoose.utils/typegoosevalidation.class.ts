@@ -5,11 +5,11 @@ import { TypegooseModel } from "./typegoosemodel.class";
 
 
 
-class CrudError extends Error { 
+export class CrudError extends Error { 
   public inputErrors: InputError[]; 
 
   constructor({message, inputErrors}:{message?:string, inputErrors?:InputError[]}) { 
-    super('CrudError') 
+    super(message); 
     this.inputErrors = inputErrors ?? []; 
   } 
 } 

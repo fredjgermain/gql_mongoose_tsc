@@ -1,5 +1,39 @@
-import { mongoose, getModelForClass } from '@typegoose/typegoose'; 
+import { mongoose, getModelForClass, getModelWithString } from '@typegoose/typegoose'; 
 import { ClassType } from 'type-graphql'; 
+
+// export function TestClassDecorator<T extends { new (...args: any[]): {} }>(constructor: T): ClassDecorator {
+
+//   console.log(`Message is:`) 
+//     return function (): void { 
+//         console.log('constructor') 
+//     } 
+//   // return class extends constructor {
+//   //   test = "from deco";
+//   // };
+// }
+
+type ModelDoc = {accessor:string, label?:string, description?:string} 
+const registeredModels = [] as ModelDoc[]; 
+
+export function TestClassDecorator(documentation?:Omit<ModelDoc, "accessor">): ClassDecorator {
+
+  //console.log(`Message is: ${message}`)
+  return function <TFunction extends Function>(target:TFunction): void { 
+    const {accessor, description, label} = {...documentation, accessor:target.name}; 
+    console.log(`model-documentation: ${accessor} ${description ?? ''} ${label ?? ''} `); 
+
+    // too soon for registering ??  ----- 
+      // const model = getModelWithString(modelName); // does it register the model ?? 
+      // console.log(model); 
+    /*const mongoModel = mongoose.models[modelName]; 
+    console.log(mongoModel); */ 
+    registeredModels.push(); 
+  } 
+} 
+
+
+@TestClassDecorator({description:"deco", label:"deco label"}) 
+class DecoratedClass {} 
 
 
 

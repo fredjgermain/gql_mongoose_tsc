@@ -14,7 +14,7 @@ type MongoModel = mongoose.Model<any, {}, {}>
 
 
 // D for the type of documents to accept/return from Crud methods. 
-export class TypegooseCrud<D extends IEntry> { 
+export class TypegooseCrud { 
   public modelName:string; 
   public tgmodel:TypegooseModel; 
   public tgvalidation:TypegooseValidation; 
@@ -33,12 +33,12 @@ export class TypegooseCrud<D extends IEntry> {
 
   // MODEL =============================================== 
   public async Model({modelName}:{modelName:string}) { 
-    const [model] = await TypegooseModel.Models({modelNames:[modelName]}); 
+    const [model] = await TypegooseModel.Models({modelsName:[modelName]}); 
     return model; 
   } 
 
-  public async Models({modelNames}:{modelNames:string[]}) { 
-    return await TypegooseModel.Models({modelNames}); 
+  public async Models({modelsName}:{modelsName:string[]}) { 
+    return await TypegooseModel.Models({modelsName}); 
   } 
 
 
@@ -50,27 +50,27 @@ export class TypegooseCrud<D extends IEntry> {
 
 
   // CREATE =============================================== 
-  public async Create( inputs:Partial<D>[] ):Promise<D[]> { 
+  public async Create( inputs:Partial<IEntry>[] ):Promise<IEntry[]> { 
     this.tgvalidation.ThrowIfHasError( await this.tgvalidation.ValidateToCreate(inputs) ); 
     // --------------------------------------------------- 
     const results = await this.mongoModel.create(inputs); 
-    return results.map( e => ParseDocsTo<D>(e)); 
+    return results.map( e => ParseDocsTo<IEntry>(e)); 
   } 
 
 
   // READ =============================================== 
-  public async Read( ids?:string[] ):Promise<D[]> { 
+  public async Read( ids?:string[] ):Promise<IEntry[]> { 
     const inputs = ids?.map( id => {return {_id:id}} ) ?? []; 
     this.tgvalidation.ThrowIfHasError( await this.tgvalidation.ValidateInputMustExists(inputs) ); 
     // --------------------------------------------------- 
     const selector = ids ? {_id: {$in: ids}} : {}; 
     const results = await this.mongoModel.find(selector); 
-    return results.map( e => ParseDocsTo<D>(e)); 
+    return results.map( e => ParseDocsTo<IEntry>(e)); 
   } 
 
 
   // UPDATE =============================================== 
-  public async Update(inputs:D[]):Promise<D[]> { 
+  public async Update(inputs:IEntry[]):Promise<IEntry[]> { 
     this.tgvalidation.ThrowIfHasError( await this.tgvalidation.ValidateToUpdate(inputs) ); 
     // --------------------------------------------------- 
     for(let i = 0; i < inputs.length; i++) { 
@@ -80,16 +80,16 @@ export class TypegooseCrud<D extends IEntry> {
     // fetch modified items 
     const ids = inputs.map( item => item._id ); 
     const results = await this.mongoModel.find({_id: {$in: ids}}); 
-    return results.map( e => ParseDocsTo<D>(e)); 
+    return results.map( e => ParseDocsTo<IEntry>(e)); 
   }
 
   // DELETE =============================================== 
-  public async Delete(ids:string[]):Promise<D[]> { 
+  public async Delete(ids:string[]):Promise<IEntry[]> { 
     const inputs = ids.map( id => {return {_id:id}} ); 
     this.tgvalidation.ThrowIfHasError( await this.tgvalidation.ValidateInputMustExists(inputs) ); 
     // --------------------------------------------------- 
     const results = await this.mongoModel.find({_id: {$in: ids}}); 
     await this.mongoModel.deleteMany({_id: {$in: ids}}); 
-    return results.map( e => ParseDocsTo<D>(e)); 
+    return results.map( e => ParseDocsTo<IEntry>(e)); 
   } 
 } 

@@ -4,7 +4,7 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
   
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
+import { TestClassDecorator, OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
 
 
 
@@ -13,7 +13,9 @@ export const descriptorA = {
   label: ['label A'], 
   description: ['dummy A'] 
 } 
-@ObjectType({ description: "The DummyA model" })
+
+@TestClassDecorator({description:"descriptions"}) 
+@ObjectType({ description: "The DummyA model from decorator" })
 export class A { 
   @Field(type => ID) 
   _id: string; 
@@ -25,6 +27,8 @@ export class A {
   name: string; 
 }
 
+const testa = new A(); 
+console.log(testa); 
 
 
 export const descriptorB = { 

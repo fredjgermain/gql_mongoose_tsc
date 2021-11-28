@@ -5,7 +5,7 @@ import { ClassType, Resolver, Query, Mutation, Arg, ObjectType }
 
 // --------------------------------------------------------
 import { ObjectScalar } from "../customscalar/object.scalar"; 
-import * as CrudAction from '../../typegoose.utils/crud.actions'; 
+import { TypegooseCrud,  } from '../../typegoose.utils/typegoose.utils'; 
 
 
 
@@ -24,7 +24,8 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
   // Factored abstract CrudResolver class 
   @Resolver({ isAbstract: true }) 
   abstract class CrudResolver { 
-    model = GetMongoModel(itemSuffix); 
+    //model = GetMongoModel(itemSuffix); 
+    model = new TypegooseCrud(itemSuffix); 
 
     /** VALIDATE ------------------------------------------
      * Validates inputs 
@@ -35,9 +36,9 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      * @returns ErrProp containning all inputs errors, if any. 
      */
     @Query(type => [ObjectScalar], {name:`Validate${itemSuffix}` }) 
-    async Validate( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<ErrProp[]> { 
+    async Validate( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<InputError[]> { 
       try{
-        return await ValidateInputs(this.model, inputs); 
+        return await this.model.ValidateInput(inputs); 
       } catch(err) { 
         throw err; 
       } 
@@ -55,8 +56,8 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
      */
     @Mutation(type => [itemClass], { name: `Create${itemSuffix}` }) 
     async Create( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<T[]> { 
-      try{ 
-        return await CrudAction.Create(this.model, inputs); 
+      try { 
+        return (await this.model.Create(inputs)) as any[]; 
       } catch(err) { 
         throw err; 
       } 
@@ -75,7 +76,7 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
     @Query((type) => [itemClass], { name: `Read${itemSuffix}` }) 
     async Read( @Arg("ids", type => [String], { nullable: true }) ids?:string[] ): Promise<T[]>  { 
       try{
-        return await CrudAction.Read(this.model, ids); 
+        return (await this.model.Read(ids)) as any[]; 
       } catch(err) {
         throw err; 
       }
@@ -94,7 +95,7 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
     @Mutation(type => [itemClass], { name: `Update${itemSuffix}` })
     async Update( @Arg("inputs", type => [ObjectScalar]) inputs:any[] ): Promise<T[]> { 
       try{ 
-        return await CrudAction.Update(this.model, inputs); 
+        return (await this.model.Update(inputs)) as any[]; 
       } catch(err) {
         throw err; 
       }
@@ -113,7 +114,7 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
     @Mutation(type => [itemClass], { name: `Delete${itemSuffix}` }) 
     async Delete( @Arg("ids", type => [String]) ids:string[] ): Promise<T[]> { 
       try{ 
-        return await CrudAction.Delete(this.model, ids); 
+        return (await this.model.Delete(ids)) as any[]; 
       } catch(err) { 
         throw err; 
       }

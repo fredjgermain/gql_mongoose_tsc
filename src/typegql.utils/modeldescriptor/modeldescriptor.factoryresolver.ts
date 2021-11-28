@@ -6,6 +6,7 @@ import { prop, getModelForClass } from "@typegoose/typegoose";
 
 // -------------------------------------------------------- 
 import { ModelDescriptor } from './modeldescriptor.model'; 
+import { TypegooseModel } from '../../typegoose.utils/typegoose.utils'; 
 // import { GetIFields, GetMongoModel } from "../../typegoose.utils/typegoosemodel.util"; 
 
 
@@ -63,8 +64,10 @@ export class ModelDescriptorsResolver{
    */
   @Query(type => [ModelDescriptor]) 
   async ModelDescriptors( @Arg("modelsName", type => [String], { nullable: true }) modelsName?:string[] ): Promise<ModelDescriptor[]> { 
-    const model = getModelForClass(ModelDescriptor); 
-    return (await model.find()).filter( gqlmodel => modelsName?.includes(gqlmodel.accessor) ?? true ) 
+    // const model = getModelForClass(ModelDescriptor); 
+    // return (await model.find()).filter( gqlmodel => modelsName?.includes(gqlmodel.accessor) ?? true ) 
+    const results = (await TypegooseModel.Models({modelsName:(modelsName??[])}) ) as any[]; 
+    return results; 
   } 
 }
 
