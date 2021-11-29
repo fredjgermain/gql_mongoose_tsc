@@ -33,7 +33,7 @@ export function ParseDocsTo<T>(doc:any):T {
   return JSON.parse(JSON.stringify(doc)) 
 } 
 
-function ParseToIField(mongoField:IMongoField):IField { 
+export function ParseToIField(mongoField:IMongoField):IField { 
   const {path, instance, options, $embeddedSchemaType, validators} = mongoField; 
   const type = ParseToIType(mongoField); 
   const readableEditable = AddEditableOrReadableOptions(mongoField); 

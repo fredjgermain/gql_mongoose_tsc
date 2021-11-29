@@ -72,6 +72,7 @@ const testResolver = [
 ]
 
 const businessResolsvers = Extend_Crud_ModelDescriptor_FactoryResolvers( registrations.map( regis => regis.model ) ); 
+
 export const resolvers = [
   ...basicResolvers,  
   ...businessResolsvers, 

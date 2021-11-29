@@ -9,15 +9,6 @@ type A {
   name: String!
 }
 
-""""""
-type Answer {
-  _id: ID!
-  abbrev: String!
-  answers: [ObjectScalar!]!
-  date: DateTime!
-  patient: Patient!
-}
-
 """The DummyB model"""
 type B {
   _id: ID!
@@ -41,142 +32,31 @@ type D {
   name: String!
 }
 
-"""
-The javascript `Date` as string. Type represents date and time as the ISO Date string.
-"""
-scalar DateTime
-
-"""Form"""
-type Form {
-  _id: ID!
-  abbrev: String!
-  description: [String!]!
-  fid: String!
-  title: [String!]!
-}
-
-"""instruction"""
-type Instruction {
-  _id: ID!
-  abbrev: String!
-  iid: String!
-  label: [String!]!
-}
-
-"""Multi lingual label"""
-type MLabel {
-  _id: ID!
-  label: [String!]!
-  name: String!
-}
-
-type ModelDescriptor {
-  _id: ID!
-  accessor: String!
-  description: [String!]!
-  ifields: [ObjectScalar!]!
-  label: [String!]!
-}
-
 type Mutation {
   CreateA(inputs: [ObjectScalar!]!): [A!]!
-  CreateAnswer(inputs: [ObjectScalar!]!): [Answer!]!
   CreateB(inputs: [ObjectScalar!]!): [B!]!
   CreateC(inputs: [ObjectScalar!]!): [C!]!
   CreateD(inputs: [ObjectScalar!]!): [D!]!
-  CreateForm(inputs: [ObjectScalar!]!): [Form!]!
-  CreateInstruction(inputs: [ObjectScalar!]!): [Instruction!]!
-  CreatePatient(inputs: [ObjectScalar!]!): [Patient!]!
-  CreateQuestion(inputs: [ObjectScalar!]!): [Question!]!
-  CreateResponseGroup(inputs: [ObjectScalar!]!): [ResponseGroup!]!
   DeleteA(ids: [String!]!): [A!]!
-  DeleteAnswer(ids: [String!]!): [Answer!]!
   DeleteB(ids: [String!]!): [B!]!
   DeleteC(ids: [String!]!): [C!]!
   DeleteD(ids: [String!]!): [D!]!
-  DeleteForm(ids: [String!]!): [Form!]!
-  DeleteInstruction(ids: [String!]!): [Instruction!]!
-  DeletePatient(ids: [String!]!): [Patient!]!
-  DeleteQuestion(ids: [String!]!): [Question!]!
-  DeleteResponseGroup(ids: [String!]!): [ResponseGroup!]!
   UpdateA(inputs: [ObjectScalar!]!): [A!]!
-  UpdateAnswer(inputs: [ObjectScalar!]!): [Answer!]!
   UpdateB(inputs: [ObjectScalar!]!): [B!]!
   UpdateC(inputs: [ObjectScalar!]!): [C!]!
   UpdateD(inputs: [ObjectScalar!]!): [D!]!
-  UpdateForm(inputs: [ObjectScalar!]!): [Form!]!
-  UpdateInstruction(inputs: [ObjectScalar!]!): [Instruction!]!
-  UpdatePatient(inputs: [ObjectScalar!]!): [Patient!]!
-  UpdateQuestion(inputs: [ObjectScalar!]!): [Question!]!
-  UpdateResponseGroup(inputs: [ObjectScalar!]!): [ResponseGroup!]!
 }
 
 """Simulates Object"""
 scalar ObjectScalar
 
-"""Patient"""
-type Patient {
-  _id: ID!
-  abbrev: String!
-  birthday: DateTime!
-  firstname: String!
-  lastname: String!
-  ramq: String!
-}
-
 type Query {
-  MLabels(labelsName: [String!]): [MLabel!]!
-  ModelDescriptorA: ModelDescriptor!
-  ModelDescriptorAnswer: ModelDescriptor!
-  ModelDescriptorB: ModelDescriptor!
-  ModelDescriptorC: ModelDescriptor!
-  ModelDescriptorD: ModelDescriptor!
-  ModelDescriptorForm: ModelDescriptor!
-  ModelDescriptorInstruction: ModelDescriptor!
-  ModelDescriptorMLabel: ModelDescriptor!
-  ModelDescriptorPatient: ModelDescriptor!
-  ModelDescriptorQuestion: ModelDescriptor!
-  ModelDescriptorResponseGroup: ModelDescriptor!
-  ModelDescriptors(modelsName: [String!]): [ModelDescriptor!]!
   ReadA(ids: [String!]): [A!]!
-  ReadAnswer(ids: [String!]): [Answer!]!
   ReadB(ids: [String!]): [B!]!
   ReadC(ids: [String!]): [C!]!
   ReadD(ids: [String!]): [D!]!
-  ReadForm(ids: [String!]): [Form!]!
-  ReadInstruction(ids: [String!]): [Instruction!]!
-  ReadPatient(ids: [String!]): [Patient!]!
-  ReadQuestion(ids: [String!]): [Question!]!
-  ReadResponseGroup(ids: [String!]): [ResponseGroup!]!
-  Test: String!
   ValidateA(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateAnswer(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateB(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateC(inputs: [ObjectScalar!]!): [ObjectScalar!]!
   ValidateD(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateForm(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateInstruction(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidatePatient(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateQuestion(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-  ValidateResponseGroup(inputs: [ObjectScalar!]!): [ObjectScalar!]!
-}
-
-"""Question"""
-type Question {
-  _id: ID!
-  abbrev: String!
-  form: Form!
-  instructions: [Instruction!]!
-  label: [String!]!
-  optional: Boolean!
-  qid: String!
-  responsegroup: ResponseGroup!
-}
-
-"""ResponseGroup"""
-type ResponseGroup {
-  _id: ID!
-  abbrev: String!
-  responsechoices: [[String!]!]!
-  rid: String!
 }

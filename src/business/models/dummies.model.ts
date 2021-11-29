@@ -4,8 +4,9 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
   
 // --------------------------------------------------------------- 
-import { TestClassDecorator, OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
-
+import { OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
+import { Registeration } from "../../typegoose.utils/modelregister"; 
+import { CrudStack } from "../../typegql.utils/resolverstack";
 
 
 export const descriptorA = { 
@@ -14,7 +15,9 @@ export const descriptorA = {
   description: ['dummy A'] 
 } 
 
-@TestClassDecorator({description:"descriptions"}) 
+
+@Registeration({description:['dummy A'] , label:['label A']}) 
+@CrudStack() 
 @ObjectType({ description: "The DummyA model from decorator" })
 export class A { 
   @Field(type => ID) 
@@ -27,15 +30,15 @@ export class A {
   name: string; 
 }
 
-const testa = new A(); 
-console.log(testa); 
-
 
 export const descriptorB = { 
   accessor: 'B', 
   label: ['label B'], 
   description: ['dummy B'] 
 } 
+
+@Registeration({description:['dummy B'] , label:['label B']}) 
+@CrudStack() 
 @ObjectType({ description: "The DummyB model" })
 export class B extends A { 
   @Field(() => A) 
@@ -44,12 +47,14 @@ export class B extends A {
 } 
 
 
-
 export const descriptorC = { 
   accessor: 'C', 
   label: ['model C'], 
   description: ['dummy C'] 
 } 
+
+@Registeration({description:['dummy C'] , label:['label C']}) 
+@CrudStack() 
 @ObjectType({ description: "The DummyC model" })
 export class C extends A{ 
   @Field( () => [String] ) 
@@ -72,6 +77,9 @@ export const descriptorD = {
   label: ['model D'], 
   description: ['dummy D'] 
 } 
+
+@Registeration({description:['dummy D'] , label:['label D']}) 
+@CrudStack() 
 @ObjectType({ description: "The DummyD model" }) 
 export class D extends A { 
   // @Field(type => String) 
@@ -87,3 +95,5 @@ export class D extends A {
     }}) 
   age: string; 
 } 
+
+

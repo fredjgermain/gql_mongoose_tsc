@@ -6,6 +6,7 @@ import { ClassType, Resolver, Query, Mutation, Arg, ObjectType }
 // --------------------------------------------------------
 import { ObjectScalar } from "../customscalar/object.scalar"; 
 import { TypegooseCrud,  } from '../../typegoose.utils/typegoose.utils'; 
+import { ResolverStack } from "../resolverstack";
 
 
 
