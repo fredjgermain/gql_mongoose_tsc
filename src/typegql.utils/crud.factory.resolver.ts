@@ -1,12 +1,9 @@
-import { ClassType, Resolver, Query, Mutation, Arg, ObjectType } 
+import { ClassType, Resolver, Query, Mutation, Arg } 
   from "type-graphql"; 
-  
-
 
 // --------------------------------------------------------
-import { ObjectScalar } from "../customscalar/object.scalar"; 
-import { TypegooseCrud,  } from '../../typegoose.utils/typegoose.utils'; 
-import { ResolverStack } from "../resolverstack";
+import { ObjectScalar } from "./customscalar/object.scalar"; 
+import { TypegooseCrud,  } from '../typegoose.utils/typegoose.utils'; 
 
 
 
@@ -131,8 +128,8 @@ export function Crud_FactoryResolver<T extends ClassType>(itemClass:T):any {
  * @param itemClass 
  * @returns 
  */
- export function Extend_Crud_FactoryResolver<T extends ClassType>(itemClass:T) { 
-  
+export function Extend_Crud_FactoryResolver<T extends ClassType>(itemClass:T) { 
+
   const BaseResolver = Crud_FactoryResolver(itemClass); 
   @Resolver(of => itemClass) 
   class FactoriedResolver extends BaseResolver {} 

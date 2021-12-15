@@ -6,7 +6,9 @@ import { ExpressCORS } from './expresscors';
 
 
 
-// BuildSchema -----------------------------------------------
+/* BuildSchema -----------------------------------------------
+ * Takes a Set of resolvers and build the schema. 
+*/
 export async function BuildSchema(resolvers:NonEmptyArray<Function> | NonEmptyArray<string>) {
   return await buildSchema({ 
     resolvers: [...resolvers] as NonEmptyArray<Function> | NonEmptyArray<string>,  
@@ -19,7 +21,9 @@ export async function BuildSchema(resolvers:NonEmptyArray<Function> | NonEmptyAr
 
 type TResolvers = NonEmptyArray<Function> | NonEmptyArray<string>; 
 type TPort = string|number; 
-// APOLLO SERVER ---------------------------------------------
+/* APOLLO SERVER ---------------------------------------------
+ * Sets up and Run an ApolloServer. 
+*/ 
 export async function RunApolloserver(resolvers:TResolvers, PORT: TPort = process.env.PORT || 8000) { 
   const schema = await BuildSchema(resolvers); 
   const app = ExpressCORS(); 

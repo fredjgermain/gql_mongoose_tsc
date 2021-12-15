@@ -9,15 +9,13 @@ import { RunApolloserver } from "./apolloserver";
 import { MakeMongooseConnect } from './mongooseconnection'; 
 
 // Preppings 
-import { Prepping } from "../business/business.prepping2"; 
-import { RegisterModels, Populate } from "../typegoose.utils/modelregister"; 
+import { Prepping } from "../business/business.prepping";  
  
 // RunServer function 
 const RunServer = async () => { 
   await MakeMongooseConnect(); 
 	//const PORT = process.env.PORT || 8000; 
   
-  // CAREFUL !! Class need to be imported AND USED for their decorator to be called. 
   const resolvers = Prepping(); 
   await RunApolloserver(resolvers); 
 

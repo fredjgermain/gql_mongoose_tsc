@@ -4,7 +4,9 @@ import { connect } from "mongoose";
 
 
 
-// MONGOOSE CONNECTION ------------------------------------
+/* MONGOOSE CONNECTION ------------------------------------
+ * Sets up a Mongoose connection to MongoDb  
+*/ 
 export async function MakeMongooseConnect() { 
   const mongodbUrl = process.env.MONGODB_URL as string; 
 

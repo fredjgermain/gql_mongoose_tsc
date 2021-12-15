@@ -33,6 +33,8 @@ export function RegisterModels() {
 /*
   Cannot truly register models before connecting with Mongoose. 
   Once mongoose is connected and resolvers are mounted, call function RegisterModels above. 
+  
+  CAREFUL !! A Model need to be imported AND USED somewhere otherwise their decorator will not be read and the model will not be stacked. 
 */ 
 export function Registeration( documentation?:Partial<Omit<IModel, "accessor" | "ifields">> ): ClassDecorator { 
 

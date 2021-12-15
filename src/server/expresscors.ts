@@ -3,7 +3,9 @@ import cors from "cors";
 
 
 
-// EXPRESS ------------------------------------------------ 
+/* ExpressCORS --------------------------------------------- 
+ * Sets up express with CORS 
+*/ 
 export function ExpressCORS() { 
   const app = express(); 
 
