@@ -17,6 +17,14 @@ import { Extend_Crud_FactoryResolver } from './crud.factory.resolver';
 const resolverStack = [] as any[]; 
 
 
+/* DATA and MODEL stacks ---------------------------------------------
+  These stacks contains the data and model for registration once connected to MongoDb 
+*/
+const dataStack = [] as { data:any[], classItem:any }[]; 
+const modelStatck = [] as { imodel:IModel, classItem:any }[]; 
+
+
+
 
 /** ResolverStack -----------------------------------------------------
  * Receive a resolver and add it to the resolver stack. 

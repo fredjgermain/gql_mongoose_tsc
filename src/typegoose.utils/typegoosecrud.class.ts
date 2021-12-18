@@ -3,7 +3,6 @@ import { mongoose } from "@typegoose/typegoose";
 
 
 // -------------------------------------------------------- 
-import { GetIModel, GetMongoModel, ParseDocsTo } from "./modeler.utils"; 
 import { TypegooseModel } from "./typegoosemodel.class"; 
 import { TypegooseValidation } from "./typegoosevalidation.class"; 
 
@@ -12,8 +11,6 @@ import { TypegooseValidation } from "./typegoosevalidation.class";
 type MongoModel = mongoose.Model<any, {}, {}> 
 
 
-
-// D for the type of documents to accept/return from Crud methods. 
 export class TypegooseCrud { 
   public modelName:string; 
   public tgmodel:TypegooseModel; 
@@ -32,14 +29,14 @@ export class TypegooseCrud {
 
 
   // MODEL =============================================== 
-  public async Model({modelName}:{modelName:string}) { 
-    const [model] = await TypegooseModel.Models({modelsName:[modelName]}); 
+  /*public async Model({modelName}:{modelName:string}) { 
+    const [model] = await TypegooseModel.GetIModels({modelsName:[modelName]}); 
     return model; 
   } 
 
   public async Models({modelsName}:{modelsName:string[]}) { 
-    return await TypegooseModel.Models({modelsName}); 
-  } 
+    return await TypegooseModel.GetIModels({modelsName}); 
+  } */
 
 
 
@@ -54,7 +51,7 @@ export class TypegooseCrud {
     this.tgvalidation.ThrowIfHasError( await this.tgvalidation.ValidateToCreate(inputs) ); 
     // --------------------------------------------------- 
     const results = await this.mongoModel.create(inputs); 
-    return results.map( e => ParseDocsTo<IEntry>(e)); 
+    return results.map( e => TypegooseModel.ParseDocsTo<IEntry>(e)); 
   } 
 
 
@@ -65,7 +62,7 @@ export class TypegooseCrud {
     // --------------------------------------------------- 
     const selector = ids ? {_id: {$in: ids}} : {}; 
     const results = await this.mongoModel.find(selector); 
-    return results.map( e => ParseDocsTo<IEntry>(e)); 
+    return results.map( e => TypegooseModel.ParseDocsTo<IEntry>(e)); 
   } 
 
 
@@ -80,7 +77,7 @@ export class TypegooseCrud {
     // fetch modified items 
     const ids = inputs.map( item => item._id ); 
     const results = await this.mongoModel.find({_id: {$in: ids}}); 
-    return results.map( e => ParseDocsTo<IEntry>(e)); 
+    return results.map( e => TypegooseModel.ParseDocsTo<IEntry>(e)); 
   }
 
   // DELETE =============================================== 
@@ -90,6 +87,6 @@ export class TypegooseCrud {
     // --------------------------------------------------- 
     const results = await this.mongoModel.find({_id: {$in: ids}}); 
     await this.mongoModel.deleteMany({_id: {$in: ids}}); 
-    return results.map( e => ParseDocsTo<IEntry>(e)); 
+    return results.map( e => TypegooseModel.ParseDocsTo<IEntry>(e)); 
   } 
 } 

@@ -1,35 +1,14 @@
 import { getModelForClass } from "@typegoose/typegoose"; 
-import { ParseToIField } from "./modeler.utils"; 
-//import { ClassType } from 'type-graphql'; 
+import { TypegooseModel } from "./typegoosemodel.class";
 
 
+// -------------------------------------------------------- 
+/* These stacks contains the data and model for registration once connected to MongoDb */
 const dataStack = [] as { data:any[], classItem:any }[]; 
 const modelStatck = [] as { imodel:IModel, classItem:any }[]; 
 
 
-
-// get IModel from modelStack 
-export function GetIModel(accessor:string):IModel|undefined { 
-  return modelStatck.find( ({imodel: model}) => model.accessor === accessor )?.imodel; 
-} 
-
-
-
-export function RegisterModels() { 
-  modelStatck.forEach( ({imodel, classItem} ) => { 
-    const mongoModel = getModelForClass(classItem); 
-
-    // parse ifield from mongo model and complete imodel 
-    const [_mongoField] = Object.values(mongoModel.schema.paths) as any[]; 
-    const mongoFields = Object.values(mongoModel.schema.paths) as any[] as IMongoField[]; 
-    const ifields = mongoFields.map( field => ParseToIField(field) ) 
-    imodel.ifields = ifields; 
-  }) 
-} 
-
-
-
-// Registration Decorator ------------------------------------------- 
+// Registration Decorator #################################
 /*
   Cannot truly register models before connecting with Mongoose. 
   Once mongoose is connected and resolvers are mounted, call function RegisterModels above. 
@@ -46,14 +25,45 @@ export function Registeration( documentation?:Partial<Omit<IModel, "accessor" | 
   } 
 } 
 
+
+
+/** RegisterModels ------------------------------------------------------------
+ * 
+ */
+export function RegisterModels() { 
+  modelStatck.forEach( ({imodel, classItem} ) => { 
+    const mongoModel = getModelForClass(classItem); 
+
+    // parse ifield from mongo model and complete imodel 
+    const [_mongoField] = Object.values(mongoModel.schema.paths) as any[]; 
+    const mongoFields = Object.values(mongoModel.schema.paths) as any[] as IMongoField[]; 
+    const ifields = mongoFields.map( field => TypegooseModel.ParseToIField(field) ) 
+    imodel.ifields = ifields; 
+  }) 
+} 
+
+
+/** DataToPopulate ----------------------------------------
+ * Use this function after the dataset definition. 
+ * The dataset will be stacked while the server connects to MongoDb. 
+ * Once connected, the function "Populate" should be called
+ * 
+ * @param classItem // The Business model corresponding to the dataset  
+ * @param data // the dataset itself 
+ */
 export function DataToPopulate( classItem:any, data:any[] ) { 
   dataStack.push({classItem, data}); 
 } 
 
+
+
+/** Populate ----------------------------------------------
+ * Once connected to MongoDb, the stacked datasets will populate their corresponding collections.  
+ */
 export async function Populate() { 
   dataStack.forEach( async ({data, classItem}) => { 
     const model = getModelForClass(classItem); 
-    // reset data before polating 
+    // empty collection before populating with new dataset 
     await model.deleteMany(); 
     await model.create(data); 
   })

@@ -42,7 +42,7 @@ export class ModelResolver{
   async Models( @Arg("modelsName", type => [String], { nullable: true }) modelsName?:string[] ): Promise<Model[]> { 
     // const model = getModelForClass(ModelDescriptor); 
     // return (await model.find()).filter( gqlmodel => modelsName?.includes(gqlmodel.accessor) ?? true ) 
-    const results = (await TypegooseModel.Models({modelsName:(modelsName??[])}) ) as any[]; 
+    const results = (await TypegooseModel.GetIModels({modelsName:(modelsName??[])}) ) as any[]; 
     return results; 
   } 
 }
