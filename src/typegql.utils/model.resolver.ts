@@ -2,9 +2,8 @@ import { Resolver, Query, ObjectType, Field, Arg }
   from "type-graphql"; 
 
 // --------------------------------------------------------- 
-import { ObjectScalar } from "./customscalar/object.scalar"; 
+import { ObjectScalar } from "./object.scalar"; 
 import { TypegooseModel } from '../typegoose.utils/typegoose.utils'; 
-import { Stack } from "./resolverstack";
 
 
 
@@ -14,11 +13,11 @@ export class Model {
   @Field( type => String ) 
   accessor: string; 
   
-  @Field(type => [String]) 
-  label: string[]; 
+  @Field(type => String) 
+  label: string; 
 
-  @Field(type => [String]) 
-  description: string[]; 
+  @Field(type => String) 
+  description: string; 
 
   @Field(type => [ObjectScalar]) // replace with IField type ?? 
   ifields: object[]; 
@@ -29,7 +28,6 @@ export class Model {
 /** ModelDescriptorsResolver ======================================
  * A single purpose resolver to query Models. 
  */
-@Stack() 
 @Resolver() 
 export class ModelResolver{ 
  
@@ -40,9 +38,6 @@ export class ModelResolver{
   */ 
   @Query(type => [Model]) 
   async Models( @Arg("modelsName", type => [String], { nullable: true }) modelsName?:string[] ): Promise<Model[]> { 
-    // const model = getModelForClass(ModelDescriptor); 
-    // return (await model.find()).filter( gqlmodel => modelsName?.includes(gqlmodel.accessor) ?? true ) 
-    const results = (await TypegooseModel.GetIModels({modelsName:(modelsName??[])}) ) as any[]; 
-    return results; 
+    return TypegooseModel.GetRegisteredIModels(modelsName); 
   } 
 }

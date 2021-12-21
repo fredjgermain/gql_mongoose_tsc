@@ -1,11 +1,14 @@
 import { getModelForClass } from "@typegoose/typegoose"; 
-import { TypegooseModel } from "./typegoosemodel.class";
+import { TypegooseModel, ModelDoc  } from "../typegoose.utils/typegoosemodel.class"; 
 
 
 // -------------------------------------------------------- 
 /* These stacks contains the data and model for registration once connected to MongoDb */
+
+
 const dataStack = [] as { data:any[], classItem:any }[]; 
-const modelStatck = [] as { imodel:IModel, classItem:any }[]; 
+const modelStatck = [] as ModelDoc[]; 
+
 
 
 // Registration Decorator #################################
@@ -15,13 +18,12 @@ const modelStatck = [] as { imodel:IModel, classItem:any }[];
   
   CAREFUL !! A Model need to be imported AND USED somewhere otherwise their decorator will not be read and the model will not be stacked. 
 */ 
-export function Registeration( documentation?:Partial<Omit<IModel, "accessor" | "ifields">> ): ClassDecorator { 
-
+export function ModelStack( documentation?:Partial<Omit<ModelDoc, "modelClass"|"accessor" >> ): ClassDecorator { 
   return function <TFunction extends Function>(target:TFunction): void { 
     // find classType of classItem iteself as target ?? 
-    const classItem = target; 
-    const imodel = {accessor:target.name, ifields:[], label:[], description:[], ...documentation } as IModel; 
-    modelStatck.push({imodel, classItem}); 
+    const modelClass = target; 
+    const modeldoc = { accessor:target.name, modelClass, description:"", label:"", ...documentation } as ModelDoc; 
+    modelStatck.push(modeldoc); 
   } 
 } 
 
@@ -31,16 +33,9 @@ export function Registeration( documentation?:Partial<Omit<IModel, "accessor" | 
  * 
  */
 export function RegisterModels() { 
-  modelStatck.forEach( ({imodel, classItem} ) => { 
-    const mongoModel = getModelForClass(classItem); 
-
-    // parse ifield from mongo model and complete imodel 
-    const [_mongoField] = Object.values(mongoModel.schema.paths) as any[]; 
-    const mongoFields = Object.values(mongoModel.schema.paths) as any[] as IMongoField[]; 
-    const ifields = mongoFields.map( field => TypegooseModel.ParseToIField(field) ) 
-    imodel.ifields = ifields; 
-  }) 
+  modelStatck.forEach( m => TypegooseModel.RegisterModel(m) ) 
 } 
+
 
 
 /** DataToPopulate ----------------------------------------

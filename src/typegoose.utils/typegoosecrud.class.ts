@@ -23,7 +23,7 @@ export class TypegooseCrud {
     this.tgmodel = new TypegooseModel(modelName); 
     this.tgvalidation = new TypegooseValidation(modelName); 
     this.mongoModel = this.tgmodel.mongoModel; 
-    this.model = this.tgmodel.model; 
+    this.model = this.tgmodel.imodel; 
   } 
 
 

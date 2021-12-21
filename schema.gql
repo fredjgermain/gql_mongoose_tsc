@@ -32,6 +32,13 @@ type D {
   name: String!
 }
 
+type Model {
+  accessor: String!
+  description: String!
+  ifields: [ObjectScalar!]!
+  label: String!
+}
+
 type Mutation {
   CreateA(inputs: [ObjectScalar!]!): [A!]!
   CreateB(inputs: [ObjectScalar!]!): [B!]!
@@ -51,6 +58,7 @@ type Mutation {
 scalar ObjectScalar
 
 type Query {
+  Models(modelsName: [String!]): [Model!]!
   ReadA(ids: [String!]): [A!]!
   ReadB(ids: [String!]): [B!]!
   ReadC(ids: [String!]): [C!]!

@@ -1,8 +1,8 @@
 // Business import ------------------------------------------------------ 
 import './models/dummies.model'; 
+import { GetResolverStack } from "../prepping/typegql.stacker"; 
+import { RegisterModels, Populate } from "../prepping/typegoose.stacker"; 
 
-import { GetResolverStack } from "../typegql.utils/resolverstack"; 
-import { RegisterModels, Populate } from "../typegoose.utils/modelregister"; 
 
 
 /** Prepping ----------------------------------------------
@@ -10,7 +10,7 @@ import { RegisterModels, Populate } from "../typegoose.utils/modelregister";
  * Gets Stack Models and registers them with RegisterModels. 
  * Gets Stacked Data and populated them with Populate. 
  * Returns the ResolverStack. 
- */
+ */ 
 export function Prepping() { 
   const resolvers = GetResolverStack(); 
   

@@ -5,19 +5,13 @@ import { prop, Ref }
   
 // --------------------------------------------------------------- 
 import { OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
-import { Registeration } from "../../typegoose.utils/modelregister"; 
-import { CrudStack } from "../../typegql.utils/resolverstack";
+import { ModelStack } from "../../prepping/typegoose.stacker"; 
+import { CrudResolverStack } from "../../prepping/typegql.stacker";
 
 
-export const descriptorA = { 
-  accessor: 'A', 
-  label: ['label A'], 
-  description: ['dummy A'] 
-} 
 
-
-@Registeration({description:['dummy A'] , label:['label A']}) 
-@CrudStack() 
+@ModelStack({description:'dummy A' , label:'label A'}) 
+@CrudResolverStack() 
 @ObjectType({ description: "The DummyA model from decorator" })
 export class A { 
   @Field(type => ID) 
@@ -31,14 +25,9 @@ export class A {
 }
 
 
-export const descriptorB = { 
-  accessor: 'B', 
-  label: ['label B'], 
-  description: ['dummy B'] 
-} 
 
-@Registeration({description:['dummy B'] , label:['label B']}) 
-@CrudStack() 
+@ModelStack({description:'dummy B' , label:'label B'}) 
+@CrudResolverStack() 
 @ObjectType({ description: "The DummyB model" })
 export class B extends A { 
   @Field(() => A) 
@@ -47,14 +36,9 @@ export class B extends A {
 } 
 
 
-export const descriptorC = { 
-  accessor: 'C', 
-  label: ['model C'], 
-  description: ['dummy C'] 
-} 
 
-@Registeration({description:['dummy C'] , label:['label C']}) 
-@CrudStack() 
+@ModelStack({description:'dummy C' , label:'label C'}) 
+@CrudResolverStack() 
 @ObjectType({ description: "The DummyC model" })
 export class C extends A{ 
   @Field( () => [String] ) 
@@ -72,14 +56,8 @@ export class C extends A{
 
 
 
-export const descriptorD = { 
-  accessor: 'D', 
-  label: ['model D'], 
-  description: ['dummy D'] 
-} 
-
-@Registeration({description:['dummy D'] , label:['label D']}) 
-@CrudStack() 
+@ModelStack({description:'dummy D' , label:'label D'}) 
+@CrudResolverStack() 
 @ObjectType({ description: "The DummyD model" }) 
 export class D extends A { 
   // @Field(type => String) 

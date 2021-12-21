@@ -1,6 +1,5 @@
 import { FEEDBACK } from "../feedback.utils"; 
 import { InterpolateString, IsEmpty } from '../../lib/utils'; 
-import { FindEntries } from "./modeler.utils"; 
 import { TypegooseModel } from "./typegoosemodel.class"; 
 
 
@@ -20,6 +19,8 @@ type MsgValues = {VALUE?:string, PATH?:string, [key:string]:any};
 type ErrMsgOptions = {messageTemplate:string, msgValue?:MsgValues}; 
 type ValidationArgs = {path:string, value:any, errMsgOptions?:ErrMsgOptions}; 
 
+
+
 export class TypegooseValidation { 
   public tgmodel:TypegooseModel; 
   public modelName:string; 
@@ -28,7 +29,7 @@ export class TypegooseValidation {
   constructor(modelName:string) { 
     this.tgmodel = new TypegooseModel(modelName); 
     this.modelName = this.tgmodel.modelName; 
-    this.model = this.tgmodel.model; 
+    this.model = this.tgmodel.imodel; 
   } 
 
   public ThrowIfHasError(inputErrors:InputError[]) { 
@@ -61,7 +62,7 @@ export class TypegooseValidation {
    * @returns 
    */
   public async ValidateInputMustExists(inputs:IEntry[]):Promise<InputError[]> { 
-    const collection = await FindEntries({modelName:this.model.accessor}); 
+    const collection = await TypegooseModel.FindEntries({modelName:this.model.accessor}); 
     const predicate = (t:IEntry) => collection.some(e => e._id === t._id); 
     
     return inputs.map( input => { 
@@ -78,7 +79,7 @@ export class TypegooseValidation {
   // By Inputs --------------------------------------------
   public async ValidateByInputs(inputs:Partial<IEntry>[]):Promise<InputError[]> { 
     const ids = inputs.map( i => i?._id); 
-    const collection = (await FindEntries({modelName:this.model.accessor})) 
+    const collection = (await TypegooseModel.FindEntries({modelName:this.model.accessor})) 
       .filter( entry => !ids.includes(entry._id) ) 
     
     return inputs.map( (input, i, a) => { 
@@ -115,7 +116,7 @@ export class TypegooseValidation {
   } 
   
   private async ToUpdate(inputs:IEntry[]):Promise<[IEntry[], IEntry[]]> { 
-    const collection = await FindEntries({modelName:this.model.accessor}); 
+    const collection = await TypegooseModel.FindEntries({modelName:this.model.accessor}); 
 
     const toUpdate = [] as IEntry[]; 
     const notFound = [] as IEntry[]; 

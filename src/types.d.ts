@@ -19,8 +19,8 @@ interface IType {
 
 interface IModel { 
   accessor:string, 
-  label:string[], 
-  description:string[], 
+  label:string, 
+  description:string, 
   ifields:IField[], 
 } 
 

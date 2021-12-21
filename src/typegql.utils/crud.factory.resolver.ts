@@ -2,8 +2,8 @@ import { ClassType, Resolver, Query, Mutation, Arg }
   from "type-graphql"; 
 
 // --------------------------------------------------------
-import { ObjectScalar } from "./customscalar/object.scalar"; 
-import { TypegooseCrud,  } from '../typegoose.utils/typegoose.utils'; 
+import { ObjectScalar } from "./object.scalar"; 
+import { TypegooseCrud } from '../typegoose.utils/typegoose.utils'; 
 
 
 
