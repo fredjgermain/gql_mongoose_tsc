@@ -4,14 +4,9 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-//import { OneToOne, OneToMany } from '../../typegoose.utils/typegoosemodel.util'; 
+import { ModelStack } from "../../prepping/typegoose.stacker"; 
+import { CrudResolverStack, ResolverStack } from "../../prepping/typegql.stacker";
 
-
-export const descriptorPatient = { 
-  accessor: 'Patient', 
-  label: ['Patient', 'Patient'], 
-  description: ['Patient profile', 'Profile de patient'] 
-} 
 
 
 /** Patient
@@ -23,23 +18,9 @@ export const descriptorPatient = {
  * birthday
  * coordonnate ... 
  */
-
-/* COORDONNATES ?? 
-@prop({label: ["phone number", "No de téléphone"], 
-  required:true, unique:true, match: '^[a-zA-Z]{4}[0-9]{8}$'}) 
-phone: string[]; 
-
-@prop({label: ["email", "courriel"], 
-  required:true, unique:true, match: '^[a-zA-Z]{4}[0-9]{8}$'}) 
-email: string[]; */
-
-/*@prop({label: ["email", "courriel"], 
-  required:true, unique:true, match: '^[a-zA-Z]{4}[0-9]{8}$'}) 
-address: string[]; */
-// match: '^[a-zA-Z]{4}[0-9]{8}$'
-
-
-@ObjectType({description:"Patient"})
+@ModelStack({description:'Patient profile' , label:'Patient'}) 
+@CrudResolverStack() 
+@ObjectType({description:"Patient profile"})
 export class Patient { 
   @Field(type => ID) 
   _id: string; 
@@ -72,6 +53,7 @@ export class Patient {
 
 
 // AbbrevResolver -----------------------------------------
+@ResolverStack() 
 @Resolver(type => Patient) 
 export class PatientAbbrevResolver { 
   @FieldResolver(type => String) 

@@ -3,7 +3,8 @@ import { DateToString } from '../../../lib/utils/date.utils';
 
 
 
-// ----------------------------------------------- 
+// -------------------------------------------------------- 
+import { DataToPopulate } from "../../prepping/typegoose.stacker"; 
 import { Patient } from '../models/patient.model'; 
 
 
@@ -18,3 +19,4 @@ export const data = [
     birthday: new Date(1990, 11, 11) 
   }
 ]
+DataToPopulate(Patient, data); 

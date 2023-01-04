@@ -1,6 +1,8 @@
 import mongoose from 'mongoose'; 
 
-// ANSWERS ----------------------------------------- 
+
+// -------------------------------------------------------- 
+import { DataToPopulate } from "../../prepping/typegoose.stacker"; 
 import { Answer } from '../models/answer.model'; 
 import { data as patientsData } from './patients.mockdata'; 
 import { data as questionsData } from './questions.mockdata'; 
@@ -13,3 +15,4 @@ export const data = [
     answers: [{qid:questionsData[0].qid, value:-1}], 
   } 
 ] as Answer[]; 
+DataToPopulate(Answer, data); 

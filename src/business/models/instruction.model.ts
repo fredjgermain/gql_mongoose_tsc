@@ -5,14 +5,10 @@ import { prop, Ref }
 
 
 // --------------------------------------------------------------- 
-//import { OneToOne, OneToMany } from '../../typegoose.utils/typegoosemodel.util'; 
+import { ModelStack } from "../../prepping/typegoose.stacker"; 
+import { CrudResolverStack, ResolverStack } from "../../prepping/typegql.stacker";
 
 
-export const descriptorInstruction = { 
-  accessor: 'Instruction', 
-  label: ['Instructions', 'Instructions'], 
-  description: ['Instructions', 'Instructions'] 
-} 
 
 /** Instruction
  * Instruction assignable to a question, giving a bit of instruction about a question of series of questions. 
@@ -20,6 +16,8 @@ export const descriptorInstruction = {
  * iid 
  * label ... multilingual 
  */
+@ModelStack({description:"Form's instruction." , label:'Instruction'}) 
+@CrudResolverStack() 
 @ObjectType({description:"instruction"})
 export class Instruction  {
   @Field(type => ID) 
@@ -39,6 +37,7 @@ export class Instruction  {
 
 
 // AbbrevResolver -----------------------------------------
+@ResolverStack() 
 @Resolver(type => Instruction) 
 export class InstructionAbbrevResolver { 
   @FieldResolver(type => String) 

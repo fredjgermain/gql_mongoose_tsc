@@ -1,5 +1,12 @@
 // Business import ------------------------------------------------------ 
 import './models/dummies.model'; 
+import './models/answer.model';
+import './models/form.model';
+import './models/instruction.model';
+import './models/patient.model';
+import './models/question.model';
+import './models/responsegroup.model';
+
 import { GetResolverStack } from "../prepping/typegql.stacker"; 
 import { RegisterModels, Populate } from "../prepping/typegoose.stacker"; 
 

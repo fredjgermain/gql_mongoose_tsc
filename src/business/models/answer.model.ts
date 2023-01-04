@@ -4,17 +4,14 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-import { OneToOne, OneToMany, FindObjectByClassAndId } from '../../typegoose.utils/datarelation.util'; 
+import { OneToOne, FindObjectByClassAndId } from '../../typegoose.utils/datarelation.util'; 
 import { Patient } from './patient.model'; 
-import { ObjectScalar } from "../../typegql.utils/object.scalar";
+import { ObjectScalar } from "../../typegql.utils/object.scalar"; 
+
+import { ModelStack } from "../../prepping/typegoose.stacker"; 
+import { CrudResolverStack, ResolverStack } from "../../prepping/typegql.stacker";
 
 
-
-export const descriptorAnswer = { 
-  accessor: 'Answer', 
-  label: ['Answers', 'Réponses'], 
-  description: ['Given answers', 'Réponses données'] 
-} 
 
 /** Answer 
  * Each item is answer to series of question, given by 1 patient on a specific day. 
@@ -24,7 +21,9 @@ export const descriptorAnswer = {
  * date
  * answervalues ... unanswered question are -1 
  */
-@ObjectType({ description: "" }) 
+@ModelStack({description:'Dated answer by patient' , label:'Answer'}) 
+@CrudResolverStack() 
+@ObjectType({ description: "Dated answer by patient" }) 
 export class Answer { 
   @Field(type => ID) 
   _id: string; 
@@ -49,6 +48,7 @@ export class Answer {
 } 
 
 // AbbrevResolver -----------------------------------------
+@ResolverStack() 
 @Resolver(type => Answer) 
 export class AnswerAbbrevResolver { 
   @FieldResolver(type => String) 

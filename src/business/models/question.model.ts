@@ -6,18 +6,14 @@ import { prop, Ref }
 // --------------------------------------------------------------- 
 import { OneToOne, OneToMany } from '../../typegoose.utils/datarelation.util'; 
 
-
 import { Form } from './form.model'; 
 import { ResponseGroup } from './responsegroup.model'; 
 import { Instruction } from './instruction.model'; 
 
+import { ModelStack } from "../../prepping/typegoose.stacker"; 
+import { CrudResolverStack, ResolverStack } from "../../prepping/typegql.stacker";
 
 
-export const descriptorQuestion = { 
-  accessor: 'Question', 
-  label: ['Question', 'Question'], 
-  description: ['Question', 'Question'] 
-} 
 
 /** Question 
  * Each item is a question addressed to a patient. 
@@ -28,7 +24,9 @@ export const descriptorQuestion = {
  * responsetype ... the types possible response to that question. 
  * label ... a multi-lingual question label. 
  * optional ... indicate if that question if optional or not. 
- */ 
+ */
+@ModelStack({description:"Question entry." , label:'Question'}) 
+@CrudResolverStack() 
 @ObjectType({description:"Question"})
 export class Question { 
   @Field(type => ID) 
@@ -66,6 +64,7 @@ export class Question {
 
 
 // AbbrevResolver -----------------------------------------
+@ResolverStack() 
 @Resolver(type => Question) 
 export class QuestionAbbrevResolver { 
   @FieldResolver(type => String) 

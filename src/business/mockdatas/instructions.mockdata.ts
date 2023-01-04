@@ -1,6 +1,12 @@
 import mongoose from 'mongoose'; 
-// ----------------------------------------------
+
+
+
+// -------------------------------------------------------- 
+import { DataToPopulate } from "../../prepping/typegoose.stacker"; 
 import { Instruction } from '../models/instruction.model'; 
+
+
 
 // INSTRUCTION ----------------------------------
 export const data:Instruction[] = [ 
@@ -60,3 +66,4 @@ export const data:Instruction[] = [
     label: [`Avez-vous des difficultés:`], 
   }
 ] 
+DataToPopulate(Instruction, data); 

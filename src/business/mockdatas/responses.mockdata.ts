@@ -1,8 +1,11 @@
 import mongoose from 'mongoose'; 
 
-// --------------------------------------------------
+// -------------------------------------------------------- 
+import { DataToPopulate } from "../../prepping/typegoose.stacker"; 
+
 //import { DaysPerMonth } from '../../../lib/date/date.utils'; 
 import { ResponseGroup } from '../models/responsegroup.model'; 
+
 
 function Range(min:number, max:number) { 
   const range = []; 
@@ -69,6 +72,9 @@ export const data:ResponseGroup[] = [
       `(10) Extremement`, 
     ]]
   },
+]
+DataToPopulate(ResponseGroup, data); 
+
   /*{ 
     //_id:new mongoose.Types.ObjectId(), 
     rid: 'Weeks-day', 
@@ -94,4 +100,3 @@ export const data:ResponseGroup[] = [
     rid: 'Last month days', 
     values: Range_DaysPerMonth(), 
   } */
-]

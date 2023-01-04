@@ -4,13 +4,11 @@ import { prop, Ref }
   from "@typegoose/typegoose"; 
 
 // --------------------------------------------------------------- 
-//import { OneToOne, OneToMany } from '../../typegoose.utils/typegoosemodel.util'; 
+import { ModelStack } from "../../prepping/typegoose.stacker"; 
+import { CrudResolverStack, ResolverStack } from "../../prepping/typegql.stacker";
 
-export const descriptorResponse = { 
-  accessor: 'ResponseGroup', 
-  label: ['ResponseGroup', 'ResponseGroup'], 
-  description: ['ResponseGroup', 'ResponseGroup'] 
-} 
+
+
 // /** ResponseChoice 
 //  * A single possible choice with multilingual label 
 //  * 
@@ -34,6 +32,8 @@ export const descriptorResponse = {
  * rid 
  * responsechocies 
  */ 
+@ModelStack({description:"Group reponse choices." , label:"Response group"}) 
+@CrudResolverStack() 
 @ObjectType({description:"ResponseGroup"}) 
 export class ResponseGroup { 
   @Field(() => ID) 
@@ -53,6 +53,7 @@ export class ResponseGroup {
 
 
 // AbbrevResolver -----------------------------------------
+@ResolverStack() 
 @Resolver(type => ResponseGroup) 
 export class ResponseGroupAbbrevResolver { 
   @FieldResolver(type => String) 

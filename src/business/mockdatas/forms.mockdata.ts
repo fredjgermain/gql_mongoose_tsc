@@ -1,6 +1,11 @@
 import mongoose from 'mongoose'; 
 
-// ----------------------------------------------
+
+
+// -------------------------------------------------------- 
+import { DataToPopulate } from "../../prepping/typegoose.stacker"; 
+
+
 import { Form } from '../models/form.model'; 
 
 // FORM -----------------------------------------
@@ -30,3 +35,4 @@ export const data:Form[] = [
     description: ["EDEC Échelle d'autoévaluation cognitive"]
   } 
 ] 
+DataToPopulate(Form, data); 

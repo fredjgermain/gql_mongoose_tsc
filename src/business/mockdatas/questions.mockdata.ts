@@ -1,16 +1,12 @@
 import mongoose from 'mongoose'; 
 
 // -------------------------------------------------------- 
+import { DataToPopulate } from "../../prepping/typegoose.stacker"; 
+
+import { Question } from '../models/question.model'; 
 import { data as FormDatas } from './forms.mockdata'; 
 import { data as InstructionDatas } from './instructions.mockdata'; 
 import { data as ResponseGroupDatas } from './responses.mockdata'; 
-
-/* 
-import { Form } from '../models/form.model'; 
-import { Instruction} from '../models/instruction.model'; 
-import { ResponseGroup } from '../models/responsegroup.model'; 
-*/ 
-import { Question } from '../models/question.model'; 
 
 
 
@@ -205,3 +201,5 @@ export const data = [
   ...asrs_questions, ...pdqd5_questions, 
   ...whodas_questions, ...edec_questions 
 ]; 
+
+DataToPopulate(Question, data); 
